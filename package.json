@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "name": "whosin",
+  "version": "1.0.0",
+  "description": "simple utility to see who's in",
+  "main": "index.js",
+  "author": "Ben Frain",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "browser-sync": "^2.18.8",
+    "del": "^2.2.2",
+    "gulp-postcss": "^6.4.0",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-typescript": "^3.1.6",
+    "postcss-color-function": "^3.0.0",
+    "postcss-import": "^9.1.0",
+    "postcss-mixins": "^5.4.1",
+    "postcss-nested": "^1.0.0",
+    "postcss-simple-vars": "^3.0.0",
+    "typescript": "^2.2.1"
+  }
+}

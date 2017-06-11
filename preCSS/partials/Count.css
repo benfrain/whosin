@@ -1,0 +1,26 @@
+.wi-Count {
+    /*position: absolute;*/
+    /*bottom: 44px;*/
+    /*left: 50%;*/
+    height: 33px;
+    width: 33px;
+    color: #f90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #f90;
+    box-shadow: 3px 0 0 #333;
+    [data-wi-count-update] & {
+        animation: wiCount .3s 1 ease-in-out;
+    }
+}
+
+@keyframes wiCount {
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: none;
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outFile": "whois.js",
+        "inlineSourceMap": true
+    },
+    "include": [
+        "ts/whois.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

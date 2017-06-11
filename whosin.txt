@@ -1,0 +1,81 @@
+## v1
+
+- input box allows you to add names [fixed top/bottom] [x]
+- Each name can be set to in or out [x]
+- Tool splits those that are in into teams [default to splitting to 2]
+- swiping a name gives option to delete it []
+- tool tray maybe (that could house the split, download, upload, delete-all)
+- localStorage [x]
+- show currentCount of whosin [x]
+- If there are no people 'in' hide the splitter [x]
+
+## v2
+- Use vCard Parser to include contact info such as phone/email
+- split multiplier [tools let's you set divider]
+- save and import JSON [x]
+- service worker
+- animations for add/remove
+- pay mode (a toggle in settings allows 'in' users to have an additional toggle to show they have paid)
+
+## v3 
+- multiple lists/teams
+- undo for delete (store person object in a trash area which can be re-instated from tools)
+
+### Functions
+
+- itemAdd
+- itemPrimeDelete
+- itemDelete
+- itemToggleMark
+- itemSplit
+- inputShow
+- toolTrayShow
+- toolTrayHide
+- dataLoad
+- dataSave
+- updateCurrentCount
+
+## data
+function whoIsIn() {
+    this.currentCount = 0;
+    this.whoisin = [];
+    this.showingInput = false;
+    this.showingTool = false;
+    this.observers = [];
+}
+
+### example person data
+
+{
+    name:"Ben",
+    contactNumber: null,
+    contactEmail: null,
+    paid: false,
+    marked: false,
+    team: null,
+}
+
+## listeners
+swipe left on names, tap on right 44px => enter delete mode `itemPrimeDelete()`
+swipe right of click anywhere else on name => mark In `itemToggleMark` 
+click on delete mode => updates the data `itemDelete()`
+click plus next to input => `itemAdd`
+click on split icon in tools => `itemSplit`
+click add icon => `inputShow`
+swipe down anywhere => `inputShow`
+
+
+#### Reasons
+Use Yarn instead of NPM
+Use ES2015/TypeScript (for easy imports)
+Use webpack
+Learn service workers
+Progressive web app
+Design something
+
+
+
+
+
+### Notes
+file type input is VERY difficult to style so wrapped this in a label element, hid the input and styled the label instead

@@ -1,0 +1,35 @@
+$color-delete: #B92E22;
+$color-paid: #A3B922;
+$color-white: #fff;
+
+
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    height: 100%;
+}
+
+.wi-Whosin {
+    box-sizing: border-box !important;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, "Helvetica", "Roboto";
+    max-width: 450px;
+    width: 96%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+input[type="file" i] {
+    font-size: 1rem;
+    display: inline-flex;
+    flex: 1 1 50px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right !important;
+}

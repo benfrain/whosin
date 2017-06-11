@@ -1,0 +1,49 @@
+.wi-Tools {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: flex-end;*/
+    height: 100%;
+    /*margin: 11px 0;*/
+    background-color: #222;
+    z-index: 10;
+    width: 50%;
+    max-width: 300px;
+    transform: translateX(100%);
+    transition: transform .2s;
+    [data-wi-tools-exposed="true"] & {
+        transform: none;
+    }
+    /*justify-content: space-between;*/
+}
+
+.wi-Tools_Btn {
+    display: inline-flex;
+    color: #eee;
+    justify-content: flex-end;
+    /*border: 1px solid #f2f2f2;*/
+    /*border-radius: 2px;*/
+    font-size: 1rem;
+    min-height: 44px;
+    padding: 0 11px;
+}
+
+.wi-Tools_Load {
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.wi-Tools_LoadBtn {
+    all: unset;
+    color: #eee;
+}
+
+.wi-Tools_LoadInput {
+    display: none !important;
+}
+
+.wi-Tools_Close {
+    margin-top: auto;
+}

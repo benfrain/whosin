@@ -1,0 +1,54 @@
+.wi-AddForm {
+    display: flex;
+    align-items: center;
+    /*Context for the label*/
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 11px;
+}
+
+.wi-AddForm_Input {
+    display: flex;
+    align-items: flex-end;
+    flex: 1 1 auto;
+    height: 44px;
+    font-size: 21px;
+    padding: 8px 11px 0;
+    &:focus {
+        outline: 0;
+        background-color: #f1f1f1;
+        color: #555;
+    }
+}
+
+.wi-AddForm_Label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 11px;
+    color: #888;
+    font-size: 16px;
+    transition: transform .2s, color .2s;
+    transform-origin: 0 0;
+    /*Using valid and required attribute is genius. From: https://stackoverflow.com/a/16956610/1147859*/
+    .wi-AddForm_Input:focus + &,
+    [data-wi-input="filled"] + & {
+        transform: translateY(-18px) scale(.6);
+        color: #444;
+    }
+    [data-wi-duplicate-name] & {
+        color: $color-delete !important;
+    }
+}
+
+.wi-AddForm_DoneBtn {
+    display: flex;
+    flex: 0 1 auto;
+    padding: 8px 11px;
+    justify-content: center;
+    background-color: #f90;
+    align-self: stretch;
+    font-size: .8rem;
+    color: #999;
+    /*text-decoration: underline;*/
+}

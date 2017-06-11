@@ -1,0 +1,23 @@
+.wi-Split {
+    margin-top: auto;
+    font-size: 0;
+    position: relative;
+    transition: transform .2s;
+    display: flex;
+    justify-content: space-around;
+    [data-wi-count="0"] & {
+        transform: translateY(100%);
+    }
+}
+
+.wi-Split_Btn {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 11px;
+    /*& + & {
+        border-left: 1px solid #999;
+    }*/
+}

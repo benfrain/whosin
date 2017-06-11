@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+<head>
+    <title>Who's in?</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="wi-Whosin">
+        <header class="wi-Header">
+            <div class="wi-Masthead">
+                <!-- <a class="wi-Masthead_Logo">Who's in?</a> -->
+                <button id="wiToolsBtn" class="wi-Masthead_ToolsBtn">
+                    <svg class="wi-Masthead_Cog" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 19"><g fill="#888" fill-rule="evenodd"><path d="M17.402 7.422c-.165-.534-.392-1.05-.66-1.544.495-.554.907-1.03 1.237-1.425l.28-.356-2.76-2.632-.37.277c-.42.316-.91.712-1.49 1.187-.52-.28-1.05-.48-1.61-.64-.04-.73-.1-1.35-.16-1.84L11.85 0H7.94l-.062.43c-.062.493-.123 1.13-.165 1.84-.55.16-1.09.375-1.6.632-.574-.48-1.07-.89-1.48-1.19l-.373-.28-2.72 2.673.288.356c.33.4.744.87 1.24 1.43-.29.5-.496 1.01-.66 1.55-.764.04-1.403.1-1.92.16L0 7.62v3.74l.454.06c.515.06 1.175.12 1.917.158.17.535.4 1.05.66 1.544-.49.554-.9 1.03-1.23 1.425l-.29.356 2.77 2.652.37-.277c.42-.317.91-.712 1.49-1.187.52.28 1.05.48 1.61.64.04.73.11 1.35.17 1.84l.06.44h3.9l.06-.43c.06-.49.12-1.13.163-1.84.555-.16 1.09-.37 1.61-.63.574.48 1.07.87 1.48 1.19l.37.28 2.765-2.65-.29-.353c-.33-.395-.743-.87-1.24-1.424.29-.495.497-1.01.66-1.544.765-.04 1.4-.1 1.92-.16l.453-.06V7.62l-.45-.06c-.557-.04-1.196-.1-1.96-.138zm1.34 3.068c-.495.04-1.093.1-1.794.138l-.39.02-.063.356c-.165.673-.454 1.326-.825 1.92l-.206.317.247.28c.46.5.85.93 1.16 1.31l-1.44 1.39c-.39-.31-.84-.69-1.36-1.11l-.27-.25-.33.2c-.62.38-1.3.64-2 .79l-.37.08-.02.38c-.04.65-.08 1.23-.14 1.72H8.87c-.04-.49-.103-1.07-.144-1.72l-.02-.372-.37-.08c-.7-.16-1.382-.436-2-.79l-.33-.2-.29.237c-.514.436-.97.81-1.36 1.11l-1.443-1.39c.33-.377.72-.81 1.155-1.307l.248-.27-.208-.317c-.392-.593-.66-1.246-.825-1.92l-.087-.355-.392-.02c-.68-.04-1.275-.08-1.79-.14V8.51c.514-.04 1.112-.1 1.792-.138l.393-.02.08-.356c.16-.673.45-1.326.82-1.92l.2-.316-.25-.28c-.46-.5-.85-.93-1.16-1.31l1.45-1.38c.39.31.842.69 1.36 1.11l.3.23.33-.197c.62-.38 1.3-.64 2-.8l.37-.08.02-.375c.04-.652.08-1.226.142-1.72h2.062c.04.494.1 1.07.142 1.72l.02.377.37.08c.7.155 1.38.432 2 .79l.33.2.29-.24c.515-.436.97-.813 1.36-1.11L16.88 4.16c-.33.38-.72.81-1.154 1.31l-.27.28.207.317c.393.59.66 1.244.826 1.92l.08.353.392.02c.68.04 1.27.08 1.79.135v1.98h-.02z"/><path d="M9.897 6.55c-1.69 0-3.072 1.327-3.072 2.95 0 1.623 1.38 2.95 3.072 2.95 1.69 0 3.072-1.327 3.072-2.95 0-1.623-1.39-2.95-3.08-2.95zm0 4.91c-1.113 0-2.04-.87-2.04-1.96 0-1.09.906-1.96 2.04-1.96s2.04.87 2.04 1.96c0 1.09-.927 1.96-2.04 1.96z"/></g></svg>
+                </button>
+            </div>
+            <div id="wiTools" class="wi-Tools">
+                <button id="wiDeleteMode" class="wi-Tools_Btn wi-Tools_Delete">Delete</button>
+                <button id="wiWMD" class="wi-Tools_Btn wi-Tools_WMD">Delete All</button>
+                <button id="wiEditMode" class="wi-Tools_Btn wi-Tools_Edit">Edit</button>
+                <button id="wiPaidMode" class="wi-Tools_Btn wi-Tools_Paid">Paid?</button>
+                <div class="wi-Tools_Btn wi-Tools_Load">
+                    <label class="wi-Tools_LoadBtn">Load
+                        <input class="wi-Tools_LoadInput" type="file"  id="wiLoad">
+                    </label>
+                </div>
+                <button id="wiSave" class="wi-Tools_Btn wi-Tools_Save">Save</button>
+                <button id="wiToolsClose" class="wi-Tools_Btn wi-Tools_Close">Close</button>
+            </div>
+            <form id="wiAddForm" class="wi-AddForm" autocomplete="off">
+                <input id="hdrInput" class="wi-AddForm_Input" type="text">
+                <label id="wiInputLabel" class="wi-AddForm_Label" for="hdrInput">Add Name</label>
+                <i id="wiCount" class="wi-Count"></i>
+                <!-- <button id="hdrInputDoneBtn" type="submit" class="wi-AddForm_DoneBtn">done</button> -->
+            </form>
+        </header>
+        <main id="itmContainer" class="wi-Slats"></main>
+        
+        <aside id="wiSplitter" class="wi-Split">
+            <button data-wi-divisor="2" id="wiSplit2" class="wi-Split_Btn">2 teams</button>
+            <button data-wi-divisor="3" id="wiSplit3" class="wi-Split_Btn">3 teams</button>
+            <button data-wi-divisor="4" id="wiSplit4" class="wi-Split_Btn">4 teams</button>
+        </aside>
+    </div>
+    <script src="whois.js"></script>
+</body>
+</html>

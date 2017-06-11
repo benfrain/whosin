@@ -1,0 +1,13 @@
+.wi-Masthead {
+    /*display: none;*/
+    position: relative;
+    padding: 44px 0 0 0;
+}
+
+.wi-Masthead_Cog {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 11px;
+    top: 11px;
+}
