@@ -79,3 +79,9 @@ Design something
 
 ### Notes
 file type input is VERY difficult to style so wrapped this in a label element, hid the input and styled the label instead
+
+## 16.6.17
+Made OK progress on getting the items to travel to their new position. However, need to ensure that items are sorted so that last 'in' is the first to display. At present, not sure how they are being sorted. Commented out 
+
+                    // splitTeams(wi.divisor);
+and not really sure what is going on now.

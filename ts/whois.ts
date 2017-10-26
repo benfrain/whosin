@@ -10,6 +10,7 @@ const wiLoad = <HTMLInputElement>document.getElementById("wiLoad");
 const wiCount = <HTMLElement>document.getElementById("wiCount");
 const wiToolsBtn = <HTMLButtonElement>document.getElementById("wiToolsBtn");
 const wiToolsClose = <HTMLButtonElement>document.getElementById("wiToolsClose");
+const wiSlatsAreIn = <HTMLElement>document.getElementById("wiSlatsAreIn");
 // console.log(JSON.parse(storage.getItem("players")));
 // makeArrayOfStorageItems(JSON.parse(storage.getItem("players")));
 
@@ -40,21 +41,18 @@ function makePerson(name: string) {
     this.in = false;
 }
 
-
 var wi = new Whois();
 
-
-Whois.prototype.addObserver = function (observer: Object) {
+Whois.prototype.addObserver = function(observer: Object) {
     this.observers.push(observer);
 };
 
-
-Whois.prototype.notify = function (changes:Object, callback:Function) {
+Whois.prototype.notify = function(changes: Object, callback: Function) {
     // Loop through every property in changes and set the data to that new value
     var prop;
-    for(prop in changes) {
+    for (prop in changes) {
         // First catch any incorrect assignments of the data
-        if(typeof this[prop] == "undefined") {
+        if (typeof this[prop] == "undefined") {
             console.log("there is no property of name " + prop);
         }
         // We want to exit if the change value is the same as what we already have, otherwise we update the main object with the new one
@@ -71,21 +69,21 @@ Whois.prototype.notify = function (changes:Object, callback:Function) {
 
     // filter invokes this and returns observers that match into the matchedObservers array
     function hasSomeOfTheChangedProps(item) {
-        // If the props contains a wildcard 
+        // If the props contains a wildcard
         if (item.props === "*") {
             return true;
         }
         // Otherwise check if the changed prop is included in the props list
-        for(var prop2 in changes) {
+        for (var prop2 in changes) {
             // To ensure we don't quit the entire loop, we want to return true if the prop2 is in item.props. Otherwise we want to keep looping to check each prop and only quit the function by returning once the entire loop has run
-            if(item.props.includes(prop2)) {
+            if (item.props.includes(prop2)) {
                 return true;
             }
         }
         return false;
     }
     // Now for any observers that care about data that has just been changed we inform them of the changes
-    matchedObservers.forEach(function (matchingObserver) {
+    matchedObservers.forEach(function(matchingObserver) {
         matchingObserver.callback.call(null);
     });
 };
@@ -101,11 +99,17 @@ wi.addObserver({
 wi.addObserver({
     props: ["items"],
     callback: function renderItems() {
+        console.log("running items observer");
         console.log(wi.items);
+
+        // clear the container
         itmContainer.innerHTML = "";
+
         createSlats(wi.items);
+
         // Set the storage
         storage.setItem("players", JSON.stringify(wi.items));
+
         // Set the count
         if (wi.count !== countIn(wi.items)) {
             document.body.setAttribute("data-wi-count-update", "");
@@ -116,6 +120,7 @@ wi.addObserver({
             document.body.removeAttribute("data-wi-count-update");
         }
         wi.count = countIn(wi.items);
+
         // Communicate to DOM the count number
         document.body.setAttribute("data-wi-count", wi.count);
         wiCount.textContent = wi.count.toString();
@@ -129,35 +134,97 @@ function countIn(items: Array<Object>) {
             acc.push(item);
         }
         return acc;
-    },[]);
+    }, []);
     return count.length;
 }
 
+function moveSlats(slat: Element) {
+    let heightOfClickedItem = slat.getBoundingClientRect().height;
+    let nextItem = slat.nextElementSibling || null;
+    let positionOfClickedSlat = slat.offsetTop;
+
+    // Create a container for the items that are in
+    let wrapSlats = document.createElement("div");
+    wrapSlats.classList.add("wi-Slats_Wrapper");
+    itmContainer.insertBefore(wrapSlats, itmContainer.firstChild);
+
+    // Wrap everything up above the clicked item
+    let items = document.querySelectorAll(".wi-Slat");
+    var arr = Array.prototype.slice.call(items); // Now it's an Array.
+    console.log(arr.indexOf(slat));
+
+    for (let i = 0; i < arr.indexOf(slat); i++) {
+        wrapSlats.appendChild(items[i]);
+    }
+
+    // Set the clicked slat to be position fixed;
+    slat.style.position = "absolute";
+    slat.style.top = positionOfClickedSlat + "px";
+    slat.style.backgroundColor = "#f9f9f9";
+
+    // Move the clicked slat up
+    let moveAmount = positionOfClickedSlat + "px";
+    slat.style.transform = `translateY(-${moveAmount})`;
+
+    // Move the 'in' container
+    wrapSlats.style.transition = `transform .2s`;
+    setTimeout(function() {
+        wrapSlats.style.transform = `translateY(${heightOfClickedItem}px)`;
+    }, 5);
+
+    // If the slat that was clicked has another item after it, add some margin above it to leave space while the clicked slat moves
+    if (nextItem !== null) {
+        nextItem.style.marginTop = heightOfClickedItem + "px";
+    }
+}
+
+function moveEntryInArray(countNo: number, theArray: Array<Object>) {
+    console.log(countNo, theArray);
+    theArray.move(countNo, 0);
+}
+
 function createSlats(slats: Array<Object>) {
-    slats.forEach(function(item) {
+    slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
         slat.classList.add("wi-Slat");
+        slat.setAttribute("data-idx", idx);
         slat.setAttribute("data-wi-slat-in", item.in);
         if (item.team && item.in) {
             slat.setAttribute("data-wi-slat-team", item.team);
         }
-        slat.addEventListener("click", function(e) {
-            e.stopPropagation();
-            // item.in = !item.in;
-            wi.items = setThisItem(item);
-            splitTeams(wi.divisor);
-        }, false);
+
+        // Handle a user being clicked to be 'In'
+        slat.addEventListener(
+            "click",
+            function(e) {
+                e.stopPropagation();
+                moveSlats(this);
+                this.addEventListener("transitionend", function setItems() {
+                    console.log(this);
+                    moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items);
+
+                    wi.notify({ items: setThisItem(item) });
+
+                    this.removeEventListener("transitionend", setItems);
+                });
+            },
+            false
+        );
 
         // The delete button
         let deleteBtn = document.createElement("button");
         deleteBtn.classList.add("wi-Slat_Delete");
         deleteBtn.textContent = "X";
         slat.appendChild(deleteBtn);
-        deleteBtn.addEventListener("click", function(e) {
-            e.stopPropagation();
-            wi.notify({items: removeThisSlat(item)});
-        }, false);
+        deleteBtn.addEventListener(
+            "click",
+            function(e) {
+                e.stopPropagation();
+                wi.notify({ items: removeThisSlat(item) });
+            },
+            false
+        );
 
         // The text node
         let textNode = document.createElement("p");
@@ -173,8 +240,7 @@ function createSlats(slats: Array<Object>) {
 
         itmContainer.appendChild(slat);
     });
-};
-
+}
 
 function setThisItem(slat: Object) {
     var newItems = wi.items.map(function(item, idx) {
@@ -183,10 +249,9 @@ function setThisItem(slat: Object) {
         }
         return item;
     });
-    console.log(newItems);
+    console.table(newItems);
     return newItems;
 }
-
 
 /**
  * Takes a slat as an object and compares it with the objects in the main items. A new array is made with a reduce and the only things allowed in are entries that are not the current slat. This new array is then set to be the items
@@ -205,44 +270,52 @@ function removeThisSlat(slat: Object) {
 // If we have storage of the players then we create an array of them and notify the instance
 if (storage.getItem("players")) {
     wi.notify({
-        items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players")))
+        items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players"))),
     });
 }
 
 // wiAddForm stop the page refreshing by default
-wiAddForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-    // If nothing has been entered in the text box
-    if (hdrInput.value === "") {
-        console.warn("nothing entered");
-        return;
-    }
-    // Otherwise, add the name
-    addName();
-}, false);
+wiAddForm.addEventListener(
+    "submit",
+    function(e) {
+        e.preventDefault();
+        // If nothing has been entered in the text box
+        if (hdrInput.value === "") {
+            console.warn("nothing entered");
+            return;
+        }
+        // Otherwise, add the name
+        addName();
+    },
+    false
+);
 
-wiToolsBtn.addEventListener("click", (e)=> {
+wiToolsBtn.addEventListener("click", e => {
     document.body.setAttribute("data-wi-tools-exposed", document.body.getAttribute("data-wi-tools-exposed") === "true" ? "false" : "true");
 });
 
 // Handles the loading of the JSON file
-wiLoad.addEventListener("change", function(e) {
-    // Note: this was useful http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api
-    var file = wiLoad.files[0];
-    var textType = /json.*/;
-    if (file.type.match(textType)) {
-        var reader = new FileReader();
+wiLoad.addEventListener(
+    "change",
+    function(e) {
+        // Note: this was useful http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api
+        var file = wiLoad.files[0];
+        var textType = /json.*/;
+        if (file.type.match(textType)) {
+            var reader = new FileReader();
 
-        reader.readAsText(file);
-        reader.onload = function(e) {
-            let loadedJSON = JSON.parse(reader.result);
-            console.log(loadedJSON);
-            wi.notify({ items: loadedJSON });
-        };
-    } else {
-        alert("File type not supported!");
-    }
-}, false);
+            reader.readAsText(file);
+            reader.onload = function(e) {
+                let loadedJSON = JSON.parse(reader.result);
+                console.log(loadedJSON);
+                wi.notify({ items: loadedJSON });
+            };
+        } else {
+            alert("File type not supported!");
+        }
+    },
+    false
+);
 
 // hdrInputDoneBtn.addEventListener("click", function(e){
 //     addName();
@@ -263,13 +336,21 @@ function addName() {
 }
 
 // We need a listener for input so we can determine if he input is filled or not
-hdrInput.addEventListener("input", function(e) {
-    e.target.setAttribute("data-wi-input", this.value.length > 0 ? "filled" : "empty");
-}, false);
+hdrInput.addEventListener(
+    "input",
+    function(e) {
+        e.target.setAttribute("data-wi-input", this.value.length > 0 ? "filled" : "empty");
+    },
+    false
+);
 
-wiToolsClose.addEventListener("click", (e) => {
-    document.body.setAttribute("data-wi-tools-exposed", "false");
-}, false);
+wiToolsClose.addEventListener(
+    "click",
+    e => {
+        document.body.setAttribute("data-wi-tools-exposed", "false");
+    },
+    false
+);
 
 function isNameValid(name: string) {
     for (let item of wi.items) {
@@ -283,29 +364,37 @@ function isNameValid(name: string) {
 
 function makeArrayOfStorageItems(items: String) {
     let resultantArray = [];
-    for (let i=0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
         resultantArray.push(items[i]);
     }
     return resultantArray;
 }
 
-wiTools.addEventListener("click", function(e) {
-    if (e.target.id === "wiDeleteMode") {
-        document.body.setAttribute("data-wi-tools-delete-mode", document.body.getAttribute("data-wi-tools-delete-mode") === "true" ? "false" : "true");
-    }
-    if (e.target.id === "wiPaidMode") {
-        document.body.setAttribute("data-wi-tools-paid-mode", document.body.getAttribute("data-wi-tools-paid-mode") === "true" ? "false" : "true");
-    }
-    if (e.target.id === "wiSave") {
-        saveText( JSON.stringify(wi.items), "whosin.json" );
-    }
-}, false);
+wiTools.addEventListener(
+    "click",
+    function(e) {
+        if (e.target.id === "wiDeleteMode") {
+            document.body.setAttribute("data-wi-tools-delete-mode", document.body.getAttribute("data-wi-tools-delete-mode") === "true" ? "false" : "true");
+        }
+        if (e.target.id === "wiPaidMode") {
+            document.body.setAttribute("data-wi-tools-paid-mode", document.body.getAttribute("data-wi-tools-paid-mode") === "true" ? "false" : "true");
+        }
+        if (e.target.id === "wiSave") {
+            saveText(JSON.stringify(wi.items), "whosin.json");
+        }
+    },
+    false
+);
 
 // This is our splitter functionality
-wiSplitter.addEventListener("click", function(e) {
-    wi.divisor = parseFloat(e.target.getAttribute("data-wi-divisor"));
-    splitTeams(wi.divisor);
-}, false);
+wiSplitter.addEventListener(
+    "click",
+    function(e) {
+        wi.divisor = parseFloat(e.target.getAttribute("data-wi-divisor"));
+        splitTeams(wi.divisor);
+    },
+    false
+);
 
 function splitTeams(divideBy) {
     // Make an array of the people who are in
@@ -347,7 +436,6 @@ function itemAdd(itemString: string) {
     });
 }
 
-
 /**
  * Randomize array element order in-place. From: http://stackoverflow.com/a/12646864/1147859
  * Using Durstenfeld shuffle algorithm.
@@ -373,30 +461,27 @@ function chunkify(a: Array<Object>, n: Number, balanced: Boolean) {
         return [a];
     }
     var len = a.length,
-            out = [],
-            i = 0,
-            size;
+        out = [],
+        i = 0,
+        size;
     if (len % n === 0) {
         size = Math.floor(len / n);
         while (i < len) {
-            out.push(a.slice(i, i += size));
+            out.push(a.slice(i, (i += size)));
         }
-    }
-    else if (balanced) {
+    } else if (balanced) {
         while (i < len) {
             size = Math.ceil((len - i) / n--);
-            out.push(a.slice(i, i += size));
+            out.push(a.slice(i, (i += size)));
         }
-    }
-    else {
-
+    } else {
         n--;
         size = Math.floor(len / n);
         if (len % size === 0) {
             size--;
         }
         while (i < size * n) {
-            out.push(a.slice(i, i += size));
+            out.push(a.slice(i, (i += size)));
         }
         out.push(a.slice(size * n));
     }
@@ -408,14 +493,19 @@ function chunkify(a: Array<Object>, n: Number, balanced: Boolean) {
  * @param {[Array]} arr [An array containing nested arrays]
  */
 function flatten(arr: Array<Object>) {
-    return arr.reduce(function (flat: Array<Object>, toFlatten: Array<Object>) {
+    return arr.reduce(function(flat: Array<Object>, toFlatten: Array<Object>) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
 }
 
-function saveText(text: Array<Object>, filename: string){
+function saveText(text: Array<Object>, filename: string) {
     var a = document.createElement("a");
-    a.setAttribute("href", "data:text/plain;charset=utf-u,"+encodeURIComponent(text));
+    a.setAttribute("href", "data:text/plain;charset=utf-u," + encodeURIComponent(text));
     a.setAttribute("download", filename);
     a.click();
 }
+
+Array.prototype.move = function(from: number, to: number) {
+    this.splice(to, 0, this.splice(from, 1)[0]);
+    return this;
+};

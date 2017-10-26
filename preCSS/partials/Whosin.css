@@ -1,8 +1,6 @@
-$color-delete: #B92E22;
-$color-paid: #A3B922;
+$color-delete: #b92e22;
+$color-paid: #a3b922;
 $color-white: #fff;
-
-
 
 html {
     height: 100%;
@@ -19,8 +17,7 @@ body {
     flex-direction: column;
     font-family: -apple-system, "Helvetica", "Roboto";
     max-width: 450px;
-    width: 96%;
-    margin: 0 auto;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -32,4 +29,9 @@ input[type="file" i] {
     align-items: center;
     justify-content: flex-end;
     text-align: right !important;
+}
+
+.wi-Slats_Wrapper {
+    position: relative;
+    transition: transform .4s;
 }

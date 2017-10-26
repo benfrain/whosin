@@ -16,11 +16,14 @@
     min-height: 44px;
     padding: 0 11px;
     position: relative;
+    width: 100%;
+    overflow: hidden;
+    transition: transform .4s, background-color .2s;
     & + & {
         border-top: 1px solid #eee;
     }
     &[data-wi-slat-in="true"] {
-        background-color: #f9f9f9;
+        background-color: #fff;
     }
     &:after {
         font-size: 11px;
@@ -37,9 +40,12 @@
 
 /*The first slat that isn't in*/
 [data-wi-slat-in="false"] {
+    background-color: #fafafa;
+    color: #ccc;
+    border-top: 1px solid #e4e4e4 !important;
     [data-wi-slat-in="true"] + & {
-        border-top: 5px double #f1f1f1;
-        margin-top: 22px;
+        /*border-top: 5px double #f1f1f1;
+        margin-top: 22px;*/
     }
 }
 
@@ -77,7 +83,7 @@
 /*This creates a highlight colour for each team*/
 [data-wi-slat-team="1"] {
     &:after {
-        background-color: #9E0A12;
+        background-color: #9e0a12;
     }
 }
 
@@ -95,6 +101,6 @@
 
 [data-wi-slat-team="4"] {
     &:after {
-        background-color: #9EB912;
+        background-color: #9eb912;
     }
 }
