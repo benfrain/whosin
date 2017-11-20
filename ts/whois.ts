@@ -99,8 +99,8 @@ wi.addObserver({
 wi.addObserver({
     props: ["items"],
     callback: function renderItems() {
-        console.log("running items observer");
-        console.log(wi.items);
+        // console.log("running items observer");
+        console.table(wi.items);
 
         // clear the container
         itmContainer.innerHTML = "";
@@ -138,49 +138,59 @@ function countIn(items: Array<Object>) {
     return count.length;
 }
 
-function moveSlats(slat: Element) {
-    let heightOfClickedItem = slat.getBoundingClientRect().height;
+function rePositionSlat(slat: Element, direction: string) {
+    let moveAmount, indexOfClickedSlat, plusOrMinus;
+    let slatGeometry = slat.getBoundingClientRect();
+    let heightOfClickedItem = slatGeometry.height;
     let nextItem = slat.nextElementSibling || null;
-    let positionOfClickedSlat = slat.offsetTop;
-
-    // Create a container for the items that are in
-    let wrapSlats = document.createElement("div");
-    wrapSlats.classList.add("wi-Slats_Wrapper");
-    itmContainer.insertBefore(wrapSlats, itmContainer.firstChild);
+    let positionOfClickedSlat = slatGeometry.top;
 
     // Wrap everything up above the clicked item
     let items = document.querySelectorAll(".wi-Slat");
-    var arr = Array.prototype.slice.call(items); // Now it's an Array.
-    console.log(arr.indexOf(slat));
+    var arr = Array.from(items); // Now it's an Array.
 
-    for (let i = 0; i < arr.indexOf(slat); i++) {
-        wrapSlats.appendChild(items[i]);
-    }
+    // Create a container for the items above
+    let wrapSlats = document.createElement("div");
+    wrapSlats.classList.add("wi-Slats_Wrapper");
 
     // Set the clicked slat to be position fixed;
-    slat.style.position = "absolute";
+    slat.style.zIndex = "1000";
+    slat.style.position = "fixed";
     slat.style.top = positionOfClickedSlat + "px";
     slat.style.backgroundColor = "#f9f9f9";
 
-    // Move the clicked slat up
-    let moveAmount = positionOfClickedSlat + "px";
-    slat.style.transform = `translateY(-${moveAmount})`;
-
-    // Move the 'in' container
-    wrapSlats.style.transition = `transform .2s`;
-    setTimeout(function() {
-        wrapSlats.style.transform = `translateY(${heightOfClickedItem}px)`;
-    }, 5);
+    if (direction === "up") {
+        itmContainer.insertBefore(wrapSlats, itmContainer.firstChild);
+        for (let i = 0; i < arr.indexOf(slat); i++) {
+            wrapSlats.appendChild(items[i]);
+        }
+        moveAmount = positionOfClickedSlat - wrapSlats.getBoundingClientRect().top;
+        plusOrMinus = "-";
+    } else {
+        itmContainer.insertBefore(wrapSlats, slat);
+        indexOfClickedSlat = arr.indexOf(slat);
+        for (let i = indexOfClickedSlat + 1; i < arr.length; i++) {
+            wrapSlats.appendChild(items[i]);
+        }
+        // Move the clicked slat down
+        let bottomOfWiSlatsContainer = itmContainer.getBoundingClientRect().bottom;
+        let difference = bottomOfWiSlatsContainer - (slat.getBoundingClientRect().top + heightOfClickedItem);
+        moveAmount = difference;
+    }
 
     // If the slat that was clicked has another item after it, add some margin above it to leave space while the clicked slat moves
     if (nextItem !== null) {
         nextItem.style.marginTop = heightOfClickedItem + "px";
     }
+
+    // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
+    slat.style.transform = direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
+    wrapSlats.style.transform = direction === "up" ? `translateY(${heightOfClickedItem}px)` : `translateY(-${heightOfClickedItem}px)`;
 }
 
-function moveEntryInArray(countNo: number, theArray: Array<Object>) {
+function moveEntryInArray(countNo: number, theArray: Array<Object>, endPos) {
     console.log(countNo, theArray);
-    theArray.move(countNo, 0);
+    theArray.move(countNo, endPos);
 }
 
 function createSlats(slats: Array<Object>) {
@@ -199,15 +209,22 @@ function createSlats(slats: Array<Object>) {
             "click",
             function(e) {
                 e.stopPropagation();
-                moveSlats(this);
-                this.addEventListener("transitionend", function setItems() {
-                    console.log(this);
-                    moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items);
-
-                    wi.notify({ items: setThisItem(item) });
-
-                    this.removeEventListener("transitionend", setItems);
-                });
+                // Fork here depending upon whether item is in or out
+                if (e.target.getAttribute("data-wi-slat-in") === "false") {
+                    rePositionSlat(this, "up");
+                    this.addEventListener("transitionend", function setItems() {
+                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items, 0);
+                        wi.notify({ items: setThisItem(item) });
+                        this.removeEventListener("transitionend", setItems);
+                    });
+                } else {
+                    rePositionSlat(this, "down");
+                    this.addEventListener("transitionend", function returnItems() {
+                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items, wi.items.length - 1);
+                        wi.notify({ items: setThisItem(item) });
+                        this.removeEventListener("transitionend", returnItems);
+                    });
+                }
             },
             false
         );
@@ -249,7 +266,7 @@ function setThisItem(slat: Object) {
         }
         return item;
     });
-    console.table(newItems);
+    // console.table(newItems);
     return newItems;
 }
 

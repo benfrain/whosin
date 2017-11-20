@@ -85,3 +85,16 @@ Made OK progress on getting the items to travel to their new position. However, 
 
                     // splitTeams(wi.divisor);
 and not really sure what is going on now.
+
+## 26.10.17
+AMended the movement functions and commented a few bits and pieces. Clicked items now move into position with a nice transition.
+
+To do:
+- Need to sort unselecting players so they move back now. 
+- Apply the new style menu, not entirely sold on the design but take a look.
+- When a player is unselected, also need to remove the team they are in.
+
+
+
+## 11.11.17
+Arrrggghhhhhhh making 'In' working well but returning no working. The event listener for transition end isn't doing anything. Debugger seems the best place to try and fix. When I make a item in it flows through correctly, when return it doesn't.
