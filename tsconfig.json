@@ -5,13 +5,9 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "outFile": "whois.js",
+        "outFile": "inout.js",
         "inlineSourceMap": true
     },
-    "include": [
-        "ts/whois.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["ts/inout.ts"],
+    "exclude": ["node_modules"]
 }

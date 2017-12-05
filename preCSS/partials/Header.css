@@ -1,4 +1,6 @@
-.wi-Header {
+.io-Header {
+    position: relative;
     display: flex;
-    flex-direction: column;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #d5d5d5;
 }

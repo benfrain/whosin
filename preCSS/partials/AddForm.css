@@ -1,47 +1,51 @@
-.wi-AddForm {
+.io-AddForm {
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
     /*Context for the label*/
     position: relative;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 11px;
+    /* Needed for iOS */
+    min-width: 0;
 }
 
-.wi-AddForm_Input {
+.io-AddForm_Input {
     display: flex;
     align-items: flex-end;
     flex: 1 1 auto;
     height: 44px;
     font-size: 21px;
-    padding: 8px 11px 0;
+    padding: 8px 10px 0;
+    margin-right: 20px;
+    border-radius: 4px;
+    transition: background-color .2s;
     &:focus {
         outline: 0;
-        background-color: #f1f1f1;
-        color: #555;
+        background-color: #444;
+        color: #ddd;
     }
 }
 
-.wi-AddForm_Label {
+.io-AddForm_Label {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 11px;
+    left: 10px;
     color: #888;
     font-size: 16px;
     transition: transform .2s, color .2s;
     transform-origin: 0 0;
     /*Using valid and required attribute is genius. From: https://stackoverflow.com/a/16956610/1147859*/
-    .wi-AddForm_Input:focus + &,
-    [data-wi-input="filled"] + & {
+    .io-AddForm_Input:focus + &,
+    [data-io-input="filled"] + & {
         transform: translateY(-18px) scale(.6);
-        color: #444;
+        color: #ddd;
     }
-    [data-wi-duplicate-name] & {
+    [data-io-duplicate-name] & {
         color: $color-delete !important;
     }
 }
 
-.wi-AddForm_DoneBtn {
+.io-AddForm_DoneBtn {
     display: flex;
     flex: 0 1 auto;
     padding: 8px 11px;

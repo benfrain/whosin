@@ -2,19 +2,25 @@ const storage = window.localStorage;
 const itmContainer = document.getElementById("itmContainer");
 const hdrInputDoneBtn = <HTMLButtonElement>document.getElementById("hdrInputDoneBtn");
 const hdrInput = <HTMLInputElement>document.getElementById("hdrInput");
-const wiTools = <HTMLElement>document.getElementById("wiTools");
-const wiSplitter = <HTMLElement>document.getElementById("wiSplitter");
-const wiAddForm = <HTMLFormElement>document.getElementById("wiAddForm");
-const wiInputLabel = <HTMLLabelElement>document.getElementById("wiInputLabel");
-const wiLoad = <HTMLInputElement>document.getElementById("wiLoad");
-const wiCount = <HTMLElement>document.getElementById("wiCount");
-const wiToolsBtn = <HTMLButtonElement>document.getElementById("wiToolsBtn");
-const wiToolsClose = <HTMLButtonElement>document.getElementById("wiToolsClose");
-const wiSlatsAreIn = <HTMLElement>document.getElementById("wiSlatsAreIn");
+const ioTools = <HTMLElement>document.getElementById("ioTools");
+const ioSplitter = <HTMLElement>document.getElementById("ioSplitter");
+const ioSplit2 = <HTMLButtonElement>document.getElementById("ioSplit2");
+const ioSplit3 = <HTMLButtonElement>document.getElementById("ioSplit3");
+const ioSplit4 = <HTMLButtonElement>document.getElementById("ioSplit4");
+const ioAddForm = <HTMLFormElement>document.getElementById("ioAddForm");
+const ioInputLabel = <HTMLLabelElement>document.getElementById("ioInputLabel");
+const ioLoad = <HTMLInputElement>document.getElementById("ioLoad");
+const ioCount = <HTMLElement>document.getElementById("ioCount");
+const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
+const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
+const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
+const root = <HTMLHtmlElement>document.documentElement;
+const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
+let clickMask;
 // console.log(JSON.parse(storage.getItem("players")));
 // makeArrayOfStorageItems(JSON.parse(storage.getItem("players")));
 
-class Whois {
+class InOut {
     items: Array<Object> = [];
     observers: Array<Object>;
     showingToolTray: Boolean;
@@ -41,13 +47,13 @@ function makePerson(name: string) {
     this.in = false;
 }
 
-var wi = new Whois();
+var io = new InOut();
 
-Whois.prototype.addObserver = function(observer: Object) {
+InOut.prototype.addObserver = function (observer: Object) {
     this.observers.push(observer);
 };
 
-Whois.prototype.notify = function(changes: Object, callback: Function) {
+InOut.prototype.notify = function (changes: Object, callback: Function) {
     // Loop through every property in changes and set the data to that new value
     var prop;
     for (prop in changes) {
@@ -83,53 +89,86 @@ Whois.prototype.notify = function(changes: Object, callback: Function) {
         return false;
     }
     // Now for any observers that care about data that has just been changed we inform them of the changes
-    matchedObservers.forEach(function(matchingObserver) {
+    matchedObservers.forEach(function (matchingObserver) {
         matchingObserver.callback.call(null);
     });
 };
 
-wi.addObserver({
+io.addObserver({
     props: ["*"],
     callback: function observerEverything() {
         console.warn("something changed");
     },
 });
 
+io.addObserver({
+    props: ["showingToolTray"],
+    callback: function toggleTools() {
+        if (io.showingToolTray === true) {
+            root.setAttribute("data-io-tools-exposed", "true");
+            createToolsClickMask();
+            let btnPosY = (window.innerHeight - ioToolsBtn.getBoundingClientRect().top) + 10;
+            let btnPosX = ioToolsBtn.getBoundingClientRect().right;
+            console.log(btnPosX);
+            root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
+            root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
+        } else {
+            root.removeAttribute("data-io-tools-exposed");
+            removeToolsClickMask();
+        }
+    },
+});
+
+function createToolsClickMask() {
+    clickMask = document.createElement("div");
+    clickMask.classList.add("io-Tools_ClickMask");
+    clickMask = ioToolsBtn.parentNode.insertBefore(clickMask, ioToolsBtn);
+    clickMask.addEventListener("click", function (e) {
+        io.notify({ showingToolTray: false });
+        removeToolsClickMask();
+    });
+}
+
+function removeToolsClickMask() {
+    if (wrapper.contains(clickMask)) {
+        wrapper.removeChild(clickMask);
+    }
+}
+
 // This function renders the list of items in total each time
-wi.addObserver({
+io.addObserver({
     props: ["items"],
     callback: function renderItems() {
-        // console.log("running items observer");
-        console.table(wi.items);
+        // console.table(io.items);
 
         // clear the container
         itmContainer.innerHTML = "";
 
-        createSlats(wi.items);
+        createSlats(io.items);
 
         // Set the storage
-        storage.setItem("players", JSON.stringify(wi.items));
+        storage.setItem("players", JSON.stringify(io.items));
 
         // Set the count
-        if (wi.count !== countIn(wi.items)) {
-            document.body.setAttribute("data-wi-count-update", "");
-            setTimeout(function() {
-                document.body.removeAttribute("data-wi-count-update");
+        if (io.count !== countIn(io.items)) {
+            root.setAttribute("data-io-count-update", "");
+            setTimeout(function () {
+                root.removeAttribute("data-io-count-update");
             }, 300);
         } else {
-            document.body.removeAttribute("data-wi-count-update");
+            root.removeAttribute("data-io-count-update");
         }
-        wi.count = countIn(wi.items);
+        io.count = countIn(io.items);
 
         // Communicate to DOM the count number
-        document.body.setAttribute("data-wi-count", wi.count);
-        wiCount.textContent = wi.count.toString();
+        root.setAttribute("data-io-count", io.count);
+        ioCount.textContent = io.count.toString();
     },
 });
 
 // Count the people who are in
 function countIn(items: Array<Object>) {
-    var count = items.reduce(function(acc, item, idx) {
+    var count = items.reduce(function (acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
@@ -139,6 +178,7 @@ function countIn(items: Array<Object>) {
 }
 
 function rePositionSlat(slat: Element, direction: string) {
+    // debugger;
     let moveAmount, indexOfClickedSlat, plusOrMinus;
     let slatGeometry = slat.getBoundingClientRect();
     let heightOfClickedItem = slatGeometry.height;
@@ -146,15 +186,15 @@ function rePositionSlat(slat: Element, direction: string) {
     let positionOfClickedSlat = slatGeometry.top;
 
     // Wrap everything up above the clicked item
-    let items = document.querySelectorAll(".wi-Slat");
+    let items = document.querySelectorAll(".io-Slat");
     var arr = Array.from(items); // Now it's an Array.
 
     // Create a container for the items above
     let wrapSlats = document.createElement("div");
-    wrapSlats.classList.add("wi-Slats_Wrapper");
+    wrapSlats.classList.add("io-Slats_Wrapper");
 
     // Set the clicked slat to be position fixed;
-    slat.style.zIndex = "1000";
+    slat.style.zIndex = "99";
     slat.style.position = "fixed";
     slat.style.top = positionOfClickedSlat + "px";
     slat.style.backgroundColor = "#f9f9f9";
@@ -174,7 +214,7 @@ function rePositionSlat(slat: Element, direction: string) {
         }
         // Move the clicked slat down
         let bottomOfWiSlatsContainer = itmContainer.getBoundingClientRect().bottom;
-        let difference = bottomOfWiSlatsContainer - (slat.getBoundingClientRect().top + heightOfClickedItem);
+        let difference = bottomOfWiSlatsContainer - slat.getBoundingClientRect().top;
         moveAmount = difference;
     }
 
@@ -183,45 +223,50 @@ function rePositionSlat(slat: Element, direction: string) {
         nextItem.style.marginTop = heightOfClickedItem + "px";
     }
 
+    // Determine transition duration
+    let duration = moveAmount / 500;
     // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
-    slat.style.transform = direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
     wrapSlats.style.transform = direction === "up" ? `translateY(${heightOfClickedItem}px)` : `translateY(-${heightOfClickedItem}px)`;
+    slat.style.transform = direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
+    console.log(duration.toFixed(2));
+    slat.style.transitionDuration = `${duration.toFixed(2)}s`
+    wrapSlats.style.transitionDuration = `${duration.toFixed(2)}s`
 }
 
 function moveEntryInArray(countNo: number, theArray: Array<Object>, endPos) {
-    console.log(countNo, theArray);
+    // console.log(countNo, theArray);
     theArray.move(countNo, endPos);
 }
 
 function createSlats(slats: Array<Object>) {
-    slats.forEach(function(item, idx) {
+    slats.forEach(function (item, idx) {
         // The container
         let slat = document.createElement("div");
-        slat.classList.add("wi-Slat");
+        slat.classList.add("io-Slat");
         slat.setAttribute("data-idx", idx);
-        slat.setAttribute("data-wi-slat-in", item.in);
+        slat.setAttribute("data-io-slat-in", item.in);
         if (item.team && item.in) {
-            slat.setAttribute("data-wi-slat-team", item.team);
+            slat.setAttribute("data-io-slat-team", item.team);
         }
 
         // Handle a user being clicked to be 'In'
         slat.addEventListener(
             "click",
-            function(e) {
+            function (e) {
                 e.stopPropagation();
                 // Fork here depending upon whether item is in or out
-                if (e.target.getAttribute("data-wi-slat-in") === "false") {
+                if (e.target.getAttribute("data-io-slat-in") === "false") {
                     rePositionSlat(this, "up");
                     this.addEventListener("transitionend", function setItems() {
-                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items, 0);
-                        wi.notify({ items: setThisItem(item) });
+                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, 0);
+                        io.notify({ items: setThisItem(item) });
                         this.removeEventListener("transitionend", setItems);
                     });
                 } else {
                     rePositionSlat(this, "down");
                     this.addEventListener("transitionend", function returnItems() {
-                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), wi.items, wi.items.length - 1);
-                        wi.notify({ items: setThisItem(item) });
+                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, io.items.length - 1);
+                        io.notify({ items: setThisItem(item) });
                         this.removeEventListener("transitionend", returnItems);
                     });
                 }
@@ -231,27 +276,27 @@ function createSlats(slats: Array<Object>) {
 
         // The delete button
         let deleteBtn = document.createElement("button");
-        deleteBtn.classList.add("wi-Slat_Delete");
+        deleteBtn.classList.add("io-Slat_Delete");
         deleteBtn.textContent = "X";
         slat.appendChild(deleteBtn);
         deleteBtn.addEventListener(
             "click",
-            function(e) {
+            function (e) {
                 e.stopPropagation();
-                wi.notify({ items: removeThisSlat(item) });
+                io.notify({ items: removeThisSlat(item) });
             },
             false
         );
 
         // The text node
         let textNode = document.createElement("p");
-        textNode.classList.add("wi-Slat_Name");
+        textNode.classList.add("io-Slat_Name");
         textNode.textContent = item.name;
         slat.appendChild(textNode);
 
         // The action button
         let slatBtn = document.createElement("button");
-        slatBtn.classList.add("wi-Slat_Action");
+        slatBtn.classList.add("io-Slat_Action");
         slatBtn.textContent = "paid";
         slat.appendChild(slatBtn);
 
@@ -260,7 +305,7 @@ function createSlats(slats: Array<Object>) {
 }
 
 function setThisItem(slat: Object) {
-    var newItems = wi.items.map(function(item, idx) {
+    var newItems = io.items.map(function (item, idx) {
         if (item.name === slat.name) {
             item.in = !item.in;
         }
@@ -275,7 +320,7 @@ function setThisItem(slat: Object) {
  * @param {Object} slat A single slat represented as an object
  */
 function removeThisSlat(slat: Object) {
-    var newItems = wi.items.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
+    var newItems = io.items.reduce(function (acc: Array<Object>, item: Object, idx: Number) {
         if (item.name !== slat.name) {
             acc.push(item);
         }
@@ -286,15 +331,15 @@ function removeThisSlat(slat: Object) {
 
 // If we have storage of the players then we create an array of them and notify the instance
 if (storage.getItem("players")) {
-    wi.notify({
+    io.notify({
         items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players"))),
     });
 }
 
 // wiAddForm stop the page refreshing by default
-wiAddForm.addEventListener(
+ioAddForm.addEventListener(
     "submit",
-    function(e) {
+    function (e) {
         e.preventDefault();
         // If nothing has been entered in the text box
         if (hdrInput.value === "") {
@@ -307,25 +352,27 @@ wiAddForm.addEventListener(
     false
 );
 
-wiToolsBtn.addEventListener("click", e => {
-    document.body.setAttribute("data-wi-tools-exposed", document.body.getAttribute("data-wi-tools-exposed") === "true" ? "false" : "true");
+ioToolsBtn.addEventListener("click", e => {
+    io.notify({
+        showingToolTray: io.showingToolTray === true ? false : true,
+    })
 });
 
 // Handles the loading of the JSON file
-wiLoad.addEventListener(
+ioLoad.addEventListener(
     "change",
-    function(e) {
+    function (e) {
         // Note: this was useful http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api
-        var file = wiLoad.files[0];
+        var file = ioLoad.files[0];
         var textType = /json.*/;
         if (file.type.match(textType)) {
             var reader = new FileReader();
 
             reader.readAsText(file);
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 let loadedJSON = JSON.parse(reader.result);
                 console.log(loadedJSON);
-                wi.notify({ items: loadedJSON });
+                io.notify({ items: loadedJSON });
             };
         } else {
             alert("File type not supported!");
@@ -341,12 +388,12 @@ wiLoad.addEventListener(
 function addName() {
     console.log(isNameValid(hdrInput.value));
     if (isNameValid(hdrInput.value) === false) {
-        document.body.setAttribute("data-wi-duplicate-name", "");
-        wiInputLabel.textContent = "Name already exists";
+        root.setAttribute("data-io-duplicate-name", "");
+        ioInputLabel.textContent = "Name already exists";
         // return;
     } else {
-        document.body.removeAttribute("data-wi-duplicate-name");
-        wiInputLabel.textContent = "Add Name";
+        root.removeAttribute("data-io-duplicate-name");
+        ioInputLabel.textContent = "Add Name";
         itemAdd(hdrInput.value);
         hdrInput.value = "";
     }
@@ -355,22 +402,22 @@ function addName() {
 // We need a listener for input so we can determine if he input is filled or not
 hdrInput.addEventListener(
     "input",
-    function(e) {
-        e.target.setAttribute("data-wi-input", this.value.length > 0 ? "filled" : "empty");
+    function (e) {
+        e.target.setAttribute("data-io-input", this.value.length > 0 ? "filled" : "empty");
     },
     false
 );
 
-wiToolsClose.addEventListener(
-    "click",
-    e => {
-        document.body.setAttribute("data-wi-tools-exposed", "false");
-    },
-    false
-);
+// ioToolsClose.addEventListener(
+//     "click",
+//     e => {
+//         root.setAttribute("data-io-tools-exposed", "false");
+//     },
+//     false
+// );
 
 function isNameValid(name: string) {
-    for (let item of wi.items) {
+    for (let item of io.items) {
         if (item.name === name) {
             // alert(item.name, name);
             return false;
@@ -387,42 +434,65 @@ function makeArrayOfStorageItems(items: String) {
     return resultantArray;
 }
 
-wiTools.addEventListener(
+ioTools.addEventListener(
     "click",
-    function(e) {
-        if (e.target.id === "wiDeleteMode") {
-            document.body.setAttribute("data-wi-tools-delete-mode", document.body.getAttribute("data-wi-tools-delete-mode") === "true" ? "false" : "true");
+    function (e) {
+        if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
+            root.setAttribute("data-io-tools-delete-mode", root.getAttribute("data-io-tools-delete-mode") === "true" ? "false" : "true");
         }
-        if (e.target.id === "wiPaidMode") {
-            document.body.setAttribute("data-wi-tools-paid-mode", document.body.getAttribute("data-wi-tools-paid-mode") === "true" ? "false" : "true");
+        if (e.target.id === "ioPaidMode" || e.target.parentNode.id === "ioPaidMode") {
+            root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
         }
-        if (e.target.id === "wiSave") {
-            saveText(JSON.stringify(wi.items), "whosin.json");
+        if (e.target.id === "ioSave" || e.target.parentNode.id === "ioSave") {
+            saveText(JSON.stringify(io.items), "inout.json");
         }
     },
     false
 );
 
 // This is our splitter functionality
-wiSplitter.addEventListener(
-    "click",
-    function(e) {
-        wi.divisor = parseFloat(e.target.getAttribute("data-wi-divisor"));
-        splitTeams(wi.divisor);
-    },
-    false
-);
+// ioSplitter.addEventListener(
+//     "click",
+//     function (e) {
+//         let item;
 
-function splitTeams(divideBy) {
+//         console.log(e.target);
+//         // Depending upon whether the SVG or element has been clicked
+//         if (e.target.classList.contains(".io-Tools_SplitBtn")) {
+//             console.log(parseFloat(e.target.getAttribute("data-io-divisor")));
+//             io.divisor = parseFloat(e.target.getAttribute("data-io-divisor"));
+//         } else {
+//             console.log(parseFloat(e.target.parentNode.getAttribute("data-io-divisor")));
+//             io.divisor = parseFloat(e.target.parentNode.getAttribute("data-io-divisor"));
+//         }
+//         console.log(io.divisor);
+//         splitTeams(io.divisor);
+//     },
+//     false
+// );
+
+ioSplit2.addEventListener("click", function split2ways() {
+    splitTeams(2);
+})
+
+ioSplit3.addEventListener("click", function split3ways() {
+    splitTeams(3);
+})
+
+ioSplit4.addEventListener("click", function split4ways() {
+    splitTeams(4);
+});
+
+function splitTeams(divideBy: number) {
     // Make an array of the people who are in
-    let peopleIn = wi.items.reduce(function(acc, item, idx) {
+    let peopleIn = io.items.reduce(function (acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
         return acc;
     }, []);
     // Make an array of the people who are out
-    let peopleOut = wi.items.reduce(function(acc, item, idx) {
+    let peopleOut = io.items.reduce(function (acc, item, idx) {
         if (item.in !== true) {
             acc.push(item);
         }
@@ -434,22 +504,25 @@ function splitTeams(divideBy) {
     let chunkedAndShuffled = chunkify(shuffledArray, divideBy, true);
 
     // Now for each team of people
-    chunkedAndShuffled.forEach(function(arrayOfSplit, idx) {
+    chunkedAndShuffled.forEach(function (arrayOfSplit, idx) {
         // For each person in each team
-        arrayOfSplit.forEach(function(itemInArraySplit) {
+        arrayOfSplit.forEach(function (itemInArraySplit) {
             // Set them on their relevant team. Adding one here to give more human friendly team numbers
             itemInArraySplit.team = idx + 1;
         });
     });
+    console.log(chunkedAndShuffled);
+    console.log(peopleOut);
+    console.log(flatten(chunkedAndShuffled).concat(peopleOut));
     // Now flatten the teams into a single array and then add on the people who are out
-    wi.notify({ items: flatten(chunkedAndShuffled).concat(peopleOut) });
+    io.notify({ items: flatten(chunkedAndShuffled).concat(peopleOut) });
 }
 
 function itemAdd(itemString: string) {
     var newPerson = new makePerson(itemString);
-    wi.items.push(newPerson);
-    wi.notify({
-        items: wi.items,
+    io.items.push(newPerson);
+    io.notify({
+        items: io.items,
     });
 }
 
@@ -473,7 +546,8 @@ function shuffleArray(array: Array<Object>) {
  * @param {[Number]} n is the number we want to split the array by
  * @param {[Boolean]} balanced (subarrays' lengths differ as less as possible) or even (all subarrays but the last have the same length)
  */
-function chunkify(a: Array<Object>, n: Number, balanced: Boolean) {
+function chunkify(a: Array<Object>, n: number, balanced: Boolean) {
+    console.log(a, n);
     if (n < 2) {
         return [a];
     }
@@ -502,6 +576,7 @@ function chunkify(a: Array<Object>, n: Number, balanced: Boolean) {
         }
         out.push(a.slice(size * n));
     }
+    console.log(out);
     return out;
 }
 
@@ -510,7 +585,7 @@ function chunkify(a: Array<Object>, n: Number, balanced: Boolean) {
  * @param {[Array]} arr [An array containing nested arrays]
  */
 function flatten(arr: Array<Object>) {
-    return arr.reduce(function(flat: Array<Object>, toFlatten: Array<Object>) {
+    return arr.reduce(function (flat: Array<Object>, toFlatten: Array<Object>) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
 }
@@ -522,7 +597,8 @@ function saveText(text: Array<Object>, filename: string) {
     a.click();
 }
 
-Array.prototype.move = function(from: number, to: number) {
+Array.prototype.move = function (from: number, to: number) {
     this.splice(to, 0, this.splice(from, 1)[0]);
     return this;
 };
+

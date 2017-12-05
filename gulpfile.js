@@ -6,13 +6,14 @@ var autoprefixer = require("autoprefixer");
 var browserSync = require("browser-sync");
 var postcssimport = require("postcss-import");
 var postcssColorFunction = require("postcss-color-function");
+var assets = require('postcss-assets');
 var nested = require("postcss-nested");
 var tsProject = ts.createProject("tsconfig.json");
 var del = require("del");
 var sourcemaps = require("gulp-sourcemaps");
 
 gulp.task("css", function() {
-    var processors = [postcssimport({ glob: true }), simplevars, nested, postcssColorFunction(), autoprefixer({ browsers: ["iOS >= 8", "android 4"] })];
+    var processors = [postcssimport({ glob: true }), simplevars, nested, assets, postcssColorFunction(), autoprefixer({ browsers: ["iOS >= 8", "android 4"] })];
 
     // Produce a file list off all needed css files and move them to /build
 

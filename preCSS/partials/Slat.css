@@ -1,19 +1,19 @@
-.wi-Slats {
+.io-Slats {
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform 2s;
-    [data-wi-tools-delete-mode="true"] & {
+    transition: transform .35s;
+    [data-io-tools-delete-mode="true"] & {
         transform: translateX(44px);
     }
 }
 
-.wi-Slats_Wrapper {
+.io-Slats_Wrapper {
     position: relative;
-    transition: .2s transform;
+    transition-property: transform;
 }
 
-.wi-Slat {
+.io-Slat {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,42 +22,47 @@
     padding: 0 11px;
     position: relative;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     transform: none;
-    transition: transform .35s, background-color .35s;
+    transition-property: all;
+
     & + & {
-        border-top: 1px solid #eee;
+        box-shadow: inset 0 1px 0 0 #eee;
     }
-    &[data-wi-slat-in="true"] {
+    &[data-io-slat-in="true"] {
         background-color: #fff;
     }
     &:after {
-        font-size: 11px;
-        height: 14px;
-        width: 18px;
+        font-size: 12px;
+        height: 25px;
+        width: 25px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 7px;
+        border-radius: 40px;
         font-size: 12px;
-        color: #fff;
-        content: attr(data-wi-slat-team);
+        color: #222;
+        content: attr(data-io-slat-team);
+        /* background-color: #f1f1f1; */
         /*content: "";*/
+    }
+    &[data-io-slat-in="false"]:after {
+        background-color: #fafafa;
     }
 }
 
 /*The first slat that isn't in*/
-[data-wi-slat-in="false"] {
+[data-io-slat-in="false"] {
     background-color: #fafafa;
     color: #ccc;
-    border-top: 1px solid #e4e4e4 !important;
-    [data-wi-slat-in="true"] + & {
+    box-shadow: inset 0 1px 0 0 #e4e4e4 !important;
+    [data-io-slat-in="true"] + & {
         /*border-top: 5px double #f1f1f1;
         margin-top: 22px;*/
     }
 }
 
-.wi-Slat_Delete {
+.io-Slat_Delete {
     position: absolute;
     right: 100%;
     display: flex;
@@ -70,7 +75,7 @@
     background-color: $color-delete;
 }
 
-.wi-Slat_Action {
+.io-Slat_Action {
     position: absolute;
     left: 100%;
     display: flex;
@@ -83,32 +88,32 @@
     background-color: transparent;
     transition: transform .2s;
     color: $color-white;
-    [data-wi-tools-paid-mode="true"] & {
+    [data-io-tools-paid-mode="true"] & {
         transform: translateX(-100px);
     }
 }
 
 /*This creates a highlight colour for each team*/
-[data-wi-slat-team="1"] {
+[data-io-slat-team="1"] {
     &:after {
-        background-color: #da020e;
+        border: 2px solid color(#40dfff a(.5));
     }
 }
 
-[data-wi-slat-team="2"] {
+[data-io-slat-team="2"] {
     &:after {
-        background-color: #5cbfeb;
+        border: 2px solid color(#cca814 a(.5));
     }
 }
 
-[data-wi-slat-team="3"] {
+[data-io-slat-team="3"] {
     &:after {
-        background-color: #f90;
+        border: 2px solid color(#99873D a(.5));
     }
 }
 
-[data-wi-slat-team="4"] {
+[data-io-slat-team="4"] {
     &:after {
-        background-color: #9eb912;
+        background-color: color(#9eb912 a(.3));
     }
 }

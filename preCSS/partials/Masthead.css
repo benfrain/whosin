@@ -1,13 +1,33 @@
-.wi-Masthead {
-    /*display: none;*/
+.io-Masthead {
     position: relative;
-    padding: 44px 0 0 0;
+    padding: 20px;
 }
 
-.wi-Masthead_Cog {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 11px;
-    top: 11px;
+.io-Masthead_ToolsBtn {
+    z-index: 100;
+    display: block;
+    height: 30px;
+    width: 30px;
+    position: fixed;
+    top: 65vh;
+    right: 50px;
+    border-radius: 50%;
+    background-color: #f90;
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        border-radius: 50%;
+        border: 1px solid #f90;
+        height: 34px;
+        width: 34px;
+        background-color: transparent;
+    }
+}
+
+.io-Masthead_Logo {
+    display: flex;
+    align-items: center;
 }

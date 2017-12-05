@@ -2,23 +2,44 @@ $color-delete: #b92e22;
 $color-paid: #a3b922;
 $color-white: #fff;
 
+:root {
+    --toolsX: "";
+    --toolsY: "";
+    --duration: "";
+}
+
 html {
     height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
     display: flex;
     height: 100%;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* [data-io-tools-exposed="true"] & {
+        filter: blur(3px);
+    } */
 }
 
-.wi-Whosin {
+.io-InOut_Group {
+    transition: filter .2s;
+    [data-io-tools-exposed="true"] & {
+        filter: blur(3px);
+    }
+}
+
+.io-InOut {
     box-sizing: border-box !important;
     display: flex;
     flex-direction: column;
-    font-family: -apple-system, "Helvetica", "Roboto";
-    max-width: 450px;
+    font-family: 'Exo 2', sans-serif;
     width: 100%;
-    overflow: hidden;
+    position: relative;
 }
 
 input[type="file" i] {
@@ -31,7 +52,7 @@ input[type="file" i] {
     text-align: right !important;
 }
 
-.wi-Slats_Wrapper {
+.io-Slats_Wrapper {
     position: relative;
     transition: transform .4s;
 }

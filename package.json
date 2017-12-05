@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "postcss": "^6.0.14",
+    "postcss-assets": "^5.0.0"
   },
   "name": "whosin",
   "version": "1.0.0",

@@ -1,22 +1,20 @@
-.wi-Count {
-    /*position: absolute;*/
-    /*bottom: 44px;*/
-    /*left: 50%;*/
-    height: 33px;
-    width: 33px;
-    color: #f90;
+.io-Count {
+    /* color: #222; */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
-    color: #f90;
-    box-shadow: 3px 0 0 #333;
-    [data-wi-count-update] & {
-        animation: wiCount .3s 1 ease-in-out;
+    font-size: 1.4rem;
+    color: #fff;
+    /*box-shadow: 3px 0 0 #333;*/
+    [data-io-count-update] & {
+        animation: ioCount .3s 1 ease-in-out;
+    }
+    &:empty {
+        opacity: 0;
     }
 }
 
-@keyframes wiCount {
+@keyframes ioCount {
     50% {
         transform: scale(1.2);
     }
