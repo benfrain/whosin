@@ -27,6 +27,7 @@ class InOut {
     showingInput: Boolean;
     notify: Function;
     addObserver: Function;
+    deleteMode: Boolean;
     divisor: number;
     count: number;
     constructor() {
@@ -36,6 +37,7 @@ class InOut {
         this.showingInput = false;
         this.divisor = 0;
         this.count = 0;
+        this.deleteMode = false;
     }
 }
 
@@ -102,6 +104,36 @@ io.addObserver({
 });
 
 io.addObserver({
+    props: ["deleteMode"],
+    callback: function observerEverything() {
+        if (io.deleteMode === true) {
+            root.setAttribute("data-io-tools-delete-mode", "true");
+            deleteModeClickMask();
+        } else {
+            root.setAttribute("data-io-tools-delete-mode", "false");
+            removeDeleteModeClickMask();
+        }
+    },
+});
+
+function deleteModeClickMask() {
+    let deleteMask = document.createElement("div");
+    deleteMask.classList.add("io-Slat_DeleteMask");
+    itmContainer.appendChild(deleteMask);
+    deleteMask.addEventListener("click", function selfRemoveDeleteMask() {
+        io.notify({ deleteMode: false });
+        removeDeleteModeClickMask();
+    });
+}
+
+function removeDeleteModeClickMask() {
+    let deleteMask = itmContainer.querySelector(".io-Slat_DeleteMask");
+    if (deleteMask) {
+        itmContainer.removeChild(deleteMask);
+    }
+}
+
+io.addObserver({
     props: ["showingToolTray"],
     callback: function toggleTools() {
         if (io.showingToolTray === true) {
@@ -109,7 +141,6 @@ io.addObserver({
             createToolsClickMask();
             let btnPosY = (window.innerHeight - ioToolsBtn.getBoundingClientRect().top) + 10;
             let btnPosX = ioToolsBtn.getBoundingClientRect().right;
-            console.log(btnPosX);
             root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
             root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
         } else {
@@ -228,14 +259,21 @@ function rePositionSlat(slat: Element, direction: string) {
     // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
     wrapSlats.style.transform = direction === "up" ? `translateY(${heightOfClickedItem}px)` : `translateY(-${heightOfClickedItem}px)`;
     slat.style.transform = direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
-    console.log(duration.toFixed(2));
-    slat.style.transitionDuration = `${duration.toFixed(2)}s`
-    wrapSlats.style.transitionDuration = `${duration.toFixed(2)}s`
+    // Set the CSS var for the duration this click should take
+    root.style.setProperty("--duration", `${duration.toFixed(2)}s`);
+    console.log(duration, direction);
 }
 
 function moveEntryInArray(countNo: number, theArray: Array<Object>, endPos) {
     // console.log(countNo, theArray);
     theArray.move(countNo, endPos);
+}
+
+// We remove any team affiliation here
+function removeTeams() {
+    io.items.forEach(item => {
+        item.team = "";
+    });
 }
 
 function createSlats(slats: Array<Object>) {
@@ -255,19 +293,24 @@ function createSlats(slats: Array<Object>) {
             function (e) {
                 e.stopPropagation();
                 // Fork here depending upon whether item is in or out
+                root.setAttribute("data-io-slat-moving", "true");
                 if (e.target.getAttribute("data-io-slat-in") === "false") {
                     rePositionSlat(this, "up");
                     this.addEventListener("transitionend", function setItems() {
                         moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, 0);
+                        removeTeams();
                         io.notify({ items: setThisItem(item) });
                         this.removeEventListener("transitionend", setItems);
+                        root.setAttribute("data-io-slat-moving", "false");
                     });
                 } else {
                     rePositionSlat(this, "down");
                     this.addEventListener("transitionend", function returnItems() {
                         moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, io.items.length - 1);
+                        removeTeams();
                         io.notify({ items: setThisItem(item) });
                         this.removeEventListener("transitionend", returnItems);
+                        root.setAttribute("data-io-slat-moving", "false");
                     });
                 }
             },
@@ -277,7 +320,6 @@ function createSlats(slats: Array<Object>) {
         // The delete button
         let deleteBtn = document.createElement("button");
         deleteBtn.classList.add("io-Slat_Delete");
-        deleteBtn.textContent = "X";
         slat.appendChild(deleteBtn);
         deleteBtn.addEventListener(
             "click",
@@ -381,10 +423,6 @@ ioLoad.addEventListener(
     false
 );
 
-// hdrInputDoneBtn.addEventListener("click", function(e){
-//     addName();
-// });
-
 function addName() {
     console.log(isNameValid(hdrInput.value));
     if (isNameValid(hdrInput.value) === false) {
@@ -408,14 +446,6 @@ hdrInput.addEventListener(
     false
 );
 
-// ioToolsClose.addEventListener(
-//     "click",
-//     e => {
-//         root.setAttribute("data-io-tools-exposed", "false");
-//     },
-//     false
-// );
-
 function isNameValid(name: string) {
     for (let item of io.items) {
         if (item.name === name) {
@@ -438,10 +468,13 @@ ioTools.addEventListener(
     "click",
     function (e) {
         if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
-            root.setAttribute("data-io-tools-delete-mode", root.getAttribute("data-io-tools-delete-mode") === "true" ? "false" : "true");
+            io.notify({ deleteMode: io.deleteMode === true ? false : true });
+            io.notify({ showingToolTray: false });
+
         }
         if (e.target.id === "ioPaidMode" || e.target.parentNode.id === "ioPaidMode") {
             root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
+            io.notify({ showingToolTray: false });
         }
         if (e.target.id === "ioSave" || e.target.parentNode.id === "ioSave") {
             saveText(JSON.stringify(io.items), "inout.json");
@@ -450,37 +483,19 @@ ioTools.addEventListener(
     false
 );
 
-// This is our splitter functionality
-// ioSplitter.addEventListener(
-//     "click",
-//     function (e) {
-//         let item;
-
-//         console.log(e.target);
-//         // Depending upon whether the SVG or element has been clicked
-//         if (e.target.classList.contains(".io-Tools_SplitBtn")) {
-//             console.log(parseFloat(e.target.getAttribute("data-io-divisor")));
-//             io.divisor = parseFloat(e.target.getAttribute("data-io-divisor"));
-//         } else {
-//             console.log(parseFloat(e.target.parentNode.getAttribute("data-io-divisor")));
-//             io.divisor = parseFloat(e.target.parentNode.getAttribute("data-io-divisor"));
-//         }
-//         console.log(io.divisor);
-//         splitTeams(io.divisor);
-//     },
-//     false
-// );
-
 ioSplit2.addEventListener("click", function split2ways() {
     splitTeams(2);
+    io.notify({ showingToolTray: false });
 })
 
 ioSplit3.addEventListener("click", function split3ways() {
     splitTeams(3);
+    io.notify({ showingToolTray: false });
 })
 
 ioSplit4.addEventListener("click", function split4ways() {
     splitTeams(4);
+    io.notify({ showingToolTray: false });
 });
 
 function splitTeams(divideBy: number) {
@@ -511,9 +526,6 @@ function splitTeams(divideBy: number) {
             itemInArraySplit.team = idx + 1;
         });
     });
-    console.log(chunkedAndShuffled);
-    console.log(peopleOut);
-    console.log(flatten(chunkedAndShuffled).concat(peopleOut));
     // Now flatten the teams into a single array and then add on the people who are out
     io.notify({ items: flatten(chunkedAndShuffled).concat(peopleOut) });
 }
@@ -525,6 +537,8 @@ function itemAdd(itemString: string) {
         items: io.items,
     });
 }
+
+
 
 /**
  * Randomize array element order in-place. From: http://stackoverflow.com/a/12646864/1147859
@@ -547,7 +561,6 @@ function shuffleArray(array: Array<Object>) {
  * @param {[Boolean]} balanced (subarrays' lengths differ as less as possible) or even (all subarrays but the last have the same length)
  */
 function chunkify(a: Array<Object>, n: number, balanced: Boolean) {
-    console.log(a, n);
     if (n < 2) {
         return [a];
     }
@@ -576,7 +589,6 @@ function chunkify(a: Array<Object>, n: number, balanced: Boolean) {
         }
         out.push(a.slice(size * n));
     }
-    console.log(out);
     return out;
 }
 

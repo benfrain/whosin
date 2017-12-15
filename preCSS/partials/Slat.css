@@ -10,7 +10,7 @@
 
 .io-Slats_Wrapper {
     position: relative;
-    transition-property: transform;
+    transition: transform var(--duration);
 }
 
 .io-Slat {
@@ -22,13 +22,10 @@
     padding: 0 11px;
     position: relative;
     width: 100%;
-    /*overflow: hidden;*/
     transform: none;
-    transition-property: all;
-
-    & + & {
-        box-shadow: inset 0 1px 0 0 #eee;
-    }
+    transition: all var(--duration);
+    box-shadow: inset 0 -1px 0 0 #eee;
+    
     &[data-io-slat-in="true"] {
         background-color: #fff;
     }
@@ -42,12 +39,21 @@
         border-radius: 40px;
         font-size: 12px;
         color: #222;
+        opacity: 1;
         content: attr(data-io-slat-team);
-        /* background-color: #f1f1f1; */
-        /*content: "";*/
     }
-    &[data-io-slat-in="false"]:after {
-        background-color: #fafafa;
+    /* Don't want to see the team numbers when slats move */
+    [data-io-slat-moving="true"] &:after {
+        animation: fader var(--duration) forwards;
+    }
+}
+
+@keyframes fader {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }
 
@@ -55,11 +61,7 @@
 [data-io-slat-in="false"] {
     background-color: #fafafa;
     color: #ccc;
-    box-shadow: inset 0 1px 0 0 #e4e4e4 !important;
-    [data-io-slat-in="true"] + & {
-        /*border-top: 5px double #f1f1f1;
-        margin-top: 22px;*/
-    }
+    box-shadow: inset 0 -1px 0 0 #e4e4e4 !important;
 }
 
 .io-Slat_Delete {
@@ -72,7 +74,20 @@
     height: 44px;
     width: 44px;
     color: $color-white;
-    background-color: $color-delete;
+    /* background-color: $color-delete; */
+    background: inline("img/trash_bg.svg"),  $color-delete;
+    background-size: 20px auto;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important;    
+}
+
+.io-Slat_DeleteMask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .io-Slat_Action {
@@ -114,6 +129,6 @@
 
 [data-io-slat-team="4"] {
     &:after {
-        background-color: color(#9eb912 a(.3));
+        border: 2px solid color(#f90 a(.5));
     }
 }

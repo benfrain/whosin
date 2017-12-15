@@ -1259,12 +1259,12 @@ graceful-fs@~1.2.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-gulp-postcss@^6.4.0:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/gulp-postcss/-/gulp-postcss-6.4.0.tgz#78a32e3c87aa6cdcec5ae1c905e196d478e8c5d5"
+gulp-postcss@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/gulp-postcss/-/gulp-postcss-7.0.0.tgz#cfb62a19fa947f8be67ce9ecae89ceb959f0cf93"
   dependencies:
     gulp-util "^3.0.8"
-    postcss "^5.2.12"
+    postcss "^6.0.0"
     postcss-load-config "^1.2.0"
     vinyl-sourcemaps-apply "^0.2.1"
 
@@ -2434,7 +2434,7 @@ postcss-value-parser@^3.2.3, postcss-value-parser@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-3.3.0.tgz#87f38f9f18f774a4ab4c8a232f5c5ce8872a9d15"
 
-postcss@^5.0.14, postcss@^5.0.4, postcss@^5.2.12, postcss@^5.2.16, postcss@^5.2.17, postcss@^5.2.4, postcss@^5.2.6:
+postcss@^5.0.14, postcss@^5.0.4, postcss@^5.2.16, postcss@^5.2.17, postcss@^5.2.4, postcss@^5.2.6:
   version "5.2.17"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.17.tgz#cf4f597b864d65c8a492b2eabe9d706c879c388b"
   dependencies:
@@ -2443,7 +2443,7 @@ postcss@^5.0.14, postcss@^5.0.4, postcss@^5.2.12, postcss@^5.2.16, postcss@^5.2.
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-postcss@^6.0.10, postcss@^6.0.14, postcss@^6.0.9:
+postcss@^6.0.0, postcss@^6.0.10, postcss@^6.0.14, postcss@^6.0.9:
   version "6.0.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.14.tgz#5534c72114739e75d0afcf017db853099f562885"
   dependencies:
@@ -2850,9 +2850,9 @@ source-map-url@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/source-map-url/-/source-map-url-0.3.0.tgz#7ecaf13b57bcd09da8a40c5d269db33799d4aaf9"
 
-source-map@0.X, source-map@^0.5.1, source-map@^0.5.6, source-map@~0.5.3:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+source-map@0.X, source-map@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
 source-map@^0.1.38:
   version "0.1.43"
@@ -2860,9 +2860,9 @@ source-map@^0.1.38:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+source-map@^0.5.1, source-map@^0.5.6, source-map@~0.5.3:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
 sparkles@^1.0.0:
   version "1.0.0"

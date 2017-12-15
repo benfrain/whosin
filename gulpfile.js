@@ -12,8 +12,8 @@ var tsProject = ts.createProject("tsconfig.json");
 var del = require("del");
 var sourcemaps = require("gulp-sourcemaps");
 
-gulp.task("css", function() {
-    var processors = [postcssimport({ glob: true }), simplevars, nested, assets, postcssColorFunction(), autoprefixer({ browsers: ["iOS >= 8", "android 4"] })];
+gulp.task("css", function () {
+    var processors = [postcssimport({ glob: true }), simplevars, nested, assets({ relative: true }), postcssColorFunction(), autoprefixer({ browsers: ["iOS >= 8", "android 4"] })];
 
     // Produce a file list off all needed css files and move them to /build
 
@@ -23,7 +23,7 @@ gulp.task("css", function() {
 });
 
 // Static server
-gulp.task("browser-sync", function() {
+gulp.task("browser-sync", function () {
     browserSync({
         open: false,
         server: {
@@ -33,20 +33,20 @@ gulp.task("browser-sync", function() {
 });
 
 // Delete
-gulp.task("clean", function() {
+gulp.task("clean", function () {
     return del(["build/**/*"]);
 });
 
 gulp.task("default", ["clean:mobile"]);
 
 // HTML
-gulp.task("html", function() {
+gulp.task("html", function () {
     gulp.src("./libs/**/*").pipe(gulp.dest("./build/libs"));
     return gulp.src("./index.html").pipe(gulp.dest("./build"));
 });
 
 // Watch
-gulp.task("watch", function() {
+gulp.task("watch", function () {
     // Watch .scss files
     gulp.watch("preCSS/**/*.css", ["css", browserSync.reload]);
 
@@ -57,7 +57,7 @@ gulp.task("watch", function() {
     gulp.watch("*.html", ["html", browserSync.reload]);
 });
 
-gulp.task("ts", function() {
+gulp.task("ts", function () {
     tsProject.src().pipe(sourcemaps.init()).pipe(ts(tsProject)).js.pipe(sourcemaps.write()).pipe(gulp.dest("./build"));
 });
 
