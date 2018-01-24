@@ -2,7 +2,7 @@
     position: relative;
     padding: 20px;
     display: inline-flex;
-    flex: 1 1 100px;
+    flex: 0 1 auto;
 }
 
 .io-Masthead_ToolsBtn {
@@ -14,7 +14,7 @@
     top: 65vh;
     right: 50px;
     border-radius: 50%;
-    background-color: #f90;
+    background-color: $color-orange;
     &:after {
         content: "";
         display: block;

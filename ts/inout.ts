@@ -28,6 +28,7 @@ class InOut {
     notify: Function;
     addObserver: Function;
     deleteMode: Boolean;
+    paidMode: Boolean;
     divisor: number;
     count: number;
     constructor() {
@@ -38,6 +39,7 @@ class InOut {
         this.divisor = 0;
         this.count = 0;
         this.deleteMode = false;
+        this.paidMode = false;
     }
 }
 
@@ -60,7 +62,7 @@ InOut.prototype.notify = function (changes: Object, callback: Function) {
     var prop;
     for (prop in changes) {
         // First catch any incorrect assignments of the data
-        if (typeof this[prop] == "undefined") {
+        if (typeof this[prop] === "undefined") {
             console.log("there is no property of name " + prop);
         }
         // We want to exit if the change value is the same as what we already have, otherwise we update the main object with the new one
@@ -111,7 +113,24 @@ io.addObserver({
             deleteModeClickMask();
         } else {
             root.setAttribute("data-io-tools-delete-mode", "false");
-            removeDeleteModeClickMask();
+            if (io.paidMode === false) {
+                removeDeleteModeClickMask();
+            }
+        }
+    },
+});
+
+io.addObserver({
+    props: ["paidMode"],
+    callback: function observerEverything() {
+        if (io.paidMode === true) {
+            root.setAttribute("data-io-tools-paid-mode", "true");
+            deleteModeClickMask();
+        } else {
+            root.setAttribute("data-io-tools-paid-mode", "false");
+            if (io.deleteMode === false) {
+                removeDeleteModeClickMask();
+            }
         }
     },
 });
@@ -121,12 +140,13 @@ function deleteModeClickMask() {
     deleteMask.classList.add("io-Slat_DeleteMask");
     itmContainer.appendChild(deleteMask);
     deleteMask.addEventListener("click", function selfRemoveDeleteMask() {
-        io.notify({ deleteMode: false });
+        io.notify({ deleteMode: false, paidMode: false });
         removeDeleteModeClickMask();
     });
 }
 
 function removeDeleteModeClickMask() {
+    console.log("remove");
     let deleteMask = itmContainer.querySelector(".io-Slat_DeleteMask");
     if (deleteMask) {
         itmContainer.removeChild(deleteMask);
@@ -210,7 +230,7 @@ function countIn(items: Array<Object>) {
 
 function rePositionSlat(slat: Element, direction: string) {
     // debugger;
-    let moveAmount, indexOfClickedSlat, plusOrMinus;
+    let moveAmount, indexOfClickedSlat;
     let slatGeometry = slat.getBoundingClientRect();
     let heightOfClickedItem = slatGeometry.height;
     let nextItem = slat.nextElementSibling || null;
@@ -236,7 +256,6 @@ function rePositionSlat(slat: Element, direction: string) {
             wrapSlats.appendChild(items[i]);
         }
         moveAmount = positionOfClickedSlat - wrapSlats.getBoundingClientRect().top;
-        plusOrMinus = "-";
     } else {
         itmContainer.insertBefore(wrapSlats, slat);
         indexOfClickedSlat = arr.indexOf(slat);
@@ -251,7 +270,9 @@ function rePositionSlat(slat: Element, direction: string) {
 
     // If the slat that was clicked has another item after it, add some margin above it to leave space while the clicked slat moves
     if (nextItem !== null) {
+        console.log(heightOfClickedItem);
         nextItem.style.marginTop = heightOfClickedItem + "px";
+
     }
 
     // Determine transition duration
@@ -265,7 +286,6 @@ function rePositionSlat(slat: Element, direction: string) {
 }
 
 function moveEntryInArray(countNo: number, theArray: Array<Object>, endPos) {
-    // console.log(countNo, theArray);
     theArray.move(countNo, endPos);
 }
 
@@ -353,7 +373,6 @@ function setThisItem(slat: Object) {
         }
         return item;
     });
-    // console.table(newItems);
     return newItems;
 }
 
@@ -378,10 +397,10 @@ if (storage.getItem("players")) {
     });
 }
 
-// wiAddForm stop the page refreshing by default
 ioAddForm.addEventListener(
     "submit",
     function (e) {
+        // stop the page refreshing by default
         e.preventDefault();
         // If nothing has been entered in the text box
         if (hdrInput.value === "") {
@@ -424,11 +443,9 @@ ioLoad.addEventListener(
 );
 
 function addName() {
-    console.log(isNameValid(hdrInput.value));
     if (isNameValid(hdrInput.value) === false) {
         root.setAttribute("data-io-duplicate-name", "");
         ioInputLabel.textContent = "Name already exists";
-        // return;
     } else {
         root.removeAttribute("data-io-duplicate-name");
         ioInputLabel.textContent = "Add Name";
@@ -449,7 +466,6 @@ hdrInput.addEventListener(
 function isNameValid(name: string) {
     for (let item of io.items) {
         if (item.name === name) {
-            // alert(item.name, name);
             return false;
         }
     }
@@ -468,15 +484,19 @@ ioTools.addEventListener(
     "click",
     function (e) {
         if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
+            io.notify({ paidMode: false });
             io.notify({ deleteMode: io.deleteMode === true ? false : true });
             io.notify({ showingToolTray: false });
 
         }
         if (e.target.id === "ioPaidMode" || e.target.parentNode.id === "ioPaidMode") {
-            root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
+            // root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
+            io.notify({ paidMode: io.paidMode === true ? false : true });
+            io.notify({ deleteMode: false });
             io.notify({ showingToolTray: false });
         }
         if (e.target.id === "ioSave" || e.target.parentNode.id === "ioSave") {
+            io.notify({ deleteMode: false, paidMode: false });
             saveText(JSON.stringify(io.items), "inout.json");
         }
     },
