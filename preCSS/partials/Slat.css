@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform .35s;
+    transition: transform 0.35s;
     [data-io-tools-delete-mode="true"] & {
         transform: translateX(44px);
     }
@@ -23,9 +23,9 @@
     position: relative;
     width: 100%;
     transform: none;
-    transition: all var(--duration);
+    transition: transform var(--duration);
     box-shadow: inset 0 -1px 0 0 #eee;
-    
+
     &[data-io-slat-in="true"] {
         background-color: #fff;
     }
@@ -37,10 +37,13 @@
         align-items: center;
         justify-content: center;
         border-radius: 40px;
-        font-size: 12px;
         color: #222;
         opacity: 1;
         content: attr(data-io-slat-team);
+    }
+    /*Don't allow clicks on a slat to do anything if in the middle of a move*/
+    [data-io-slat-moving="true"] & {
+        pointer-events: none;
     }
     /* Don't want to see the team numbers when slats move */
     [data-io-slat-moving="true"] &:after {
@@ -75,11 +78,11 @@
     width: 44px;
     color: $color-white;
     /* background-color: $color-delete; */
-    background: inline("img/trash_bg.svg"),  $color-delete;
+    background: inline("img/trash_bg.svg"), $color-delete;
     background-size: 20px auto;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important;    
+    box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important;
 }
 
 .io-Slat_DeleteMask {
@@ -101,7 +104,7 @@
     width: 100px;
     border: 3px solid $color-paid;
     background-color: transparent;
-    transition: transform .2s;
+    transition: transform 0.2s;
     color: $color-white;
     [data-io-tools-paid-mode="true"] & {
         transform: translateX(-100px);
@@ -111,24 +114,24 @@
 /*This creates a highlight colour for each team*/
 [data-io-slat-team="1"] {
     &:after {
-        border: 2px solid color(#40dfff a(.5));
+        border: 2px solid color(#40dfff a(0.5));
     }
 }
 
 [data-io-slat-team="2"] {
     &:after {
-        border: 2px solid color(#cca814 a(.5));
+        border: 2px solid color(#cca814 a(0.5));
     }
 }
 
 [data-io-slat-team="3"] {
     &:after {
-        border: 2px solid color(#99873D a(.5));
+        border: 2px solid color(#99873d a(0.5));
     }
 }
 
 [data-io-slat-team="4"] {
     &:after {
-        border: 2px solid color(#f90 a(.5));
+        border: 2px solid color(#f90 a(0.5));
     }
 }

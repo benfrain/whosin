@@ -1,40 +1,52 @@
 .io-Masthead {
-    position: relative;
-    padding: 20px;
-    display: inline-flex;
-    flex: 0 1 auto;
+  position: relative;
+  padding: 20px;
+  display: inline-flex;
+  flex: 0 1 auto;
 }
 
 .io-Masthead_ToolsBtn {
-    z-index: 100;
+  z-index: 100;
+  display: block;
+  height: 40px;
+  width: 40px;
+  position: fixed;
+  top: 65vh;
+  right: 50px;
+  border-radius: 50%;
+  /* background-color: $color-orange; */
+  background: radial-gradient(
+    circle at center,
+    #f90 0px,
+    #f90,
+    20\px,
+    white 25px,
+    #f90 40px
+  );
+  &:after {
+    content: "";
     display: block;
-    height: 40px;
-    width: 40px;
-    position: fixed;
-    top: 65vh;
-    right: 50px;
+    position: absolute;
+    top: -2px;
+    left: -2px;
     border-radius: 50%;
-    background-color: $color-orange;
-    &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        border-radius: 50%;
-        border: 1px solid #f90;
-        height: 44px;
-        width: 44px;
-        background-color: transparent;
-    }
+    border: 1px solid #f90;
+    height: 44px;
+    width: 44px;
+    background-color: transparent;
+  }
+  transition: transform 0.1s;
+  &[aria-selected="true"] {
+    transform: scale(0.8);
+  }
 }
 
 .io-Masthead_Logo {
-    display: flex;
-    flex: 1 0 auto;
-    align-items: center;
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
 }
 
 .io-Masthead_LogoSvg {
-    height: 55px;
+  height: 55px;
 }

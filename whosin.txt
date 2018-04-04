@@ -109,3 +109,6 @@ In and Out both working well now. Also consolidated the movement into one functi
 
 # 24.11.17
 Renamed from Whos in to `IN/OUT`
+
+# 1.4.18
+There is no transition on the wrapper when moving an item down as it is freshly created in the DOM (so cannot transition from any existing state.). Try using an animation instead to fix this.

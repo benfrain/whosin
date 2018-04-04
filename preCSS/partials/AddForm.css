@@ -1,59 +1,59 @@
 .io-AddForm {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    /*Context for the label*/
-    position: relative;
-    /* Needed for iOS */
-    min-width: 0;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  /*Context for the label*/
+  position: relative;
+  /* Needed for iOS */
+  min-width: 0;
 }
 
 .io-AddForm_Input {
-    display: flex;
-    align-items: flex-end;
-    flex: 1 1 auto;
-    height: 44px;
-    font-size: 21px;
-    padding: 8px 10px 0;
-    margin-right: 20px;
-    border-radius: 4px;
-    border: 1px solid #545454;
-    transition: background-color .2s;
-    &:focus {
-        outline: 0;
-        background-color: #444;
-        color: #ddd;
-    }
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;
+  height: 44px;
+  font-size: 21px;
+  padding: 8px 10px 0;
+  margin-right: 20px;
+  border-radius: 4px;
+  /* border: 1px solid #545454; */
+  transition: background-color 0.2s;
+  &:focus {
+    outline: 0;
+    background-color: #444;
+    color: #ddd;
+  }
 }
 
 .io-AddForm_Label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 10px;
-    color: #888;
-    font-size: 16px;
-    transition: transform .2s, color .2s;
-    transform-origin: 0 0;
-    /*Using valid and required attribute is genius. From: https://stackoverflow.com/a/16956610/1147859*/
-    .io-AddForm_Input:focus + &,
-    [data-io-input="filled"] + & {
-        transform: translateY(-18px) scale(.6);
-        color: #ddd;
-    }
-    [data-io-duplicate-name] & {
-        color: $color-delete !important;
-    }
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
+  color: #888;
+  font-size: 16px;
+  transition: transform 0.2s, color 0.2s;
+  transform-origin: 0 0;
+  /*Using valid and required attribute is genius. From: https://stackoverflow.com/a/16956610/1147859*/
+  .io-AddForm_Input:focus + &,
+  [data-io-input="filled"] + & {
+    transform: translateY(-18px) scale(0.6);
+    color: #ddd;
+  }
+  [data-io-duplicate-name] & {
+    color: $color-delete !important;
+  }
 }
 
 .io-AddForm_DoneBtn {
-    display: flex;
-    flex: 0 1 auto;
-    padding: 8px 11px;
-    justify-content: center;
-    background-color: #f90;
-    align-self: stretch;
-    font-size: .8rem;
-    color: #999;
-    /*text-decoration: underline;*/
+  display: flex;
+  flex: 0 1 auto;
+  padding: 8px 11px;
+  justify-content: center;
+  background-color: #f90;
+  align-self: stretch;
+  font-size: 0.8rem;
+  color: #999;
+  /*text-decoration: underline;*/
 }

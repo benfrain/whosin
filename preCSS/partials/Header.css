@@ -2,6 +2,6 @@
     position: relative;
     display: flex;
     /* background-color: #f0f0f0; */
-    background-color: #ddd;
-    border-bottom: 5px solid #bbb;
+    background-color: #f0f0f0;
+    /* border-bottom: 5px solid #bbb; */
 }

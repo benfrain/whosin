@@ -13,7 +13,7 @@ const ioLoad = <HTMLInputElement>document.getElementById("ioLoad");
 const ioCount = <HTMLElement>document.getElementById("ioCount");
 const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
 const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
-const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
+// const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
 let clickMask;
@@ -53,11 +53,11 @@ function makePerson(name: string) {
 
 var io = new InOut();
 
-InOut.prototype.addObserver = function (observer: Object) {
+InOut.prototype.addObserver = function(observer: Object) {
     this.observers.push(observer);
 };
 
-InOut.prototype.notify = function (changes: Object, callback: Function) {
+InOut.prototype.notify = function(changes: Object, callback: Function) {
     // Loop through every property in changes and set the data to that new value
     var prop;
     for (prop in changes) {
@@ -93,7 +93,7 @@ InOut.prototype.notify = function (changes: Object, callback: Function) {
         return false;
     }
     // Now for any observers that care about data that has just been changed we inform them of the changes
-    matchedObservers.forEach(function (matchingObserver) {
+    matchedObservers.forEach(function(matchingObserver) {
         matchingObserver.callback.call(null);
     });
 };
@@ -102,7 +102,7 @@ io.addObserver({
     props: ["*"],
     callback: function observerEverything() {
         console.warn("something changed");
-    },
+    }
 });
 
 io.addObserver({
@@ -110,14 +110,14 @@ io.addObserver({
     callback: function observerEverything() {
         if (io.deleteMode === true) {
             root.setAttribute("data-io-tools-delete-mode", "true");
-            deleteModeClickMask();
+            deleteOrPaidModeClickMask();
         } else {
             root.setAttribute("data-io-tools-delete-mode", "false");
             if (io.paidMode === false) {
-                removeDeleteModeClickMask();
+                removeDeleteOrPaidModeClickMask();
             }
         }
-    },
+    }
 });
 
 io.addObserver({
@@ -125,28 +125,27 @@ io.addObserver({
     callback: function observerEverything() {
         if (io.paidMode === true) {
             root.setAttribute("data-io-tools-paid-mode", "true");
-            deleteModeClickMask();
+            deleteOrPaidModeClickMask();
         } else {
             root.setAttribute("data-io-tools-paid-mode", "false");
             if (io.deleteMode === false) {
-                removeDeleteModeClickMask();
+                removeDeleteOrPaidModeClickMask();
             }
         }
-    },
+    }
 });
 
-function deleteModeClickMask() {
+function deleteOrPaidModeClickMask() {
     let deleteMask = document.createElement("div");
     deleteMask.classList.add("io-Slat_DeleteMask");
     itmContainer.appendChild(deleteMask);
     deleteMask.addEventListener("click", function selfRemoveDeleteMask() {
         io.notify({ deleteMode: false, paidMode: false });
-        removeDeleteModeClickMask();
+        removeDeleteOrPaidModeClickMask();
     });
 }
 
-function removeDeleteModeClickMask() {
-    console.log("remove");
+function removeDeleteOrPaidModeClickMask() {
     let deleteMask = itmContainer.querySelector(".io-Slat_DeleteMask");
     if (deleteMask) {
         itmContainer.removeChild(deleteMask);
@@ -159,7 +158,7 @@ io.addObserver({
         if (io.showingToolTray === true) {
             root.setAttribute("data-io-tools-exposed", "true");
             createToolsClickMask();
-            let btnPosY = (window.innerHeight - ioToolsBtn.getBoundingClientRect().top) + 10;
+            let btnPosY = window.innerHeight - ioToolsBtn.getBoundingClientRect().top + 10;
             let btnPosX = ioToolsBtn.getBoundingClientRect().right;
             root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
             root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
@@ -167,14 +166,14 @@ io.addObserver({
             root.removeAttribute("data-io-tools-exposed");
             removeToolsClickMask();
         }
-    },
+    }
 });
 
 function createToolsClickMask() {
     clickMask = document.createElement("div");
     clickMask.classList.add("io-Tools_ClickMask");
     clickMask = ioToolsBtn.parentNode.insertBefore(clickMask, ioToolsBtn);
-    clickMask.addEventListener("click", function (e) {
+    clickMask.addEventListener("click", function(e) {
         io.notify({ showingToolTray: false });
         removeToolsClickMask();
     });
@@ -203,7 +202,7 @@ io.addObserver({
         // Set the count
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
-            setTimeout(function () {
+            setTimeout(function() {
                 root.removeAttribute("data-io-count-update");
             }, 300);
         } else {
@@ -212,14 +211,14 @@ io.addObserver({
         io.count = countIn(io.items);
 
         // Communicate to DOM the count number
-        root.setAttribute("data-io-count", io.count);
+        root.setAttribute("data-io-count", io.count.toString());
         ioCount.textContent = io.count.toString();
-    },
+    }
 });
 
 // Count the people who are in
 function countIn(items: Array<Object>) {
-    var count = items.reduce(function (acc, item, idx) {
+    var count = items.reduce(function(acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
@@ -228,7 +227,7 @@ function countIn(items: Array<Object>) {
     return count.length;
 }
 
-function rePositionSlat(slat: Element, direction: string) {
+function rePositionSlat(slat: HTMLDivElement, direction: string) {
     // debugger;
     let moveAmount, indexOfClickedSlat;
     let slatGeometry = slat.getBoundingClientRect();
@@ -256,6 +255,9 @@ function rePositionSlat(slat: Element, direction: string) {
             wrapSlats.appendChild(items[i]);
         }
         moveAmount = positionOfClickedSlat - wrapSlats.getBoundingClientRect().top;
+        if (nextItem) {
+            nextItem.style.marginTop = `${heightOfClickedItem}px`;
+        }
     } else {
         itmContainer.insertBefore(wrapSlats, slat);
         indexOfClickedSlat = arr.indexOf(slat);
@@ -268,20 +270,25 @@ function rePositionSlat(slat: Element, direction: string) {
         moveAmount = difference;
     }
 
-    // If the slat that was clicked has another item after it, add some margin above it to leave space while the clicked slat moves
-    if (nextItem !== null) {
-        console.log(heightOfClickedItem);
-        nextItem.style.marginTop = heightOfClickedItem + "px";
-
-    }
-
     // Determine transition duration
-    let duration = moveAmount / 500;
-    // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
-    wrapSlats.style.transform = direction === "up" ? `translateY(${heightOfClickedItem}px)` : `translateY(-${heightOfClickedItem}px)`;
-    slat.style.transform = direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
-    // Set the CSS var for the duration this click should take
+    let duration = moveAmount / 700;
     root.style.setProperty("--duration", `${duration.toFixed(2)}s`);
+    // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
+    function anim() {
+        window.requestAnimationFrame(function(timeStamp) {
+            if (direction === "down" && nextItem !== null) {
+                wrapSlats.style.top = heightOfClickedItem + "px";
+            }
+            wrapSlats.style.transform =
+                direction === "up"
+                    ? `translateY(${heightOfClickedItem}px)`
+                    : `translateY(-${heightOfClickedItem}px)`;
+            slat.style.transform =
+                direction === "up" ? `translateY(-${moveAmount}px)` : `translateY(${moveAmount}px)`;
+        });
+    }
+    window.requestAnimationFrame(anim);
+    // Set the CSS var for the duration this click should take
     console.log(duration, direction);
 }
 
@@ -297,7 +304,7 @@ function removeTeams() {
 }
 
 function createSlats(slats: Array<Object>) {
-    slats.forEach(function (item, idx) {
+    slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
         slat.classList.add("io-Slat");
@@ -310,7 +317,7 @@ function createSlats(slats: Array<Object>) {
         // Handle a user being clicked to be 'In'
         slat.addEventListener(
             "click",
-            function (e) {
+            function(e) {
                 e.stopPropagation();
                 // Fork here depending upon whether item is in or out
                 root.setAttribute("data-io-slat-moving", "true");
@@ -326,7 +333,11 @@ function createSlats(slats: Array<Object>) {
                 } else {
                     rePositionSlat(this, "down");
                     this.addEventListener("transitionend", function returnItems() {
-                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, io.items.length - 1);
+                        moveEntryInArray(
+                            parseFloat(this.getAttribute("data-idx")),
+                            io.items,
+                            io.items.length - 1
+                        );
                         removeTeams();
                         io.notify({ items: setThisItem(item) });
                         this.removeEventListener("transitionend", returnItems);
@@ -343,7 +354,7 @@ function createSlats(slats: Array<Object>) {
         slat.appendChild(deleteBtn);
         deleteBtn.addEventListener(
             "click",
-            function (e) {
+            function(e) {
                 e.stopPropagation();
                 io.notify({ items: removeThisSlat(item) });
             },
@@ -367,7 +378,7 @@ function createSlats(slats: Array<Object>) {
 }
 
 function setThisItem(slat: Object) {
-    var newItems = io.items.map(function (item, idx) {
+    var newItems = io.items.map(function(item, idx) {
         if (item.name === slat.name) {
             item.in = !item.in;
         }
@@ -381,7 +392,7 @@ function setThisItem(slat: Object) {
  * @param {Object} slat A single slat represented as an object
  */
 function removeThisSlat(slat: Object) {
-    var newItems = io.items.reduce(function (acc: Array<Object>, item: Object, idx: Number) {
+    var newItems = io.items.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
         if (item.name !== slat.name) {
             acc.push(item);
         }
@@ -393,13 +404,13 @@ function removeThisSlat(slat: Object) {
 // If we have storage of the players then we create an array of them and notify the instance
 if (storage.getItem("players")) {
     io.notify({
-        items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players"))),
+        items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players")))
     });
 }
 
 ioAddForm.addEventListener(
     "submit",
-    function (e) {
+    function(e) {
         // stop the page refreshing by default
         e.preventDefault();
         // If nothing has been entered in the text box
@@ -414,15 +425,19 @@ ioAddForm.addEventListener(
 );
 
 ioToolsBtn.addEventListener("click", e => {
+    e.target.setAttribute("aria-selected", "true");
+    setTimeout(fire => {
+        e.target.removeAttribute("aria-selected");
+    }, 200);
     io.notify({
-        showingToolTray: io.showingToolTray === true ? false : true,
-    })
+        showingToolTray: io.showingToolTray === true ? false : true
+    });
 });
 
 // Handles the loading of the JSON file
 ioLoad.addEventListener(
     "change",
-    function (e) {
+    function(e) {
         // Note: this was useful http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api
         var file = ioLoad.files[0];
         var textType = /json.*/;
@@ -430,7 +445,7 @@ ioLoad.addEventListener(
             var reader = new FileReader();
 
             reader.readAsText(file);
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 let loadedJSON = JSON.parse(reader.result);
                 console.log(loadedJSON);
                 io.notify({ items: loadedJSON });
@@ -457,7 +472,7 @@ function addName() {
 // We need a listener for input so we can determine if he input is filled or not
 hdrInput.addEventListener(
     "input",
-    function (e) {
+    function(e) {
         e.target.setAttribute("data-io-input", this.value.length > 0 ? "filled" : "empty");
     },
     false
@@ -482,12 +497,11 @@ function makeArrayOfStorageItems(items: String) {
 
 ioTools.addEventListener(
     "click",
-    function (e) {
+    function(e) {
         if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
             io.notify({ paidMode: false });
             io.notify({ deleteMode: io.deleteMode === true ? false : true });
             io.notify({ showingToolTray: false });
-
         }
         if (e.target.id === "ioPaidMode" || e.target.parentNode.id === "ioPaidMode") {
             // root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
@@ -506,12 +520,12 @@ ioTools.addEventListener(
 ioSplit2.addEventListener("click", function split2ways() {
     splitTeams(2);
     io.notify({ showingToolTray: false });
-})
+});
 
 ioSplit3.addEventListener("click", function split3ways() {
     splitTeams(3);
     io.notify({ showingToolTray: false });
-})
+});
 
 ioSplit4.addEventListener("click", function split4ways() {
     splitTeams(4);
@@ -520,14 +534,14 @@ ioSplit4.addEventListener("click", function split4ways() {
 
 function splitTeams(divideBy: number) {
     // Make an array of the people who are in
-    let peopleIn = io.items.reduce(function (acc, item, idx) {
+    let peopleIn = io.items.reduce(function(acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
         return acc;
     }, []);
     // Make an array of the people who are out
-    let peopleOut = io.items.reduce(function (acc, item, idx) {
+    let peopleOut = io.items.reduce(function(acc, item, idx) {
         if (item.in !== true) {
             acc.push(item);
         }
@@ -539,9 +553,9 @@ function splitTeams(divideBy: number) {
     let chunkedAndShuffled = chunkify(shuffledArray, divideBy, true);
 
     // Now for each team of people
-    chunkedAndShuffled.forEach(function (arrayOfSplit, idx) {
+    chunkedAndShuffled.forEach(function(arrayOfSplit, idx) {
         // For each person in each team
-        arrayOfSplit.forEach(function (itemInArraySplit) {
+        arrayOfSplit.forEach(function(itemInArraySplit) {
             // Set them on their relevant team. Adding one here to give more human friendly team numbers
             itemInArraySplit.team = idx + 1;
         });
@@ -554,11 +568,9 @@ function itemAdd(itemString: string) {
     var newPerson = new makePerson(itemString);
     io.items.push(newPerson);
     io.notify({
-        items: io.items,
+        items: io.items
     });
 }
-
-
 
 /**
  * Randomize array element order in-place. From: http://stackoverflow.com/a/12646864/1147859
@@ -617,7 +629,7 @@ function chunkify(a: Array<Object>, n: number, balanced: Boolean) {
  * @param {[Array]} arr [An array containing nested arrays]
  */
 function flatten(arr: Array<Object>) {
-    return arr.reduce(function (flat: Array<Object>, toFlatten: Array<Object>) {
+    return arr.reduce(function(flat: Array<Object>, toFlatten: Array<Object>) {
         return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
 }
@@ -629,8 +641,7 @@ function saveText(text: Array<Object>, filename: string) {
     a.click();
 }
 
-Array.prototype.move = function (from: number, to: number) {
+Array.prototype.move = function(from: number, to: number) {
     this.splice(to, 0, this.splice(from, 1)[0]);
     return this;
 };
-
