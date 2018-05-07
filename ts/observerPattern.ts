@@ -34,6 +34,7 @@ InOut.prototype.addObserver = function(observer: Object) {
 };
 
 InOut.prototype.notify = function(changes: Object, callback: Function) {
+    // console.log(changes);
     // Loop through every property in changes and set the data to that new value
     var prop;
     for (prop in changes) {

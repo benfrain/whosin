@@ -1,6 +1,6 @@
 .io-Masthead {
   position: relative;
-  padding: 20px;
+  padding: 10px 20px;
   display: inline-flex;
   flex: 0 1 auto;
 }
@@ -15,14 +15,7 @@
   right: 50px;
   border-radius: 50%;
   /* background-color: $color-orange; */
-  background: radial-gradient(
-    circle at center,
-    #f90 0px,
-    #f90,
-    20\px,
-    white 25px,
-    #f90 40px
-  );
+  background: radial-gradient(circle at center, #f90 0px, #f90, 20\px, white 25px, #f90 40px);
   &:after {
     content: "";
     display: block;

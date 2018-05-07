@@ -3,7 +3,7 @@
  * @param {Object} slat A single slat represented as an object
  */
 function removeThisSlat(slat: Object) {
-    var newItems = io.items.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
+    var newItems = io.activeEvent.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
         if (item.name !== slat.name) {
             acc.push(item);
         }

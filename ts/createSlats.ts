@@ -1,4 +1,5 @@
-function createSlats(slats: Array<Object>) {
+function createSlats(slats: Array<Object>, currentDataSet: number) {
+    // console.log(slats);
     slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
@@ -8,7 +9,8 @@ function createSlats(slats: Array<Object>) {
         if (item.team && item.in) {
             slat.setAttribute("data-io-slat-team", item.team);
         }
-
+        // let noOfEventBeingUsed = io.items.findIndex(item => item.Selected);
+        // console.log(noOfEventBeingUsed);
         // Handle a user being clicked to be 'In'
         slat.addEventListener(
             "click",
@@ -17,24 +19,33 @@ function createSlats(slats: Array<Object>) {
                 // Fork here depending upon whether item is in or out
                 root.setAttribute("data-io-slat-moving", "true");
                 if (e.target.getAttribute("data-io-slat-in") === "false") {
+                    console.log("up");
                     rePositionSlat(this, "up");
                     this.addEventListener("transitionend", function setItems() {
-                        moveEntryInArray(parseFloat(this.getAttribute("data-idx")), io.items, 0);
-                        removeTeams();
-                        io.notify({ items: setThisItem(item) });
+                        moveEntryInArray(
+                            parseFloat(this.getAttribute("data-idx")),
+                            io.items[currentDataSet].EventData,
+                            0
+                        );
+                        removeTeams(currentDataSet);
+                        io.items[currentDataSet].EventData = setThisItem(item, currentDataSet);
+                        io.notify({ items: io.items });
                         this.removeEventListener("transitionend", setItems);
                         root.setAttribute("data-io-slat-moving", "false");
                     });
                 } else {
+                    console.log("down");
+
                     rePositionSlat(this, "down");
                     this.addEventListener("transitionend", function returnItems() {
                         moveEntryInArray(
                             parseFloat(this.getAttribute("data-idx")),
-                            io.items,
-                            io.items.length - 1
+                            io.items[currentDataSet].EventData,
+                            io.items[currentDataSet].EventData.length - 1
                         );
-                        removeTeams();
-                        io.notify({ items: setThisItem(item) });
+                        removeTeams(currentDataSet);
+                        io.items[currentDataSet].EventData = setThisItem(item, currentDataSet);
+                        io.notify({ items: io.items });
                         this.removeEventListener("transitionend", returnItems);
                         root.setAttribute("data-io-slat-moving", "false");
                     });
@@ -51,7 +62,7 @@ function createSlats(slats: Array<Object>) {
             "click",
             function(e) {
                 e.stopPropagation();
-                io.notify({ items: removeThisSlat(item) });
+                io.notify({ activeEvent: removeThisSlat(item) });
             },
             false
         );

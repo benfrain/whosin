@@ -1,3 +1,4 @@
+/// <reference path="defaultData.ts" />
 /// <reference path="splitTeams.ts" />
 /// <reference path="deleteOrPaidClickMask.ts" />
 /// <reference path="toolsClickMask.ts" />
@@ -8,8 +9,8 @@
 /// <reference path="countIn.ts" />
 /// <reference path="loadFile.ts" />
 /// <reference path="saveText.ts" />
-/// <reference path="defaultData.ts" />
 /// <reference path="observerPattern.ts" />
+//// <reference path="eventSwitcher.ts" />
 
 const storage = window.localStorage;
 const itmContainer = document.getElementById("itmContainer");
@@ -57,20 +58,20 @@ io.addObserver({
     }
 });
 
-io.addObserver({
-    props: ["paidMode"],
-    callback: function observerEverything() {
-        if (io.paidMode === true) {
-            root.setAttribute("data-io-tools-paid-mode", "true");
-            deleteOrPaidModeClickMask();
-        } else {
-            root.setAttribute("data-io-tools-paid-mode", "false");
-            if (io.deleteMode === false) {
-                removeDeleteOrPaidModeClickMask();
-            }
-        }
-    }
-});
+// io.addObserver({
+//     props: ["paidMode"],
+//     callback: function observerEverything() {
+//         if (io.paidMode === true) {
+//             root.setAttribute("data-io-tools-paid-mode", "true");
+//             deleteOrPaidModeClickMask();
+//         } else {
+//             root.setAttribute("data-io-tools-paid-mode", "false");
+//             if (io.deleteMode === false) {
+//                 removeDeleteOrPaidModeClickMask();
+//             }
+//         }
+//     }
+// });
 
 io.addObserver({
     props: ["showingToolTray"],
@@ -89,21 +90,82 @@ io.addObserver({
     }
 });
 
+// // EventSwitcher.Init();
+// Ben activeEvent is a bad idea. You can just use the index of the array item that is selected to know which set of data to send into the createSlats and update etc. Need to remove it from the Observer and refactor. I have made this far more complicated than it should have been!
+
+let eventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
+let addNameBtn = document.getElementById("ioAddNameBtn");
+let eventSwitcherDrop = document.getElementById("ioEventSwitcher");
+// This function renders the list of items in total each time
+// io.addObserver({
+//     props: ["items"],
+//     callback: function renderEventSwitcher() {
+//         eventSwitcherDrop.innerHTML = "";
+//         populateMenu();
+//         // let activeEventList = io.items.filter(item => item.Selected);
+//         // io.notify({ activeEvent: activeEventList[0].EventData });
+//     }
+// });
+
+function populateMenu() {
+    io.items.forEach((item, idx) => {
+        let eventSlat = document.createElement("div");
+        eventSlat.classList.add("io-EventSwitcher_Slat");
+
+        let eventItem = document.createElement("label");
+        eventItem.classList.add("io-EventSwitcher_Item");
+        eventItem.htmlFor = `event${idx}`;
+        eventItem.textContent = item.EventName;
+        eventSlat.appendChild(eventItem);
+
+        let eventRadio = document.createElement("input");
+        eventRadio.type = "radio";
+        eventRadio.id = `event${idx}`;
+        eventRadio.name = "eventOption";
+        eventRadio.value = idx.toString();
+        if (item.Selected) {
+            eventRadio.checked = true;
+        }
+
+        eventRadio.addEventListener("change", function(e) {
+            let menuItem = parseFloat(this.value);
+            io.items.forEach((item, idx) => {
+                if (idx === menuItem) {
+                    item.Selected = true;
+                } else {
+                    item.Selected = false;
+                }
+            });
+            // let activeEventList = io.items.filter(item => item.Selected);
+            io.notify({ items: io.items });
+        });
+        eventSlat.appendChild(eventRadio);
+
+        eventSwitcherDrop.appendChild(eventSlat);
+    });
+    // looks at the data and creates a link for each event, appending it to the menu
+    // adds a data attribute or similar to create a unique reference
+}
+
 // This function renders the list of items in total each time
 io.addObserver({
     props: ["items"],
     callback: function renderItems() {
+        eventSwitcherDrop.innerHTML = "";
+        populateMenu();
         // console.table(io.items);
 
         // clear the container
         itmContainer.innerHTML = "";
 
-        createSlats(io.items);
-
         // Set the storage
         storage.setItem("players", JSON.stringify(io.items));
 
         // Set the count
+        let currentDataSet = io.items.findIndex(item => item.Selected);
+
+        console.log(currentDataSet);
+        createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
             setTimeout(function() {
@@ -112,7 +174,7 @@ io.addObserver({
         } else {
             root.removeAttribute("data-io-count-update");
         }
-        io.count = countIn(io.items);
+        io.count = countIn(io.items[currentDataSet].EventData);
 
         // Communicate to DOM the count number
         root.setAttribute("data-io-count", io.count.toString());
@@ -120,17 +182,22 @@ io.addObserver({
     }
 });
 
-// If we have storage of the players then we create an array of them and notify the instance
-
 if (storage.getItem("players")) {
     io.notify({
         items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players")))
     });
 } else {
     io.notify({
-        items: makeArrayOfStorageItems(defaultData)
+        items: defaultDataV2
     });
 }
+// If we have storage of the players, and the array isn't empty then we create an array of them and notify the instance
+
+// if (storage.getItem("players") && storage.getItem("players") !== "[]") {
+
+// function discernActiveEvent() {
+//     let
+// }
 
 ioAddForm.addEventListener(
     "submit",
@@ -209,14 +276,14 @@ ioSplit4.addEventListener("click", function split4ways() {
 
 function itemAdd(itemString: string) {
     var newPerson = new makePerson(itemString);
-    io.items.push(newPerson);
+    io.activeEvent.push(newPerson);
     io.notify({
-        items: io.items
+        activeEvent: io.activeEvent
     });
 }
 
 function isNameValid(name: string) {
-    for (let item of io.items) {
+    for (let item of io.activeEvent) {
         if (item.name === name) {
             return false;
         }
@@ -237,18 +304,19 @@ function addName() {
 }
 
 // We remove any team affiliation here
-function removeTeams() {
-    io.items.forEach(item => {
-        item.team = "";
+function removeTeams(currentDataSet) {
+    io.items[currentDataSet].EventData.forEach(participant => {
+        participant.team = "";
     });
 }
 
-function setThisItem(slat: Object) {
-    var newItems = io.items.map(function(item, idx) {
-        if (item.name === slat.name) {
-            item.in = !item.in;
+function setThisItem(slat: Object, currentDataSet) {
+    var newItems = io.items[currentDataSet].EventData.map(function(participant, idx) {
+        if (participant.name === slat.name) {
+            participant.in = !participant.in;
         }
-        return item;
+        return participant;
     });
+    console.log(newItems);
     return newItems;
 }

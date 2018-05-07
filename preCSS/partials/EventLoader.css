@@ -1,0 +1,10 @@
+.io-HeaderAndEventLoader {
+    background-color: #f0f0f0;
+}
+
+.io-EventLoader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*height: 45px;*/
+}

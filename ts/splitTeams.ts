@@ -1,13 +1,13 @@
 function splitTeams(divideBy: number) {
     // Make an array of the people who are in
-    let peopleIn = io.items.reduce(function(acc, item, idx) {
+    let peopleIn = io.activeEvent.reduce(function(acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
         return acc;
     }, []);
     // Make an array of the people who are out
-    let peopleOut = io.items.reduce(function(acc, item, idx) {
+    let peopleOut = io.activeEvent.reduce(function(acc, item, idx) {
         if (item.in !== true) {
             acc.push(item);
         }
@@ -27,5 +27,5 @@ function splitTeams(divideBy: number) {
         });
     });
     // Now flatten the teams into a single array and then add on the people who are out
-    io.notify({ items: flatten(chunkedAndShuffled).concat(peopleOut) });
+    io.notify({ activeEvent: flatten(chunkedAndShuffled).concat(peopleOut) });
 }
