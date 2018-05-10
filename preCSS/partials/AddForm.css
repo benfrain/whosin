@@ -1,9 +1,11 @@
 .io-AddForm {
-  display: flex;
+  display: none;
   flex: 1 1 auto;
   align-items: center;
   /*Context for the label*/
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   /* Needed for iOS */
   min-width: 0;
 }

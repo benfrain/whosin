@@ -17,6 +17,7 @@ Be aware that some of these resets have a negative impact on the default usabili
 /*Hat tip to @thierrykoblentz for this approach: https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
 html {
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
 }
 
 /*Yes, the universal selector. No, it isn't slow: https://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/*/
@@ -25,7 +26,7 @@ html {
     /*This prevents users being able to select text. Stops long presses in iOS bringing up copy/paste UI for example. Note below we specifically switch user-select on for inputs for the sake of Safari. Bug here: https://bugs.webkit.org/show_bug.cgi?id=82692*/
     user-select: none;
     /*This gets -webkit specific prefix as it is a non W3C property*/
-    -webkit-tap-highlight-color: rgba(255,255,255,0);
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     /*Older Androids need this instead*/
     -webkit-tap-highlight-color: transparent;
     /* Most devs find border-box easier to reason about. However by inheriting we can mix box-sizing approaches.*/
@@ -67,8 +68,17 @@ p {
 /* 
 Thanks to L. David Baron for this:
 https://twitter.com/davidbaron/status/794138427952222210 */
-base, basefont, datalist, head, meta, script, style, title,
-noembed, param, template {
+base,
+basefont,
+datalist,
+head,
+meta,
+script,
+style,
+title,
+noembed,
+param,
+template {
     display: none;
 }
 

@@ -12,32 +12,30 @@
     <div class="io-InOut">
         <section class="io-InOut_Group">
             <div class="io-HeaderAndEventLoader">
-                <div class="io-EventLoader">
-                    
-                    <div class="io-EventLoader_Menu">
-                        <div id="ioEventLoaderChoices" class="io-EventLoader_Choices">
-                            
-                        </div>
-                        <a id="ioEventLoaderAddNew" class="io-EventLoader_AddNew">Add Event</a>
-                    </div>
-                </div>
+                
                 <header class="io-Header">
-                    <nav id="ioEventSwitcher">
-                        
-                    </nav>
+                    
+                    <div class="io-Header_Left">
 
-                    <div class="io-Masthead">
-                        <!-- <a class="io-Masthead_Logo">
-                            <svg class="io-Masthead_LogoSvg" xmlns="http://www.w3.org/2000/svg" width="47" height="42" viewBox="0 0 47 42" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h47v17.9a2 2 0 0 1-1.806 1.99L23.499 22 1.806 19.89A2 2 0 0 1 0 17.9V0z"/></defs><g fill="none" fill-rule="evenodd"><path fill="#545454" d="M0 22h47v16.092a2 2 0 0 1-1.824 1.992L23.5 42 1.824 40.084A2 2 0 0 1 0 38.092V22z"/><path fill="#FFF" d="M13.344 25.252c1.621 0 2.752.419 3.392 1.256.64.837.96 2.328.96 4.472 0 2.144-.32 3.635-.96 4.472-.64.837-1.77 1.256-3.392 1.256-1.621 0-2.755-.419-3.4-1.256s-.968-2.328-.968-4.472c0-2.144.323-3.635.968-4.472.645-.837 1.779-1.256 3.4-1.256zm0 1.264c-1.088 0-1.84.323-2.256.968-.416.645-.624 1.81-.624 3.496 0 1.685.208 2.85.624 3.496.416.645 1.168.968 2.256.968 1.088 0 1.84-.323 2.256-.968.416-.645.624-1.81.624-3.496 0-1.685-.208-2.85-.624-3.496-.416-.645-1.168-.968-2.256-.968zm14.688-1.056v6.816c0 1.61-.299 2.752-.896 3.424-.597.672-1.616 1.008-3.056 1.008-1.493 0-2.547-.336-3.16-1.008-.613-.672-.92-1.813-.92-3.424V25.46h1.408v6.816c0 1.184.192 2.008.576 2.472.384.464 1.061.696 2.032.696.96 0 1.635-.232 2.024-.696.39-.464.584-1.288.584-2.472V25.46h1.408zm10.224 1.248h-3.568V36.5H33.28v-9.792h-3.552V25.46h8.528v1.248z"/><g transform="matrix(1 0 0 -1 0 22)"><use fill="#F8F8F8" xlink:href="#a"/><path stroke="#545454" d="M.5.5v17.4a1.5 1.5 0 0 0 1.355 1.493l21.596 2.11 21.694-2.11A1.5 1.5 0 0 0 46.5 17.9V.5H.5z"/></g><path fill="#585858" d="M18.8 17h-1.408V5.96H18.8V17zM30.08 5.96v10.48c0 .373-.181.56-.544.56H28.16c-.288 0-.496-.15-.624-.448l-3.728-7.824c-.363-.79-.57-1.275-.624-1.456h-.256c.043.427.064.912.064 1.456V17h-1.408V6.52c0-.373.187-.56.56-.56h1.328c.288 0 .496.15.624.448l3.616 7.632a27.5 27.5 0 0 1 .752 1.6h.272a30.3 30.3 0 0 1-.048-1.68v-8h1.392z"/></g></svg>
-                        </a> -->
+                        <button id="ioEventSwitcherBtn" class="io-Header_EventBtn">
+                            <h2 id="ioEventSwitcherTitle" class="io-Header_EventBtnTitle"></h2>
+                            <span class="io-Header_EventBtnRoster">Roster <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b></span>
+                        </button>
+
+                        <nav id="ioEventSwitcher" class="io-EventLoader">
+                            
+                        </nav>
+
+                        <form id="ioAddForm" class="io-AddForm" autocomplete="off">
+                            <input id="hdrInput" class="io-AddForm_Input" type="text">
+                            <label id="ioInputLabel" class="io-AddForm_Label" for="hdrInput">Add Name</label>
+                            <!-- <button id="hdrInputDoneBtn" type="submit" class="io-AddForm_DoneBtn">done</button> -->
+                        </form>
 
                     </div>
-
-                    <form id="ioAddForm" class="io-AddForm" autocomplete="off">
-                        <input id="hdrInput" class="io-AddForm_Input" type="text">
-                        <label id="ioInputLabel" class="io-AddForm_Label" for="hdrInput">Add Name</label>
-                        <!-- <button id="hdrInputDoneBtn" type="submit" class="io-AddForm_DoneBtn">done</button> -->
-                    </form>
+                    <button id="ioAddNameBtn" class="io-Header_AddNameBtn">
+                        <svg width="19" height="19" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg"><path d="M10 9h9v1h-9v9H9v-9H0V9h9V0h1v9z" fill="#FFF" fill-rule="evenodd"/></svg>
+                    </button>
                 </header>
             </div>
             <main id="itmContainer" class="io-Slats">
@@ -118,6 +116,12 @@
         </div>
     </div>
     <script src="inout.js?=0.2"></script>
+    <!-- <div class="io-Masthead">
+        <a class="io-Masthead_Logo">
+            <svg class="io-Masthead_LogoSvg" xmlns="http://www.w3.org/2000/svg" width="47" height="42" viewBox="0 0 47 42" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h47v17.9a2 2 0 0 1-1.806 1.99L23.499 22 1.806 19.89A2 2 0 0 1 0 17.9V0z"/></defs><g fill="none" fill-rule="evenodd"><path fill="#545454" d="M0 22h47v16.092a2 2 0 0 1-1.824 1.992L23.5 42 1.824 40.084A2 2 0 0 1 0 38.092V22z"/><path fill="#FFF" d="M13.344 25.252c1.621 0 2.752.419 3.392 1.256.64.837.96 2.328.96 4.472 0 2.144-.32 3.635-.96 4.472-.64.837-1.77 1.256-3.392 1.256-1.621 0-2.755-.419-3.4-1.256s-.968-2.328-.968-4.472c0-2.144.323-3.635.968-4.472.645-.837 1.779-1.256 3.4-1.256zm0 1.264c-1.088 0-1.84.323-2.256.968-.416.645-.624 1.81-.624 3.496 0 1.685.208 2.85.624 3.496.416.645 1.168.968 2.256.968 1.088 0 1.84-.323 2.256-.968.416-.645.624-1.81.624-3.496 0-1.685-.208-2.85-.624-3.496-.416-.645-1.168-.968-2.256-.968zm14.688-1.056v6.816c0 1.61-.299 2.752-.896 3.424-.597.672-1.616 1.008-3.056 1.008-1.493 0-2.547-.336-3.16-1.008-.613-.672-.92-1.813-.92-3.424V25.46h1.408v6.816c0 1.184.192 2.008.576 2.472.384.464 1.061.696 2.032.696.96 0 1.635-.232 2.024-.696.39-.464.584-1.288.584-2.472V25.46h1.408zm10.224 1.248h-3.568V36.5H33.28v-9.792h-3.552V25.46h8.528v1.248z"/><g transform="matrix(1 0 0 -1 0 22)"><use fill="#F8F8F8" xlink:href="#a"/><path stroke="#545454" d="M.5.5v17.4a1.5 1.5 0 0 0 1.355 1.493l21.596 2.11 21.694-2.11A1.5 1.5 0 0 0 46.5 17.9V.5H.5z"/></g><path fill="#585858" d="M18.8 17h-1.408V5.96H18.8V17zM30.08 5.96v10.48c0 .373-.181.56-.544.56H28.16c-.288 0-.496-.15-.624-.448l-3.728-7.824c-.363-.79-.57-1.275-.624-1.456h-.256c.043.427.064.912.064 1.456V17h-1.408V6.52c0-.373.187-.56.56-.56h1.328c.288 0 .496.15.624.448l3.616 7.632a27.5 27.5 0 0 1 .752 1.6h.272a30.3 30.3 0 0 1-.048-1.68v-8h1.392z"/></g></svg>
+        </a>
+
+    </div> -->
 </body>
 
 </html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="438px" height="206px" viewBox="0 0 438 206" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>HeaderBG</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="HeaderBG" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 1.000000)">
+            <circle id="Oval" stroke="#FFD54A" cx="338" cy="99" r="20"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.373754529" cx="188.5" cy="49.5" r="8.5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.825124547" cx="325" cy="6" r="5"></circle>
+            <circle id="Oval" stroke="#FFD54A" opacity="0.841938406" cx="379" cy="35" r="5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.877038043" cx="281.5" cy="42.5" r="11.5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.743829257" cx="241.5" cy="152.5" r="11.5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.654834692" cx="128.5" cy="138.5" r="8.5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.654834692" cx="118.5" cy="68.5" r="8.5"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.654834692" cx="58" cy="108" r="18"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.654834692" cx="18" cy="18" r="18"></circle>
+            <circle id="Oval" stroke="#FFD67E" opacity="0.654834692" cx="418" cy="56" r="18"></circle>
+            <path d="M70.640625,95.7011719 L110.988281,73.25" id="Path-2" stroke="#FBC55E"></path>
+            <path d="M383.5,37.5 L402.5,47.5" id="Path-2" stroke="#FBC55E"></path>
+            <path d="M127.074219,68.9179688 L317.685547,97.8515625" id="Path-3" stroke="#FACA42"></path>
+            <path d="M337.074219,118.917969 L360.5,204.5" id="Path-3" stroke="#FACA42"></path>
+            <path d="M349.169922,82.5 L376.412109,39.5664062" id="Path-4" stroke="#FBD249"></path>
+            <path d="M113.408203,61.765625 L33.5,26.5" id="Path-5" stroke="#F6B22E"></path>
+            <path d="M119.367188,77.5488281 L126.720703,130.361328" id="Path-6" stroke="#F9BF39"></path>
+        </g>
+    </g>
+</svg>

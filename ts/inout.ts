@@ -27,6 +27,12 @@ const ioLoad = <HTMLInputElement>document.getElementById("ioLoad");
 const ioCount = <HTMLElement>document.getElementById("ioCount");
 const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
 const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
+const ioEventSwitcherTitle = <HTMLHeadingElement>document.getElementById("ioEventSwitcherTitle");
+const ioEventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
+const ioAddNameBtn = document.getElementById("ioAddNameBtn");
+const ioEventSwitcherDrop = document.getElementById("ioEventSwitcher");
+const ioEventSwitcherRosterCount = document.getElementById("ioEventSwitcherRosterCount");
+
 // const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
@@ -93,9 +99,6 @@ io.addObserver({
 // // EventSwitcher.Init();
 // Ben activeEvent is a bad idea. You can just use the index of the array item that is selected to know which set of data to send into the createSlats and update etc. Need to remove it from the Observer and refactor. I have made this far more complicated than it should have been!
 
-let eventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
-let addNameBtn = document.getElementById("ioAddNameBtn");
-let eventSwitcherDrop = document.getElementById("ioEventSwitcher");
 // This function renders the list of items in total each time
 // io.addObserver({
 //     props: ["items"],
@@ -110,21 +113,24 @@ let eventSwitcherDrop = document.getElementById("ioEventSwitcher");
 function populateMenu() {
     io.items.forEach((item, idx) => {
         let eventSlat = document.createElement("div");
-        eventSlat.classList.add("io-EventSwitcher_Slat");
+        eventSlat.classList.add("io-EventLoader_Slat");
 
         let eventItem = document.createElement("label");
-        eventItem.classList.add("io-EventSwitcher_Item");
+        eventItem.classList.add("io-EventLoader_Item");
         eventItem.htmlFor = `event${idx}`;
         eventItem.textContent = item.EventName;
         eventSlat.appendChild(eventItem);
 
         let eventRadio = document.createElement("input");
+        eventRadio.classList.add("io-EventLoader_Radio");
         eventRadio.type = "radio";
         eventRadio.id = `event${idx}`;
         eventRadio.name = "eventOption";
         eventRadio.value = idx.toString();
         if (item.Selected) {
             eventRadio.checked = true;
+            ioEventSwitcherTitle.textContent = item.EventName;
+            ioEventSwitcherRosterCount.textContent = item.EventData.length;
         }
 
         eventRadio.addEventListener("change", function(e) {
@@ -141,7 +147,7 @@ function populateMenu() {
         });
         eventSlat.appendChild(eventRadio);
 
-        eventSwitcherDrop.appendChild(eventSlat);
+        ioEventSwitcherDrop.appendChild(eventSlat);
     });
     // looks at the data and creates a link for each event, appending it to the menu
     // adds a data attribute or similar to create a unique reference
@@ -151,7 +157,7 @@ function populateMenu() {
 io.addObserver({
     props: ["items"],
     callback: function renderItems() {
-        eventSwitcherDrop.innerHTML = "";
+        ioEventSwitcherDrop.innerHTML = "";
         populateMenu();
         // console.table(io.items);
 
