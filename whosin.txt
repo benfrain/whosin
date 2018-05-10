@@ -80,6 +80,7 @@ Design something
 ### Notes
 file type input is VERY difficult to style so wrapped this in a label element, hid the input and styled the label instead
 
+
 ## 16.6.17
 Made OK progress on getting the items to travel to their new position. However, need to ensure that items are sorted so that last 'in' is the first to display. At present, not sure how they are being sorted. Commented out 
 
@@ -112,3 +113,16 @@ Renamed from Whos in to `IN/OUT`
 
 # 1.4.18
 There is no transition on the wrapper when moving an item down as it is freshly created in the DOM (so cannot transition from any existing state.). Try using an animation instead to fix this.
+=======
+- If a user has a split set, I would expect each subsequent person added to get automatically split (e.g. if a two way split of 9 people, first 4 one team, last 5 the other).
+- Need to store the team split in local storage too. That way, when a user loads in their data, the split will be correct also.
+
+- need a set of SVG defs that can be loaded in at the outset in the shell
+
+- thought, maybe we need a 'shuffle/mix' button under the names when we have a team split going on. Don't think that needs to animate (yet) but maybe the movement function can be re factored such that it takes an element and destination sort order and it can just sort the movement out. That should then work on a loop of elements and destinations and even in reverse (for removing).
+
+### Need to sort the ordering
+- When a person is added, they need to go to the beginning.
+- When a person is removed, they need to be 'popped' and the subsequent items re-ordered (incidentally, we 
+
+### Selections and fly out menu style: https://codepen.io/benfrain/pen/yXvwBL
