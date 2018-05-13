@@ -1,14 +1,19 @@
 function createSlats(slats: Array<Object>, currentDataSet: number) {
     // console.log(slats);
+    setTimeout(() => {
+        root.removeAttribute("data-loading-slats");
+    }, slats.length * 100);
     slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
         slat.classList.add("io-Slat");
         slat.setAttribute("data-idx", idx);
+        slat.style.setProperty("--delay", `${idx / 20}s`);
         slat.setAttribute("data-io-slat-in", item.in);
         if (item.team && item.in) {
             slat.setAttribute("data-io-slat-team", item.team);
         }
+
         // let noOfEventBeingUsed = io.items.findIndex(item => item.Selected);
         // console.log(noOfEventBeingUsed);
         // Handle a user being clicked to be 'In'

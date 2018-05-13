@@ -1,13 +1,13 @@
-function splitTeams(divideBy: number) {
+function splitTeams(divideBy: number, currentDataSet: number) {
     // Make an array of the people who are in
-    let peopleIn = io.activeEvent.reduce(function(acc, item, idx) {
+    let peopleIn = io.items[currentDataSet].EventData.reduce(function(acc, item, idx) {
         if (item.in === true) {
             acc.push(item);
         }
         return acc;
     }, []);
     // Make an array of the people who are out
-    let peopleOut = io.activeEvent.reduce(function(acc, item, idx) {
+    let peopleOut = io.items[currentDataSet].EventData.reduce(function(acc, item, idx) {
         if (item.in !== true) {
             acc.push(item);
         }
@@ -26,6 +26,7 @@ function splitTeams(divideBy: number) {
             itemInArraySplit.team = idx + 1;
         });
     });
+    io.items[currentDataSet].EventData = flatten(chunkedAndShuffled).concat(peopleOut);
     // Now flatten the teams into a single array and then add on the people who are out
-    io.notify({ activeEvent: flatten(chunkedAndShuffled).concat(peopleOut) });
+    io.notify({ items: io.items });
 }

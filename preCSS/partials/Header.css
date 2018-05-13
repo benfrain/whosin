@@ -35,6 +35,10 @@
     border-radius: 23px;
     width: 100%;
     height: 46px;
+    transition: border-radius 0.2s;
+    [data-evswitcher-showing="true"] & {
+        border-radius: 2px;
+    }
 }
 
 .io-Header_EventBtnTitle {

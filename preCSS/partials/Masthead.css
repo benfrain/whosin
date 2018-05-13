@@ -14,8 +14,7 @@
   top: 65vh;
   right: 50px;
   border-radius: 50%;
-  /* background-color: $color-orange; */
-  background: radial-gradient(circle at center, #f90 0px, #f90, 20\px, white 25px, #f90 40px);
+  background-color: #f9ae27;
   &:after {
     content: "";
     display: block;
@@ -23,7 +22,7 @@
     top: -2px;
     left: -2px;
     border-radius: 50%;
-    border: 1px solid #f90;
+    border: 1px solid #f9ae27;
     height: 44px;
     width: 44px;
     background-color: transparent;

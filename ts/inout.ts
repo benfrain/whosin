@@ -32,6 +32,8 @@ const ioEventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
 const ioAddNameBtn = document.getElementById("ioAddNameBtn");
 const ioEventSwitcherDrop = document.getElementById("ioEventSwitcher");
 const ioEventSwitcherRosterCount = document.getElementById("ioEventSwitcherRosterCount");
+const ioEventLoaderEditBtn = document.getElementById("ioEventLoaderEditBtn");
+const ioEventLoaderAddEventBtn = document.getElementById("ioEventLoaderAddEventBtn");
 
 // const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
 const root = <HTMLHtmlElement>document.documentElement;
@@ -41,6 +43,17 @@ let clickMask;
 // makeArrayOfStorageItems(JSON.parse(storage.getItem("players")));
 
 var io = new InOut();
+
+ioEventSwitcherBtn.addEventListener("click", function(e) {
+    root.setAttribute(
+        "data-evswitcher-showing",
+        root.getAttribute("data-evswitcher-showing") === "true" ? "false" : "true"
+    );
+});
+
+function closeEventSwitcherDrop() {
+    root.setAttribute("data-evswitcher-showing", "false");
+}
 
 io.addObserver({
     props: ["*"],
@@ -143,7 +156,9 @@ function populateMenu() {
                 }
             });
             // let activeEventList = io.items.filter(item => item.Selected);
+            root.setAttribute("data-loading-slats", "true");
             io.notify({ items: io.items });
+            closeEventSwitcherDrop();
         });
         eventSlat.appendChild(eventRadio);
 
@@ -167,10 +182,8 @@ io.addObserver({
         // Set the storage
         storage.setItem("players", JSON.stringify(io.items));
 
-        // Set the count
         let currentDataSet = io.items.findIndex(item => item.Selected);
 
-        console.log(currentDataSet);
         createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
@@ -182,7 +195,7 @@ io.addObserver({
         }
         io.count = countIn(io.items[currentDataSet].EventData);
 
-        // Communicate to DOM the count number
+        // Communicate to DO M the count number
         root.setAttribute("data-io-count", io.count.toString());
         ioCount.textContent = io.count.toString();
     }
@@ -266,17 +279,20 @@ ioTools.addEventListener(
 );
 
 ioSplit2.addEventListener("click", function split2ways() {
-    splitTeams(2);
+    let currentDataSet = io.items.findIndex(item => item.Selected);
+    splitTeams(2, currentDataSet);
     io.notify({ showingToolTray: false });
 });
 
 ioSplit3.addEventListener("click", function split3ways() {
-    splitTeams(3);
+    let currentDataSet = io.items.findIndex(item => item.Selected);
+    splitTeams(3, currentDataSet);
     io.notify({ showingToolTray: false });
 });
 
 ioSplit4.addEventListener("click", function split4ways() {
-    splitTeams(4);
+    let currentDataSet = io.items.findIndex(item => item.Selected);
+    splitTeams(4, currentDataSet);
     io.notify({ showingToolTray: false });
 });
 

@@ -25,7 +25,6 @@
     transform: none;
     transition: transform var(--duration);
     box-shadow: inset 0 -1px 0 0 #eee;
-
     &[data-io-slat-in="true"] {
         background-color: #fff;
     }
@@ -48,6 +47,21 @@
     /* Don't want to see the team numbers when slats move */
     [data-io-slat-moving="true"] &:after {
         animation: fader var(--duration) forwards;
+    }
+    [data-loading-slats="true"] & {
+        opacity: 0;
+        animation: nameIn linear 0.3s var(--delay) forwards;
+    }
+}
+
+@keyframes nameIn {
+    0% {
+        transform: translate3d(-10px, -5px, 0);
+        opacity: 0;
+    }
+    100% {
+        transform: none;
+        opacity: 1;
     }
 }
 

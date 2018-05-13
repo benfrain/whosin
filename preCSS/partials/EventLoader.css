@@ -6,14 +6,23 @@
     position: absolute;
     top: 100%;
     margin-top: 5px;
-    background-color: #222;
     z-index: 100;
     width: 100%;
-    border-radius: 5px;
-    /*display: flex;
-    align-items: center;
-    justify-content: center;*/
-    /*height: 45px;*/
+    opacity: 0;
+    transition: all 0.2s;
+    pointer-events: none;
+    transform: translateY(-10px);
+    [data-evswitcher-showing="true"] & {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+}
+
+.io-EventLoader_Slats {
+    background-color: #222;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .io-EventLoader_Slat {
@@ -32,9 +41,28 @@
     border-radius: 50%;
     border: 1px solid #fff;
     box-shadow: none;
-    transition: all 0.2s;
+    transition: all 2s;
+    background-color: transparent;
     &:checked {
         background-color: #fff;
         box-shadow: inset 0 0 0 1px #000;
     }
+}
+
+.io-EventLoader_EditGroup {
+    display: flex;
+    background-color: #000;
+    justify-content: space-between;
+    overflow: hidden;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.io-EventLoader_EditBtn {
+    display: inline-flex;
+    padding: 0 20px;
+    height: 40px;
+    align-items: center;
+    font-size: 11px;
+    color: #efac27;
 }

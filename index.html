@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js" data-io-slat-moving="false">
+<html lang="en-US" class="no-js" data-io-slat-moving="false" data-evswitcher-showing="false">
 
 <head>
     <title>IN/OUT</title>
@@ -22,8 +22,14 @@
                             <span class="io-Header_EventBtnRoster">Roster <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b></span>
                         </button>
 
-                        <nav id="ioEventSwitcher" class="io-EventLoader">
-                            
+                        <nav class="io-EventLoader">
+                            <div id="ioEventSwitcher" class="io-EventLoader_Slats">
+                                
+                            </div>
+                            <div class="io-EventLoader_EditGroup">
+                                <button id="ioEventLoaderEditBtn" class="io-EventLoader_EditBtn">Edit events</button>
+                                <button id="ioEventLoaderAddEventBtn" class="io-EventLoader_EditBtn">Add event</button>
+                            </div>
                         </nav>
 
                         <form id="ioAddForm" class="io-AddForm" autocomplete="off">
