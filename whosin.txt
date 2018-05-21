@@ -126,3 +126,14 @@ There is no transition on the wrapper when moving an item down as it is freshly 
 - When a person is removed, they need to be 'popped' and the subsequent items re-ordered (incidentally, we 
 
 ### Selections and fly out menu style: https://codepen.io/benfrain/pen/yXvwBL
+
+## 17.5.18
+Now need to sort the add button so players can be added to existing and new events
+
+Also, when you click to edit an event name, change the text but then chose 'cancel' you need to revert to the prior value. [x]
+
+
+## 21.5.18
+
+In the save function, we need to use the eventsToDelete array contents (if greater than 0) to remove the matching events from the data.
+The delete btn (around line 220) should remove it from view but a cancel should bring it back (maybe just mark it with a class so it goes display none)

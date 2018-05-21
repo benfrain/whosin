@@ -31,8 +31,17 @@
     justify-content: space-between;
     height: 45px;
     padding: 0 20px;
+    position: relative;
+}
+
+.io-EventLoader_Item {
     font-size: 16px;
     color: #ddd;
+    border-bottom: 1px dashed transparent;
+    transition: border 0.1s;
+    &[contenteditable="true"] {
+        border-bottom: 1px dashed #f9ae27;
+    }
 }
 
 .io-EventLoader_Radio {
@@ -41,11 +50,15 @@
     border-radius: 50%;
     border: 1px solid #fff;
     box-shadow: none;
-    transition: all 2s;
+    transition: all 0.2s;
     background-color: transparent;
     &:checked {
         background-color: #fff;
         box-shadow: inset 0 0 0 1px #000;
+    }
+    [data-editing-events="true"] & {
+        opacity: 0;
+        pointer-events: none;
     }
 }
 
@@ -65,4 +78,58 @@
     align-items: center;
     font-size: 11px;
     color: #efac27;
+    [data-editing-events="true"] & {
+        display: none;
+    }
+}
+
+.io-EventLoader_SaveBtn {
+    font-size: 11px;
+    color: #fff;
+    display: none;
+    padding: 0 20px;
+    height: 40px;
+    align-items: baseline;
+    [data-editing-events="true"] & {
+        display: inline-flex;
+    }
+}
+
+.io-EventLoader_CancelBtn {
+    font-size: 11px;
+    color: #fff;
+    display: none;
+    padding: 0 20px;
+    height: 40px;
+    align-items: baseline;
+    [data-editing-events="true"] & {
+        display: inline-flex;
+    }
+}
+
+.io-EventLoader_SaveTick {
+    margin-left: 5px;
+}
+
+.io-EventLoader_CancelCross {
+    margin-left: 5px;
+}
+
+.io-EventLoader_DeleteBtn {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    top: 0;
+    right: 10px;
+    width: 40px;
+    height: 45px;
+    background-size: 20px auto;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: inline("img/trash-white.svg");
+    transition: opacity 0.2s;
+    [data-editing-events="true"] & {
+        opacity: 1;
+        pointer-events: auto;
+    }
 }

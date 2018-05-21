@@ -30,15 +30,18 @@ const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
 const ioEventSwitcherTitle = <HTMLHeadingElement>document.getElementById("ioEventSwitcherTitle");
 const ioEventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
 const ioAddNameBtn = document.getElementById("ioAddNameBtn");
-const ioEventSwitcherDrop = document.getElementById("ioEventSwitcher");
+const ioEventSwitcher = document.getElementById("ioEventSwitcher");
 const ioEventSwitcherRosterCount = document.getElementById("ioEventSwitcherRosterCount");
 const ioEventLoaderEditBtn = document.getElementById("ioEventLoaderEditBtn");
 const ioEventLoaderAddEventBtn = document.getElementById("ioEventLoaderAddEventBtn");
-
+const ioEventLoaderSaveBtn = document.getElementById("ioEventLoaderSaveBtn");
+const ioEventLoaderCancelBtn = document.getElementById("ioEventLoaderCancelBtn");
 // const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
 let clickMask;
+let editingEvents = false;
+const eventsToDelete: Array<number> = [];
 // console.log(JSON.parse(storage.getItem("players")));
 // makeArrayOfStorageItems(JSON.parse(storage.getItem("players")));
 
@@ -49,6 +52,100 @@ ioEventSwitcherBtn.addEventListener("click", function(e) {
         "data-evswitcher-showing",
         root.getAttribute("data-evswitcher-showing") === "true" ? "false" : "true"
     );
+});
+
+ioAddNameBtn.addEventListener("click", function(e) {
+    root.setAttribute(
+        "data-addform-exposed",
+        root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
+    );
+});
+
+ioEventLoaderEditBtn.addEventListener("click", function(e) {
+    root.setAttribute("data-editing-events", "true");
+    let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
+    eventLabels.forEach(label => {
+        label.setAttribute("contenteditable", "true");
+        label.htmlFor = "";
+    });
+    editingEvents = !editingEvents;
+});
+
+function stopEditing() {
+    root.removeAttribute("data-editing-events");
+    editingEvents = !editingEvents;
+    let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
+    eventLabels.forEach((label, idx) => {
+        label.setAttribute("contenteditable", "false");
+        label.htmlFor = `event${idx}`;
+    });
+}
+
+ioEventLoaderSaveBtn.addEventListener("click", function(e) {
+    stopEditing();
+    addTempEvent();
+    updateEventNames();
+});
+
+function addTempEvent() {
+    let tempSlatName = document.querySelector(".io-EventLoader_TempSlat");
+    editingEvents = false;
+    if (!tempSlatName) {
+        return;
+    }
+    let newEvent = {
+        EventName: tempSlatName.textContent,
+        Selected: false,
+        EventData: []
+    };
+    io.items.push(newEvent);
+    io.notify({ items: io.items });
+}
+
+function updateEventNames() {
+    let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
+    eventLabels.forEach((label, idx) => {
+        io.items[idx].EventName = label.textContent;
+        io.notify({ items: io.items });
+    });
+}
+
+ioEventLoaderCancelBtn.addEventListener("click", function(e) {
+    stopEditing();
+    // If we have selected any items to delete we want to undo that
+    eventsToDelete.length = 0;
+    // Remove any temp slats
+    let tempSlat = document.querySelector(".io-EventLoader_TempSlat");
+    if (tempSlat) {
+        ioEventSwitcher.removeChild(tempSlat);
+    }
+    // This resets the event names to whatever they were before
+    let eventItems = document.querySelectorAll(".io-EventLoader_Item");
+    eventItems.forEach((item, idx) => {
+        item.textContent = io.items[idx].EventName;
+    });
+});
+
+ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
+    root.setAttribute("data-editing-events", "true");
+    let eventSlat = document.createElement("div");
+    eventSlat.classList.add("io-EventLoader_Slat", "io-EventLoader_TempSlat");
+
+    let eventItem = document.createElement("label");
+    eventItem.classList.add("io-EventLoader_Item");
+    eventItem.textContent = "Untitled Event";
+    eventItem.setAttribute("contenteditable", "true");
+    // eventItem.htmlFor = `event${idx}`;
+    eventSlat.appendChild(eventItem);
+
+    let eventRadio = document.createElement("input");
+    eventRadio.classList.add("io-EventLoader_Radio");
+    eventRadio.type = "radio";
+    // eventRadio.id = `event${idx}`;
+    eventRadio.name = "eventOption";
+    // eventRadio.value = idx.toString();
+    eventSlat.appendChild(eventRadio);
+    ioEventSwitcher.appendChild(eventSlat);
 });
 
 function closeEventSwitcherDrop() {
@@ -77,21 +174,6 @@ io.addObserver({
     }
 });
 
-// io.addObserver({
-//     props: ["paidMode"],
-//     callback: function observerEverything() {
-//         if (io.paidMode === true) {
-//             root.setAttribute("data-io-tools-paid-mode", "true");
-//             deleteOrPaidModeClickMask();
-//         } else {
-//             root.setAttribute("data-io-tools-paid-mode", "false");
-//             if (io.deleteMode === false) {
-//                 removeDeleteOrPaidModeClickMask();
-//             }
-//         }
-//     }
-// });
-
 io.addObserver({
     props: ["showingToolTray"],
     callback: function toggleTools() {
@@ -109,20 +191,6 @@ io.addObserver({
     }
 });
 
-// // EventSwitcher.Init();
-// Ben activeEvent is a bad idea. You can just use the index of the array item that is selected to know which set of data to send into the createSlats and update etc. Need to remove it from the Observer and refactor. I have made this far more complicated than it should have been!
-
-// This function renders the list of items in total each time
-// io.addObserver({
-//     props: ["items"],
-//     callback: function renderEventSwitcher() {
-//         eventSwitcherDrop.innerHTML = "";
-//         populateMenu();
-//         // let activeEventList = io.items.filter(item => item.Selected);
-//         // io.notify({ activeEvent: activeEventList[0].EventData });
-//     }
-// });
-
 function populateMenu() {
     io.items.forEach((item, idx) => {
         let eventSlat = document.createElement("div");
@@ -130,8 +198,8 @@ function populateMenu() {
 
         let eventItem = document.createElement("label");
         eventItem.classList.add("io-EventLoader_Item");
-        eventItem.htmlFor = `event${idx}`;
         eventItem.textContent = item.EventName;
+        eventItem.htmlFor = `event${idx}`;
         eventSlat.appendChild(eventItem);
 
         let eventRadio = document.createElement("input");
@@ -140,6 +208,19 @@ function populateMenu() {
         eventRadio.id = `event${idx}`;
         eventRadio.name = "eventOption";
         eventRadio.value = idx.toString();
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.classList.add("io-EventLoader_DeleteBtn");
+        deleteBtn.id = `delete_event${idx}`;
+        eventSlat.appendChild(deleteBtn);
+
+        deleteBtn.addEventListener("click", function removeEVent(e) {
+            console.log(idx);
+            eventsToDelete.push(idx);
+            console.log(eventsToDelete);
+        });
+
         if (item.Selected) {
             eventRadio.checked = true;
             ioEventSwitcherTitle.textContent = item.EventName;
@@ -147,6 +228,9 @@ function populateMenu() {
         }
 
         eventRadio.addEventListener("change", function(e) {
+            if (editingEvents) {
+                return;
+            }
             let menuItem = parseFloat(this.value);
             io.items.forEach((item, idx) => {
                 if (idx === menuItem) {
@@ -162,7 +246,7 @@ function populateMenu() {
         });
         eventSlat.appendChild(eventRadio);
 
-        ioEventSwitcherDrop.appendChild(eventSlat);
+        ioEventSwitcher.appendChild(eventSlat);
     });
     // looks at the data and creates a link for each event, appending it to the menu
     // adds a data attribute or similar to create a unique reference
@@ -172,7 +256,7 @@ function populateMenu() {
 io.addObserver({
     props: ["items"],
     callback: function renderItems() {
-        ioEventSwitcherDrop.innerHTML = "";
+        ioEventSwitcher.innerHTML = "";
         populateMenu();
         // console.table(io.items);
 
@@ -297,15 +381,17 @@ ioSplit4.addEventListener("click", function split4ways() {
 });
 
 function itemAdd(itemString: string) {
+    let currentDataSet = io.items.findIndex(item => item.Selected);
     var newPerson = new makePerson(itemString);
-    io.activeEvent.push(newPerson);
+    io.items[currentDataSet].EventData.push(newPerson);
     io.notify({
-        activeEvent: io.activeEvent
+        items: io.items
     });
 }
 
 function isNameValid(name: string) {
-    for (let item of io.activeEvent) {
+    let currentDataSet = io.items.findIndex(item => item.Selected);
+    for (let item of io.items[currentDataSet].EventData) {
         if (item.name === name) {
             return false;
         }
@@ -342,3 +428,17 @@ function setThisItem(slat: Object, currentDataSet) {
     console.log(newItems);
     return newItems;
 }
+// io.addObserver({
+//     props: ["paidMode"],
+//     callback: function observerEverything() {
+//         if (io.paidMode === true) {
+//             root.setAttribute("data-io-tools-paid-mode", "true");
+//             deleteOrPaidModeClickMask();
+//         } else {
+//             root.setAttribute("data-io-tools-paid-mode", "false");
+//             if (io.deleteMode === false) {
+//                 removeDeleteOrPaidModeClickMask();
+//             }
+//         }
+//     }
+// });

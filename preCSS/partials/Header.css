@@ -35,9 +35,13 @@
     border-radius: 23px;
     width: 100%;
     height: 46px;
-    transition: border-radius 0.2s;
+    transition: border-radius 0.2s, opacity 0.2s;
     [data-evswitcher-showing="true"] & {
         border-radius: 2px;
+    }
+    [data-addform-exposed="true"] & {
+        opacity: 0;
+        pointer-events: none;
     }
 }
 
@@ -53,4 +57,12 @@
 
 .io-Header_EventBtnRosterCount {
     color: #fff;
+}
+
+.io-Header_AddSVG {
+    position: relative;
+    transition: transform 0.2s;
+    [data-addform-exposed="true"] & {
+        transform: rotate(45deg);
+    }
 }

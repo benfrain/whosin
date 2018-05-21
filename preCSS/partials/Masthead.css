@@ -12,7 +12,7 @@
   width: 40px;
   position: fixed;
   top: 65vh;
-  right: 50px;
+  right: 20px;
   border-radius: 50%;
   background-color: #f9ae27;
   &:after {
