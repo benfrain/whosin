@@ -136,4 +136,8 @@ Also, when you click to edit an event name, change the text but then chose 'canc
 ## 21.5.18
 
 In the save function, we need to use the eventsToDelete array contents (if greater than 0) to remove the matching events from the data.
-The delete btn (around line 220) should remove it from view but a cancel should bring it back (maybe just mark it with a class so it goes display none)
+
+The delete btn (around line 220) should remove it from view but a cancel should bring it back (maybe just mark it with a class so it goes display none) [x]
+
+- When you have the event menu open and click the add button it should also close the menu [x]
+

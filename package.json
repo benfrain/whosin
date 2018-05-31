@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "gulp": "^3.9.1",
-    "postcss": "^6.0.14",
+    "postcss": "^6.0.22",
     "postcss-assets": "^5.0.0"
   },
   "name": "whosin",
@@ -11,17 +11,17 @@
   "author": "Ben Frain",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^6.7.7",
-    "browser-sync": "^2.18.8",
-    "del": "^2.2.2",
-    "gulp-postcss": "^7.0.0",
-    "gulp-sourcemaps": "^2.4.1",
-    "gulp-typescript": "^3.1.6",
-    "postcss-color-function": "^3.0.0",
-    "postcss-import": "^9.1.0",
-    "postcss-mixins": "^5.4.1",
-    "postcss-nested": "^1.0.0",
-    "postcss-simple-vars": "^3.0.0",
-    "typescript": "^2.2.1"
+    "autoprefixer": "^8.5.1",
+    "browser-sync": "^2.24.4",
+    "del": "^3.0.0",
+    "gulp-postcss": "^7.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-typescript": "^4.0.2",
+    "postcss-color-function": "^4.0.1",
+    "postcss-import": "^11.1.0",
+    "postcss-mixins": "^6.2.0",
+    "postcss-nested": "^3.0.0",
+    "postcss-simple-vars": "^4.1.0",
+    "typescript": "^2.8.3"
   }
 }

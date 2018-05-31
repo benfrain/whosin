@@ -45,6 +45,15 @@
     }
 }
 
+.io-Header_EventDownArrow {
+    position: absolute;
+    right: 10px;
+    transition: transform .2s;
+    [data-evswitcher-showing="true"] & {
+        transform: rotate(180deg);
+    }
+}
+
 .io-Header_EventBtnTitle {
     color: #fff;
     font-size: 18px;

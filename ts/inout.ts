@@ -47,21 +47,22 @@ const eventsToDelete: Array<number> = [];
 
 var io = new InOut();
 
-ioEventSwitcherBtn.addEventListener("click", function(e) {
+ioEventSwitcherBtn.addEventListener("click", function (e) {
     root.setAttribute(
         "data-evswitcher-showing",
         root.getAttribute("data-evswitcher-showing") === "true" ? "false" : "true"
     );
 });
 
-ioAddNameBtn.addEventListener("click", function(e) {
+ioAddNameBtn.addEventListener("click", function (e) {
     root.setAttribute(
         "data-addform-exposed",
         root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
     );
+    closeEventSwitcherDrop();
 });
 
-ioEventLoaderEditBtn.addEventListener("click", function(e) {
+ioEventLoaderEditBtn.addEventListener("click", function (e) {
     root.setAttribute("data-editing-events", "true");
     let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
     eventLabels.forEach(label => {
@@ -81,11 +82,24 @@ function stopEditing() {
     });
 }
 
-ioEventLoaderSaveBtn.addEventListener("click", function(e) {
+ioEventLoaderSaveBtn.addEventListener("click", function (e) {
     stopEditing();
     addTempEvent();
     updateEventNames();
+    removeDeletedEvents();
 });
+
+function removeDeletedEvents() {
+    eventsToDelete.forEach(item => {
+        // Check if the one being deleted is the currently selected one
+        let currentDataSet = io.items.findIndex(item => item.Selected);
+        if (currentDataSet === item) {
+            io.items[0].Selected = true;
+        }
+        io.items.splice(item, 1);
+        io.notify({ items: io.items });
+    })
+}
 
 function addTempEvent() {
     let tempSlatName = document.querySelector(".io-EventLoader_TempSlat");
@@ -110,15 +124,28 @@ function updateEventNames() {
     });
 }
 
-ioEventLoaderCancelBtn.addEventListener("click", function(e) {
+ioEventLoaderCancelBtn.addEventListener("click", function (e) {
     stopEditing();
+
     // If we have selected any items to delete we want to undo that
     eventsToDelete.length = 0;
+
     // Remove any temp slats
-    let tempSlat = document.querySelector(".io-EventLoader_TempSlat");
+    let tempSlat = ioEventSwitcher.querySelectorAll(".io-EventLoader_TempSlat");
     if (tempSlat) {
-        ioEventSwitcher.removeChild(tempSlat);
+        tempSlat.forEach(item => {
+            ioEventSwitcher.removeChild(item);
+        });
     }
+
+    // Remove any temp slats
+    let delSlat = ioEventSwitcher.querySelectorAll(".io-EventLoader_DeleteSlat");
+    if (delSlat) {
+        delSlat.forEach(item => {
+            item.classList.remove("io-EventLoader_DeleteSlat");
+        });
+    }
+
     // This resets the event names to whatever they were before
     let eventItems = document.querySelectorAll(".io-EventLoader_Item");
     eventItems.forEach((item, idx) => {
@@ -126,7 +153,7 @@ ioEventLoaderCancelBtn.addEventListener("click", function(e) {
     });
 });
 
-ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
+ioEventLoaderAddEventBtn.addEventListener("click", function (e) {
     root.setAttribute("data-editing-events", "true");
     let eventSlat = document.createElement("div");
     eventSlat.classList.add("io-EventLoader_Slat", "io-EventLoader_TempSlat");
@@ -216,7 +243,8 @@ function populateMenu() {
         eventSlat.appendChild(deleteBtn);
 
         deleteBtn.addEventListener("click", function removeEVent(e) {
-            console.log(idx);
+            this.parentElement.classList.add("io-EventLoader_DeleteSlat");
+            // console.log(idx);
             eventsToDelete.push(idx);
             console.log(eventsToDelete);
         });
@@ -227,7 +255,7 @@ function populateMenu() {
             ioEventSwitcherRosterCount.textContent = item.EventData.length;
         }
 
-        eventRadio.addEventListener("change", function(e) {
+        eventRadio.addEventListener("change", function (e) {
             if (editingEvents) {
                 return;
             }
@@ -267,11 +295,11 @@ io.addObserver({
         storage.setItem("players", JSON.stringify(io.items));
 
         let currentDataSet = io.items.findIndex(item => item.Selected);
-
+        console.log(currentDataSet);
         createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
-            setTimeout(function() {
+            setTimeout(function () {
                 root.removeAttribute("data-io-count-update");
             }, 300);
         } else {
@@ -304,7 +332,7 @@ if (storage.getItem("players")) {
 
 ioAddForm.addEventListener(
     "submit",
-    function(e) {
+    function (e) {
         // stop the page refreshing by default
         e.preventDefault();
         // If nothing has been entered in the text box
@@ -334,7 +362,7 @@ ioLoad.addEventListener("change", loadFile, false);
 // We need a listener for input so we can determine if he input is filled or not
 hdrInput.addEventListener(
     "input",
-    function(e) {
+    function (e) {
         e.target.setAttribute("data-io-input", this.value.length > 0 ? "filled" : "empty");
     },
     false
@@ -342,7 +370,7 @@ hdrInput.addEventListener(
 
 ioTools.addEventListener(
     "click",
-    function(e) {
+    function (e) {
         if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
             io.notify({ paidMode: false });
             io.notify({ deleteMode: io.deleteMode === true ? false : true });
@@ -419,7 +447,7 @@ function removeTeams(currentDataSet) {
 }
 
 function setThisItem(slat: Object, currentDataSet) {
-    var newItems = io.items[currentDataSet].EventData.map(function(participant, idx) {
+    var newItems = io.items[currentDataSet].EventData.map(function (participant, idx) {
         if (participant.name === slat.name) {
             participant.in = !participant.in;
         }

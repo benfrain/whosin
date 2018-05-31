@@ -21,8 +21,8 @@
 
 .io-EventLoader_Slats {
     background-color: #222;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
 }
 
 .io-EventLoader_Slat {
@@ -30,7 +30,7 @@
     align-items: center;
     justify-content: space-between;
     height: 45px;
-    padding: 0 20px;
+    padding: 0 10px;
     position: relative;
 }
 
@@ -67,13 +67,13 @@
     background-color: #000;
     justify-content: space-between;
     overflow: hidden;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
 }
 
 .io-EventLoader_EditBtn {
     display: inline-flex;
-    padding: 0 20px;
+    padding: 0 10px;
     height: 40px;
     align-items: center;
     font-size: 11px;
@@ -87,7 +87,7 @@
     font-size: 11px;
     color: #fff;
     display: none;
-    padding: 0 20px;
+    padding: 0 10px;
     height: 40px;
     align-items: baseline;
     [data-editing-events="true"] & {
@@ -99,7 +99,7 @@
     font-size: 11px;
     color: #fff;
     display: none;
-    padding: 0 20px;
+    padding: 0 10px;
     height: 40px;
     align-items: baseline;
     [data-editing-events="true"] & {
@@ -120,7 +120,7 @@
     opacity: 0;
     pointer-events: none;
     top: 0;
-    right: 10px;
+    right: 0;
     width: 40px;
     height: 45px;
     background-size: 20px auto;
@@ -132,4 +132,8 @@
         opacity: 1;
         pointer-events: auto;
     }
+}
+
+.io-EventLoader_DeleteSlat {
+    display: none;
 }
