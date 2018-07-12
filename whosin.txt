@@ -135,9 +135,22 @@ Also, when you click to edit an event name, change the text but then chose 'canc
 
 ## 21.5.18
 
-In the save function, we need to use the eventsToDelete array contents (if greater than 0) to remove the matching events from the data.
 
 The delete btn (around line 220) should remove it from view but a cancel should bring it back (maybe just mark it with a class so it goes display none) [x]
 
 - When you have the event menu open and click the add button it should also close the menu [x]
 
+In the save function, we need to use the eventsToDelete array contents (if greater than 0) to remove the matching events from the data.
+
+Items can now be removed – see the `removeDeletedEvents()` but need someway to set the new selected event if there is another one to load or somehow prompt to create a new event if there are no events.
+
+## 20.6.18
+
+- Need to make the team switcher menu hide when switching event or adding a name.[x]
+- Edit Players mode needs adding; save and cancel function need writing []
+- Need a click mask on the event switcher []
+- If editing players, clicking the switch event control should turn off editing players []
+- slat names and event names in the event menu need a span around them so that they can sit in the middle but have the underline 
+- maybe radio buttons and 'no splits' for the Split to teams menu?? [v2!]
+- Make the load/save button (maybe the cloud or other icon with the text??) [x]
+- The Event switcher needs full height buttons. Maybe need to tweak the HTML here? [x]

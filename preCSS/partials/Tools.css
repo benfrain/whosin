@@ -1,21 +1,45 @@
 .io-Tools {
-  position: fixed;
-  bottom: var(--toolsY);
-  right: 50px;
+  /* position: fixed;
+  bottom: var(--toolsY); */
+  /* right: 50px; */
   display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  background-color: color(#222 a(0.95));
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 50px;
+  /* flex-direction: column; */
+  /* background-color: color(#222 a(0.95)); */
   z-index: 10;
-  overflow: hidden;
-  min-width: 250px;
-  transform: scale(0);
-  transform-origin: right bottom;
-  transition: transform 0.2s;
-  [data-io-tools-exposed="true"] & {
+  /* overflow: hidden; */
+  /* min-width: 250px; */
+  /* transform: scale(0); */
+  /* transform-origin: right bottom;
+  transition: transform 0.2s; */
+  position: relative;
+  /* [data-io-tools-exposed="true"] & {
     transform: none;
-  }
+  } */
   /*justify-content: space-between;*/
+}
+
+.io-Tools_Menu {
+  width: 200px;
+  position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -100px;
+    display: flex;
+    background-color: #222;
+    flex-direction: column;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.2s;
+    pointer-events: none;
+    transform: translateY(10px);
+    [data-toolsmenu-showing="true"] & {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
 }
 
 .io-Tools_ClickMask {
@@ -45,14 +69,13 @@
   padding: 0 20px;
 }
 
-.io-Tools_Btn {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: space-between;
+.io-Tools_BtnAbout {
+  padding: 10px 0 10px 30px;
+  display: flex;
+  min-height: 40px;
   align-items: center;
-  color: #ccc;
-  font-size: 0.75rem;
-  min-width: 52px;
+  justify-content: center;
+  color: #888;
 }
 
 .io-Tools_IconSplit {
@@ -60,10 +83,6 @@
 }
 
 .io-Tools_IconAdmin {
-  fill: #ddd;
-}
-
-.io-Tools_IconStorage {
   fill: #ddd;
 }
 
@@ -153,4 +172,26 @@
   &:before {
     /* background-image: inline("../img/trash.svg"); */
   }
+}
+
+.io-Tools_LoadSaveBtn {
+  padding: 10px 0;
+  display: flex;
+  min-height: 40px;
+
+  align-items: center;
+  justify-content: center;
+  color: #888;
+}
+
+.io-Tools_IconStorage {
+  fill: #888;
+  margin-left: 5px;
+}
+
+.io-Tools_IconAbout {
+  fill: #888;
+  margin-left: 5px;
+  position: relative;
+  top: -1px;
 }

@@ -1,0 +1,114 @@
+.io-EditBar {
+    display: flex;
+    font-size: 0;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-bottom: 100px;
+    background-color: #efefef;
+    border-bottom: 1px solid #e4e4e4;
+    transition: background-color .2s;
+    [data-editing-players="true"] & {
+        background-color: #3a3a3a;
+    }
+}
+
+.io-EditBar_SplitContainer {
+
+    position: relative;
+}
+
+.io-EditBar_Btn {
+    color: #888;
+    font-size: 11px;
+    height: 35px;
+    display: inline-flex;
+    /* min-width: 90px; */
+    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    margin: 10px 0;
+    border-radius: 18px;
+    /* background-color: #e4e4e4; */
+    transition: color .2s;
+    /* border: 1px solid #ddd; */
+    [data-editing-players="true"] & {
+        color: #eeeeee;
+    }
+}
+
+.io-EditBar_BtnSplit,
+.io-EditBar_BtnEdit {
+    [data-editing-players="true"] & {
+        display: none;
+    }
+}
+
+.io-EditBar_Cancel {
+    margin-left: auto;
+}
+
+.io-EditBar_Cancel,
+.io-EditBar_Save {
+    display: none;
+    [data-editing-players="true"] & {
+        display: inline-flex;
+    }
+}
+
+.io-EditBar_Splits {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -100px;
+    width: 200px;
+    display: flex;
+    background-color: #222;
+    flex-direction: column;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.2s;
+    pointer-events: none;
+    transform: translateY(10px);
+    [data-splitteam-showing="true"] & {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+}
+
+.io-Tools_MenuSlat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #ddd;
+    height: 45px;
+    padding: 0 10px;
+    position: relative;
+}
+
+.io-ClickMask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.io-EditBar_SVG {
+    margin-left: 5px;
+    fill: #bbb;
+}
+
+.io-EditBar_SaveTick {
+    margin-left: 5px;
+    stroke: #efac27;
+}
+
+.io-EditBar_CancelCross {
+    margin-left: 5px;
+    
+    fill: #efac27;
+    
+}

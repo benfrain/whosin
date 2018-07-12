@@ -28,11 +28,11 @@
   padding: 8px 15px 0;
   border-radius: 23px;
   border: 1px solid #f5a623;
+  caret-color: #f5a623;
   transition: background-color 0.2s;
   &:focus {
     outline: 0;
     background-color: #fcfcfc;
-    color: #ddd;
   }
 }
 

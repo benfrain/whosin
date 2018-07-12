@@ -19,7 +19,7 @@
     justify-content: space-between;
     color: #777;
     min-height: 44px;
-    padding: 0 11px;
+    padding: 0 10px;
     position: relative;
     width: 100%;
     transform: none;
@@ -54,6 +54,17 @@
     }
 }
 
+.io-Slat_Name {
+    border-bottom: 1px solid transparent;
+    &[contenteditable="true"] {
+        border-bottom: 1px dashed #f90;
+    }
+    &:focus {
+        outline: 0;
+        caret-color: #f9ae27;
+    }
+}
+
 @keyframes nameIn {
     0% {
         transform: translate3d(-10px, -5px, 0);
@@ -79,6 +90,10 @@
     background-color: #fafafa;
     color: #ccc;
     box-shadow: inset 0 -1px 0 0 #e4e4e4 !important;
+    [data-editing-players="true"] & {
+        background-color: #fff;
+        color: #777;
+    }
 }
 
 .io-Slat_Delete {

@@ -1,4 +1,5 @@
 function loadFile(e) {
+    console.log("calling load file");
     // Note: this was useful http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api
     var file = ioLoad.files[0];
     var textType = /json.*/;

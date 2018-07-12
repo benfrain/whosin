@@ -23,10 +23,12 @@ const ioSplit3 = <HTMLButtonElement>document.getElementById("ioSplit3");
 const ioSplit4 = <HTMLButtonElement>document.getElementById("ioSplit4");
 const ioAddForm = <HTMLFormElement>document.getElementById("ioAddForm");
 const ioInputLabel = <HTMLLabelElement>document.getElementById("ioInputLabel");
-const ioLoad = <HTMLInputElement>document.getElementById("ioLoad");
+const ioLoad = <HTMLButtonElement>document.getElementById("ioLoad");
+const ioSave = <HTMLButtonElement>document.getElementById("ioSave");
 const ioCount = <HTMLElement>document.getElementById("ioCount");
-const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
-const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
+const ioLoadSaveBtn = <HTMLButtonElement>document.getElementById("ioLoadSaveBtn");
+// const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
+// const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
 const ioEventSwitcherTitle = <HTMLHeadingElement>document.getElementById("ioEventSwitcherTitle");
 const ioEventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
 const ioAddNameBtn = document.getElementById("ioAddNameBtn");
@@ -36,25 +38,51 @@ const ioEventLoaderEditBtn = document.getElementById("ioEventLoaderEditBtn");
 const ioEventLoaderAddEventBtn = document.getElementById("ioEventLoaderAddEventBtn");
 const ioEventLoaderSaveBtn = document.getElementById("ioEventLoaderSaveBtn");
 const ioEventLoaderCancelBtn = document.getElementById("ioEventLoaderCancelBtn");
-// const ioSlatsAreIn = <HTMLElement>document.getElementById("ioSlatsAreIn");
+
+const ioEditBarPlayersBtn = document.getElementById("ioEditBarPlayersBtn");
+const ioEditBarSplitTeamsBtn = document.getElementById("ioEditBarSplitTeamsBtn");
+const ioEditBarSaveBtn = document.getElementById("ioEditBarSaveBtn");
+const ioEditBarCancelBtn = document.getElementById("ioEditBarCancelBtn");
+
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
 let clickMask;
 let editingEvents = false;
+let editingPlayers = false;
 const eventsToDelete: Array<number> = [];
-// console.log(JSON.parse(storage.getItem("players")));
-// makeArrayOfStorageItems(JSON.parse(storage.getItem("players")));
 
 var io = new InOut();
 
-ioEventSwitcherBtn.addEventListener("click", function (e) {
+ioEventSwitcherBtn.addEventListener("click", function(e) {
     root.setAttribute(
         "data-evswitcher-showing",
         root.getAttribute("data-evswitcher-showing") === "true" ? "false" : "true"
     );
 });
 
-ioAddNameBtn.addEventListener("click", function (e) {
+ioEditBarSplitTeamsBtn.addEventListener("click", function(e) {
+    if (root.getAttribute("data-splitteam-showing") === "false") {
+        createClickMask(ioEditBarSplitTeamsBtn, "data-splitteam-showing");
+    }
+    root.setAttribute(
+        "data-splitteam-showing",
+        root.getAttribute("data-splitteam-showing") === "true" ? "false" : "true"
+    );
+});
+
+function createClickMask(triggerElement, dataAttrb: string) {
+    let deleteMask = document.createElement("div");
+    deleteMask.classList.add("io-ClickMask");
+    triggerElement.parentNode.insertBefore(deleteMask, triggerElement);
+    deleteMask.addEventListener("touchstart", function selfRemoveDeleteMask(e) {
+        // Without preventDefault touchstart would lead to a click and the menu would re-open
+        e.preventDefault();
+        deleteMask.parentNode.removeChild(deleteMask);
+        root.setAttribute(dataAttrb, "false");
+    });
+}
+
+ioAddNameBtn.addEventListener("click", function(e) {
     root.setAttribute(
         "data-addform-exposed",
         root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
@@ -62,7 +90,7 @@ ioAddNameBtn.addEventListener("click", function (e) {
     closeEventSwitcherDrop();
 });
 
-ioEventLoaderEditBtn.addEventListener("click", function (e) {
+ioEventLoaderEditBtn.addEventListener("click", function(e) {
     root.setAttribute("data-editing-events", "true");
     let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
     eventLabels.forEach(label => {
@@ -72,7 +100,20 @@ ioEventLoaderEditBtn.addEventListener("click", function (e) {
     editingEvents = !editingEvents;
 });
 
-function stopEditing() {
+ioEditBarPlayersBtn.addEventListener("click", e => {
+    root.setAttribute("data-editing-players", "true");
+    let slatNames = document.querySelectorAll(".io-Slat_Name");
+    slatNames.forEach(slatName => {
+        slatName.setAttribute("contenteditable", "true");
+    });
+    editingPlayers = !editingPlayers;
+});
+
+ioEditBarCancelBtn.addEventListener("click", function(e) {
+    stopEditingPlayers();
+});
+
+function stopEditingEvents() {
     root.removeAttribute("data-editing-events");
     editingEvents = !editingEvents;
     let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
@@ -82,8 +123,17 @@ function stopEditing() {
     });
 }
 
-ioEventLoaderSaveBtn.addEventListener("click", function (e) {
-    stopEditing();
+function stopEditingPlayers() {
+    root.removeAttribute("data-editing-players");
+    editingPlayers = !editingPlayers;
+    let slats = document.querySelectorAll(".io-Slat_Name");
+    slats.forEach((slat, idx) => {
+        slat.setAttribute("contenteditable", "false");
+    });
+}
+
+ioEventLoaderSaveBtn.addEventListener("click", function(e) {
+    stopEditingEvents();
     addTempEvent();
     updateEventNames();
     removeDeletedEvents();
@@ -98,7 +148,7 @@ function removeDeletedEvents() {
         }
         io.items.splice(item, 1);
         io.notify({ items: io.items });
-    })
+    });
 }
 
 function addTempEvent() {
@@ -124,8 +174,27 @@ function updateEventNames() {
     });
 }
 
-ioEventLoaderCancelBtn.addEventListener("click", function (e) {
-    stopEditing();
+ioEditBarSaveBtn.addEventListener("click", function(e) {
+    updateEventPlayers();
+});
+
+function updateEventPlayers() {
+    let eventPlayers = document.querySelectorAll(".io-Slat_Name");
+    let currentDataSet = io.items.findIndex(item => item.Selected);
+    console.log(currentDataSet);
+    io.items[currentDataSet].EventData.forEach((player, idx) => {
+        player.name = eventPlayers[idx].textContent;
+    });
+    io.notify({ items: io.items });
+    stopEditingPlayers();
+    // eventPlayers.forEach((player, idx) => {
+
+    //     io.items[idx].EventName = label.textContent;
+    // });
+}
+
+ioEventLoaderCancelBtn.addEventListener("click", function(e) {
+    stopEditingEvents();
 
     // If we have selected any items to delete we want to undo that
     eventsToDelete.length = 0;
@@ -153,7 +222,7 @@ ioEventLoaderCancelBtn.addEventListener("click", function (e) {
     });
 });
 
-ioEventLoaderAddEventBtn.addEventListener("click", function (e) {
+ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
     root.setAttribute("data-editing-events", "true");
     let eventSlat = document.createElement("div");
     eventSlat.classList.add("io-EventLoader_Slat", "io-EventLoader_TempSlat");
@@ -194,9 +263,6 @@ io.addObserver({
             deleteOrPaidModeClickMask();
         } else {
             root.setAttribute("data-io-tools-delete-mode", "false");
-            if (io.paidMode === false) {
-                removeDeleteOrPaidModeClickMask();
-            }
         }
     }
 });
@@ -255,7 +321,7 @@ function populateMenu() {
             ioEventSwitcherRosterCount.textContent = item.EventData.length;
         }
 
-        eventRadio.addEventListener("change", function (e) {
+        eventRadio.addEventListener("change", function(e) {
             if (editingEvents) {
                 return;
             }
@@ -299,7 +365,7 @@ io.addObserver({
         createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
-            setTimeout(function () {
+            setTimeout(function() {
                 root.removeAttribute("data-io-count-update");
             }, 300);
         } else {
@@ -324,15 +390,9 @@ if (storage.getItem("players")) {
 }
 // If we have storage of the players, and the array isn't empty then we create an array of them and notify the instance
 
-// if (storage.getItem("players") && storage.getItem("players") !== "[]") {
-
-// function discernActiveEvent() {
-//     let
-// }
-
 ioAddForm.addEventListener(
     "submit",
-    function (e) {
+    function(e) {
         // stop the page refreshing by default
         e.preventDefault();
         // If nothing has been entered in the text box
@@ -346,66 +406,57 @@ ioAddForm.addEventListener(
     false
 );
 
-ioToolsBtn.addEventListener("click", e => {
-    e.target.setAttribute("aria-selected", "true");
-    setTimeout(fire => {
-        e.target.removeAttribute("aria-selected");
-    }, 200);
-    io.notify({
-        showingToolTray: io.showingToolTray === true ? false : true
-    });
+ioLoadSaveBtn.addEventListener("click", function(e) {
+    if (root.getAttribute("data-toolsmenu-showing") === "false") {
+        createClickMask(ioLoadSaveBtn, "data-toolsmenu-showing");
+    }
+    root.setAttribute(
+        "data-toolsmenu-showing",
+        root.getAttribute("data-toolsmenu-showing") === "true" ? "false" : "true"
+    );
 });
 
 // Handles the loading of the JSON file
 ioLoad.addEventListener("change", loadFile, false);
 
+ioSave.addEventListener("click", function(e) {
+    io.notify({ deleteMode: false });
+    saveText(JSON.stringify(io.items), "inout.json");
+});
+
 // We need a listener for input so we can determine if he input is filled or not
 hdrInput.addEventListener(
     "input",
-    function (e) {
+    function(e) {
         e.target.setAttribute("data-io-input", this.value.length > 0 ? "filled" : "empty");
     },
     false
 );
 
-ioTools.addEventListener(
-    "click",
-    function (e) {
-        if (e.target.id === "ioDeleteMode" || e.target.parentNode.id === "ioDeleteMode") {
-            io.notify({ paidMode: false });
-            io.notify({ deleteMode: io.deleteMode === true ? false : true });
-            io.notify({ showingToolTray: false });
-        }
-        if (e.target.id === "ioPaidMode" || e.target.parentNode.id === "ioPaidMode") {
-            // root.setAttribute("data-io-tools-paid-mode", root.getAttribute("data-io-tools-paid-mode") === "true" ? "false" : "true");
-            io.notify({ paidMode: io.paidMode === true ? false : true });
-            io.notify({ deleteMode: false });
-            io.notify({ showingToolTray: false });
-        }
-        if (e.target.id === "ioSave" || e.target.parentNode.id === "ioSave") {
-            io.notify({ deleteMode: false, paidMode: false });
-            saveText(JSON.stringify(io.items), "inout.json");
-        }
-    },
-    false
-);
+ioSave.addEventListener("click", function(e) {
+    io.notify({ deleteMode: false, paidMode: false });
+    saveText(JSON.stringify(io.items), "inout.json");
+});
 
 ioSplit2.addEventListener("click", function split2ways() {
     let currentDataSet = io.items.findIndex(item => item.Selected);
     splitTeams(2, currentDataSet);
     io.notify({ showingToolTray: false });
+    root.setAttribute("data-splitteam-showing", "false");
 });
 
 ioSplit3.addEventListener("click", function split3ways() {
     let currentDataSet = io.items.findIndex(item => item.Selected);
     splitTeams(3, currentDataSet);
     io.notify({ showingToolTray: false });
+    root.setAttribute("data-splitteam-showing", "false");
 });
 
 ioSplit4.addEventListener("click", function split4ways() {
     let currentDataSet = io.items.findIndex(item => item.Selected);
     splitTeams(4, currentDataSet);
     io.notify({ showingToolTray: false });
+    root.setAttribute("data-splitteam-showing", "false");
 });
 
 function itemAdd(itemString: string) {
@@ -447,7 +498,7 @@ function removeTeams(currentDataSet) {
 }
 
 function setThisItem(slat: Object, currentDataSet) {
-    var newItems = io.items[currentDataSet].EventData.map(function (participant, idx) {
+    var newItems = io.items[currentDataSet].EventData.map(function(participant, idx) {
         if (participant.name === slat.name) {
             participant.in = !participant.in;
         }
@@ -456,17 +507,3 @@ function setThisItem(slat: Object, currentDataSet) {
     console.log(newItems);
     return newItems;
 }
-// io.addObserver({
-//     props: ["paidMode"],
-//     callback: function observerEverything() {
-//         if (io.paidMode === true) {
-//             root.setAttribute("data-io-tools-paid-mode", "true");
-//             deleteOrPaidModeClickMask();
-//         } else {
-//             root.setAttribute("data-io-tools-paid-mode", "false");
-//             if (io.deleteMode === false) {
-//                 removeDeleteOrPaidModeClickMask();
-//             }
-//         }
-//     }
-// });

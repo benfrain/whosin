@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js" data-io-slat-moving="false" data-evswitcher-showing="false" data-addform-exposed="false">
+<html lang="en-US" class="no-js" data-io-slat-moving="false" data-evswitcher-showing="false" data-splitteam-showing="false"
+    data-addform-exposed="false" data-toolsmenu-showing="false">
 
 <head>
     <title>IN/OUT</title>
@@ -20,27 +21,44 @@
     <div class="io-InOut">
         <section class="io-InOut_Group">
             <div class="io-HeaderAndEventLoader">
-                
+
                 <header class="io-Header">
-                    
+
                     <div class="io-Header_Left">
 
                         <button type="button" id="ioEventSwitcherBtn" class="io-Header_EventBtn">
                             <h2 id="ioEventSwitcherTitle" class="io-Header_EventBtnTitle"></h2>
-                            <span class="io-Header_EventBtnRoster">Roster <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b></span>
-                            <svg class="io-Header_EventDownArrow" width="18" height="11" viewBox="0 0 18 11" xmlns="http://www.w3.org/2000/svg"><path d="M8.89 8.682L16.666.904l.707.707-7.778 7.778-.707.707L.404 1.611 1.11.904l7.778 7.778z" fill="#FFF" fill-rule="evenodd"/></svg>
+                            <span class="io-Header_EventBtnRoster">
+
+                                <i id="ioCount" class="io-Header_EventBtnInCount"></i>
+                                /
+                                <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b>
+                            </span>
+                            <svg class="io-Header_EventDownArrow" width="18" height="11" viewBox="0 0 18 11" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.89 8.682L16.666.904l.707.707-7.778 7.778-.707.707L.404 1.611 1.11.904l7.778 7.778z" fill="#FFF" fill-rule="evenodd"
+                                />
+                            </svg>
                         </button>
 
                         <nav class="io-EventLoader">
                             <div id="ioEventSwitcher" class="io-EventLoader_Slats">
-                                
+
                             </div>
                             <div class="io-EventLoader_EditGroup">
                                 <button type="button" id="ioEventLoaderEditBtn" class="io-EventLoader_EditBtn">Edit events</button>
                                 <button type="button" id="ioEventLoaderAddEventBtn" class="io-EventLoader_EditBtn">Add event</button>
 
-                                <button type="button" id="ioEventLoaderSaveBtn" class="io-EventLoader_SaveBtn">Save <svg class="io-EventLoader_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg"><path d="M.235 4.542l2.811 2.509L8.035.475" stroke="#FFF" stroke-width=".68" fill="none"/></svg></button>
-                                <button type="button" id="ioEventLoaderCancelBtn" class="io-EventLoader_CancelBtn">Cancel <svg class="io-EventLoader_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg"><path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z" fill="#FFF" fill-rule="evenodd"/></svg></button>
+                                <button type="button" id="ioEventLoaderSaveBtn" class="io-EventLoader_SaveBtn">Save
+                                    <svg class="io-EventLoader_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M.235 4.542l2.811 2.509L8.035.475" stroke="#FFF" stroke-width=".68" fill="none" />
+                                    </svg>
+                                </button>
+                                <button type="button" id="ioEventLoaderCancelBtn" class="io-EventLoader_CancelBtn">Cancel
+                                    <svg class="io-EventLoader_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
+                                            fill="#FFF" fill-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </nav>
 
@@ -52,17 +70,78 @@
 
                     </div>
                     <button type="button" id="ioAddNameBtn" class="io-Header_AddNameBtn">
-                        <svg class="io-Header_AddSVG" width="19" height="19" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg"><path d="M10 9h9v1h-9v9H9v-9H0V9h9V0h1v9z" fill="#FFF" fill-rule="evenodd"/></svg>
+                        <svg class="io-Header_AddSVG" width="19" height="19" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 9h9v1h-9v9H9v-9H0V9h9V0h1v9z" fill="#FFF" fill-rule="evenodd" />
+                        </svg>
                     </button>
                 </header>
             </div>
             <main id="itmContainer" class="io-Slats">
             </main>
         </section>
-        <button type="button" id="ioToolsBtn" class="io-Masthead_ToolsBtn">
+        <nav class="io-EditBar">
+            <button type="button" id="ioEditBarPlayersBtn" class="io-EditBar_Btn io-EditBar_BtnEdit">
+                Edit players
+                <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512">
+                    <path d="M432 0c44.182 0 80 35.817 80 80 0 18.01-5.955 34.629-16 48l-32 32L352 48l32-32c13.371-10.045 29.989-16 48-16zM32 368L0 512l144-32 296-296L328 72 32 368zm325.789-186.211l-224 224-27.578-27.578 224-224 27.578 27.578z"
+                    />
+                </svg>
+            </button>
+            <div class="io-EditBar_SplitContainer">
+                <button type="button" id="ioEditBarSplitTeamsBtn" class="io-EditBar_Btn io-EditBar_BtnSplit">
+                    Split to teams
+                    <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 768 768">
+                        <path d="M319.5 127.5L246 201l169.5 169.5v270h-63v-243L201 246l-73.5 73.5v-192h192zm129 0h192v192L567 246l-93 93-45-45 93-93z"
+                        />
+                    </svg>
+
+                </button>
+                <div id="ioSplitter" class="io-EditBar_Splits">
+                    <button id="ioSplit2" type="button" class="io-Tools_MenuSlat">Split to 2 Teams</button>
+                    <button id="ioSplit3" type="button" class="io-Tools_MenuSlat">Split to 3 Teams</button>
+                    <button id="ioSplit4" type="button" class="io-Tools_MenuSlat">Split to 4 Teams</button>
+                </div>
+            </div>
+            <button type="button" id="ioEditBarSaveBtn" class="io-EditBar_Btn io-EditBar_Save">Save
+                <svg class="io-EditBar_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M.235 4.542l2.811 2.509L8.035.475" stroke-width=".68" fill="none" />
+                </svg>
+            </button>
+            <button type="button" id="ioEditBarCancelBtn" class="io-EditBar_Btn io-EditBar_Cancel">Cancel
+                <svg class="io-EditBar_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
+                        fill-rule="evenodd" />
+                </svg>
+            </button>
+
+
+        </nav>
+
+        <div class="io-Tools">
+            <button type="button" id="ioLoadSaveBtn" class="io-Tools_LoadSaveBtn">
+                Load/Save
+                <svg class="io-Tools_IconStorage" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 1024 1024">
+                    <path d="M480 512L376 616l-24-24 144-144 144 144-24 24-104-104v352h-32V512zm-32 160H224.09C153.534 672 96 614.692 96 544c0-60.652 42.388-111.624 99.232-124.73C193.11 407.835 192 396.047 192 384c0-106.04 85.96-192 192-192 83.694 0 154.88 53.55 181.166 128.257C589.946 300.09 621.56 288 656 288c75.467 0 137.375 58.053 143.502 131.938C854.864 434.018 896 484.224 896 544c0 70.55-57.348 128-128.09 128H544v32h224.018C856.374 704 928 632.186 928 544c0-67.085-41.175-124.528-99.748-148.304C811.522 315.912 740.757 256 656 256c-27.613 0-53.74 6.36-76.998 17.692C540.518 205.806 467.608 160 384 160c-123.712 0-224 100.288-224 224 0 4.42.128 8.812.38 13.17C103.67 421.81 64 478.37 64 544c0 88.366 71.44 160 159.982 160H448v-32z"
+                    />
+                </svg>
+            </button>
+            <div class="io-Tools_Menu">
+                <label for="ioLoad" class="io-Tools_MenuSlat">Load File</label>
+                <input class="io-Tools_LoadInput" type="file" id="ioLoad">
+                <button id="ioSave" type="button" class="io-Tools_MenuSlat">Save File</button>
+            </div>
+            <button type="button" class="io-Tools_BtnAbout">About
+
+                <svg id="icon-information" class="io-Tools_IconAbout" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 32 32">
+
+                    <path d="M17 22v-7h-3v1h2v6h-2v1h5v-1h-2zM16.5 29v0 0c-6.904 0-12.5-5.596-12.5-12.5s5.596-12.5 12.5-12.5c6.904 0 12.5 5.596 12.5 12.5s-5.596 12.5-12.5 12.5zM16.5 28c6.351 0 11.5-5.149 11.5-11.5s-5.149-11.5-11.5-11.5c-6.351 0-11.5 5.149-11.5 11.5s5.149 11.5 11.5 11.5v0 0zM16.5 13c0.828 0 1.5-0.672 1.5-1.5s-0.672-1.5-1.5-1.5c-0.828 0-1.5 0.672-1.5 1.5s0.672 1.5 1.5 1.5v0 0z"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- <button type="button" id="ioToolsBtn" class="io-Masthead_ToolsBtn">
             <i id="ioCount" class="io-Count"></i>
-        </button>
-        <div id="ioTools" class="io-Tools">
+        </button> -->
+        <!-- <div id="ioTools" class="io-Tools">
 
             <h4 class="io-Tools_Header">Admin</h4>
 
@@ -81,7 +160,7 @@
                     </svg>
                     <div class="io-Tools_AdminText">Delete All</div>
                 </button>
-                <!-- <button id="ioEditMode" class="io-Tools_Btn io-Tools_Edit">Edit</button> -->
+                
                 <button type="button" id="ioPaidMode" class="io-Tools_Btn io-Tools_Paid">
                     <svg class="io-Tools_IconAdmin" xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 1216 1024">
                         <path d="M1040.288 240c8.832 0 16-7.168 16-16v-53.28c0-28.896-23.52-52.416-52.416-52.416h-85.984l-19.616-57.888c-2.752-8.16-11.52-12.704-19.808-10.176L412.768 191.808c-8.448 2.592-13.216 11.52-10.656 19.968 2.112 6.912 8.448 11.328 15.328 11.328 1.536 0 3.104-.224 4.672-.672L872.96 85.344l42.976 126.88c2.848 8.384 12 12.928 20.288 10.016 8.384-2.816 12.864-11.936 10.016-20.288l-17.504-51.68h75.168c11.264 0 20.416 9.152 20.416 20.416V224c-.032 8.832 7.136 16 15.968 16zM1168 480c-8.832 0-16 7.168-16 16s7.168 16 16 16c11.232 0 16 4.768 16 16v192c0 11.232-4.768 16-16 16H912c-11.232 0-16-4.768-16-16V560c0-11.232 4.768-16 16-16h192c8.832 0 16-7.168 16-16V336c0-29.152-18.848-48-48-48H96c-39.456 0-64-24.544-64-64s24.544-64 64-64h162.432L161.6 191.936c-8.384 2.752-12.96 11.808-10.208 20.192 2.208 6.72 8.48 10.976 15.2 10.976 1.664 0 3.328-.256 5.024-.8L751.424 31.168c8.384-2.784 12.96-11.808 10.176-20.224-2.752-8.384-11.808-12.96-20.224-10.176l-387.2 127.68c-.736-.128-1.408-.448-2.176-.448H96c-57.408 0-96 38.592-96 96v704c0 57.408 38.592 96 96 96h976c29.152 0 48-18.848 48-48V816c0-8.832-7.168-16-16-16s-16 7.168-16 16v160c0 11.232-4.768 16-16 16H96c-39.456 0-64-24.544-64-64V297.984C48.416 311.84 70.144 320 96 320h976c11.232 0 16 4.768 16 16v176H912c-29.152 0-48 18.848-48 48v160c0 29.152 18.848 48 48 48h256c29.152 0 48-18.848 48-48V528c0-29.152-18.848-48-48-48zM992 640c0 17.673 14.327 32 32 32s32-14.327 32-32c0-17.673-14.327-32-32-32s-32 14.327-32 32z"
@@ -129,9 +208,8 @@
                         />
                     </svg>
                 </button>
-            </div>
-            <!-- <button id="ioToolsClose" class="io-Tools_Btn io-Tools_Close">Close</button> -->
-        </div>
+            </div> -->
+    </div>
     </div>
     <script src="inout.js?=0.2"></script>
     <!-- <div class="io-Masthead">
