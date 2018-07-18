@@ -58,5 +58,26 @@ var defaultDataV2 = [
             { name: "Dutton", paid: false, marked: false, team: "", in: false },
             { name: "Jim", paid: false, marked: false, team: "", in: false }
         ]
+    },
+    {
+        EventName: "Friday Night Roller Disco",
+        Selected: false,
+        EventData: [
+            { name: "Char", paid: false, marked: false, team: "", in: false },
+            { name: "Vicki", paid: false, marked: false, team: "", in: false },
+            { name: "Emma", paid: false, marked: false, team: "", in: false },
+            { name: "Sharon", paid: false, marked: false, team: "", in: false },
+            { name: "Mel", paid: false, marked: false, team: "", in: false },
+            { name: "Michelle", paid: false, marked: false, team: "", in: false },
+            { name: "Claire B", paid: false, marked: false, team: "", in: false },
+            { name: "Clarie Other", paid: false, marked: false, team: "", in: false },
+            { name: "Jane", paid: false, marked: false, team: "", in: false },
+            { name: "Anne", paid: false, marked: false, team: "", in: false },
+            { name: "Dinah", paid: false, marked: false, team: "", in: false },
+            { name: "Greg", paid: false, marked: false, team: "", in: false },
+            { name: "Thomas", paid: false, marked: false, team: "", in: false },
+            { name: "Janice", paid: false, marked: false, team: "", in: false },
+            { name: "Eleanor", paid: false, marked: false, team: "", in: false }
+        ]
     }
 ];

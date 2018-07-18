@@ -5,7 +5,6 @@
 /// <reference path="repositionSlat.ts" />
 /// <reference path="createSlats.ts" />
 /// <reference path="utils.ts" />
-/// <reference path="removeThisSlat.ts" />
 /// <reference path="countIn.ts" />
 /// <reference path="loadFile.ts" />
 /// <reference path="saveText.ts" />
@@ -17,7 +16,7 @@ const itmContainer = document.getElementById("itmContainer");
 const hdrInputDoneBtn = <HTMLButtonElement>document.getElementById("hdrInputDoneBtn");
 const hdrInput = <HTMLInputElement>document.getElementById("hdrInput");
 const ioTools = <HTMLElement>document.getElementById("ioTools");
-const ioSplitter = <HTMLElement>document.getElementById("ioSplitter");
+// const ioSplitter = <HTMLElement>document.getElementById("ioSplitter");
 const ioSplit2 = <HTMLButtonElement>document.getElementById("ioSplit2");
 const ioSplit3 = <HTMLButtonElement>document.getElementById("ioSplit3");
 const ioSplit4 = <HTMLButtonElement>document.getElementById("ioSplit4");
@@ -43,6 +42,7 @@ const ioEditBarPlayersBtn = document.getElementById("ioEditBarPlayersBtn");
 const ioEditBarSplitTeamsBtn = document.getElementById("ioEditBarSplitTeamsBtn");
 const ioEditBarSaveBtn = document.getElementById("ioEditBarSaveBtn");
 const ioEditBarCancelBtn = document.getElementById("ioEditBarCancelBtn");
+const ioEditBarAddBtn = document.getElementById("ioEditBarAddBtn");
 
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
@@ -50,6 +50,7 @@ let clickMask;
 let editingEvents = false;
 let editingPlayers = false;
 const eventsToDelete: Array<number> = [];
+const playersToDelete: Array<number> = [];
 
 var io = new InOut();
 
@@ -58,7 +59,36 @@ ioEventSwitcherBtn.addEventListener("click", function(e) {
         "data-evswitcher-showing",
         root.getAttribute("data-evswitcher-showing") === "true" ? "false" : "true"
     );
+    if (editingPlayers) {
+        stopEditingPlayers();
+    }
+    createClickMask(e.target, "data-evswitcher-showing");
 });
+
+ioEditBarAddBtn.addEventListener("click", e => {
+    addTempPlayer();
+});
+
+function addTempPlayer() {
+    let existingTemp = document.querySelector(".io-Slat_Temp");
+    if (existingTemp) {
+        return;
+    }
+
+    let firstExistingSlat = document.querySelector(`.io-Slat:first-child`);
+    let tempPlayer = document.createElement("div");
+    tempPlayer.classList.add("io-Slat", "io-Slat_Temp");
+    tempPlayer.setAttribute("data-io-slat-in", "true");
+
+    let tempPlayerName = document.createElement("p");
+    tempPlayerName.classList.add("io-Slat_Name");
+    tempPlayerName.textContent = randomName();
+    tempPlayerName.setAttribute("contenteditable", "true");
+    tempPlayer.appendChild(tempPlayerName);
+
+    itmContainer.insertBefore(tempPlayer, firstExistingSlat);
+    root.setAttribute("data-adding-player", "true");
+}
 
 ioEditBarSplitTeamsBtn.addEventListener("click", function(e) {
     if (root.getAttribute("data-splitteam-showing") === "false") {
@@ -79,16 +109,18 @@ function createClickMask(triggerElement, dataAttrb: string) {
         e.preventDefault();
         deleteMask.parentNode.removeChild(deleteMask);
         root.setAttribute(dataAttrb, "false");
+        stopEditingEvents();
+        cancelEventChanges();
     });
 }
 
-ioAddNameBtn.addEventListener("click", function(e) {
-    root.setAttribute(
-        "data-addform-exposed",
-        root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
-    );
-    closeEventSwitcherDrop();
-});
+// ioAddNameBtn.addEventListener("click", function(e) {
+//     root.setAttribute(
+//         "data-addform-exposed",
+//         root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
+//     );
+//     closeEventSwitcherDrop();
+// });
 
 ioEventLoaderEditBtn.addEventListener("click", function(e) {
     root.setAttribute("data-editing-events", "true");
@@ -106,7 +138,7 @@ ioEditBarPlayersBtn.addEventListener("click", e => {
     slatNames.forEach(slatName => {
         slatName.setAttribute("contenteditable", "true");
     });
-    editingPlayers = !editingPlayers;
+    editingPlayers = true;
 });
 
 ioEditBarCancelBtn.addEventListener("click", function(e) {
@@ -115,7 +147,7 @@ ioEditBarCancelBtn.addEventListener("click", function(e) {
 
 function stopEditingEvents() {
     root.removeAttribute("data-editing-events");
-    editingEvents = !editingEvents;
+    editingEvents = false;
     let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
     eventLabels.forEach((label, idx) => {
         label.setAttribute("contenteditable", "false");
@@ -124,11 +156,17 @@ function stopEditingEvents() {
 }
 
 function stopEditingPlayers() {
+    let addedPlayer = document.querySelector(".io-Slat_Temp");
+    if (addedPlayer) {
+        root.removeAttribute("data-adding-player");
+        addedPlayer.parentNode.removeChild(addedPlayer);
+    }
     root.removeAttribute("data-editing-players");
-    editingPlayers = !editingPlayers;
+    editingPlayers = false;
     let slats = document.querySelectorAll(".io-Slat_Name");
     slats.forEach((slat, idx) => {
         slat.setAttribute("contenteditable", "false");
+        slat.parentElement.classList.remove("io-Slat_DeleteSlat");
     });
 }
 
@@ -140,15 +178,18 @@ ioEventLoaderSaveBtn.addEventListener("click", function(e) {
 });
 
 function removeDeletedEvents() {
-    eventsToDelete.forEach(item => {
-        // Check if the one being deleted is the currently selected one
-        let currentDataSet = io.items.findIndex(item => item.Selected);
-        if (currentDataSet === item) {
+    var newEvents = io.items.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
+        if (!eventsToDelete.includes(idx)) {
+            acc.push(item);
+        } else {
             io.items[0].Selected = true;
         }
-        io.items.splice(item, 1);
-        io.notify({ items: io.items });
-    });
+        return acc;
+    }, []);
+    io.items = newEvents;
+    io.notify({ items: io.items });
+    // Now we have remove the events, empty the array
+    eventsToDelete.length = 0;
 }
 
 function addTempEvent() {
@@ -179,23 +220,38 @@ ioEditBarSaveBtn.addEventListener("click", function(e) {
 });
 
 function updateEventPlayers() {
+    let addedPlayer = document.querySelector(".io-Slat_Temp p");
+    if (addedPlayer) {
+        addName(addedPlayer.textContent);
+        root.setAttribute("data-adding-player", "false");
+    }
     let eventPlayers = document.querySelectorAll(".io-Slat_Name");
-    let currentDataSet = io.items.findIndex(item => item.Selected);
-    console.log(currentDataSet);
+    let currentDataSet = getCurrentDataSet();
+    // Set the saved data to matched the text as changed by the user
     io.items[currentDataSet].EventData.forEach((player, idx) => {
         player.name = eventPlayers[idx].textContent;
     });
+
+    var newItems = io.items[currentDataSet].EventData.reduce(function(
+        acc: Array<Object>,
+        item: Object,
+        idx: Number
+    ) {
+        if (!playersToDelete.includes(idx)) {
+            acc.push(item);
+        }
+        return acc;
+    },
+    []);
+    io.items[currentDataSet].EventData = newItems;
+
     io.notify({ items: io.items });
     stopEditingPlayers();
-    // eventPlayers.forEach((player, idx) => {
-
-    //     io.items[idx].EventName = label.textContent;
-    // });
+    // Now we have removed the players, empty the Array
+    playersToDelete.length = 0;
 }
 
-ioEventLoaderCancelBtn.addEventListener("click", function(e) {
-    stopEditingEvents();
-
+function cancelEventChanges() {
     // If we have selected any items to delete we want to undo that
     eventsToDelete.length = 0;
 
@@ -207,7 +263,7 @@ ioEventLoaderCancelBtn.addEventListener("click", function(e) {
         });
     }
 
-    // Remove any temp slats
+    // Remove any marked to delete slats
     let delSlat = ioEventSwitcher.querySelectorAll(".io-EventLoader_DeleteSlat");
     if (delSlat) {
         delSlat.forEach(item => {
@@ -216,10 +272,15 @@ ioEventLoaderCancelBtn.addEventListener("click", function(e) {
     }
 
     // This resets the event names to whatever they were before
-    let eventItems = document.querySelectorAll(".io-EventLoader_Item");
+    let eventItems = document.querySelectorAll(".io-EventLoader_EventName");
     eventItems.forEach((item, idx) => {
         item.textContent = io.items[idx].EventName;
     });
+}
+
+ioEventLoaderCancelBtn.addEventListener("click", function(e) {
+    stopEditingEvents();
+    cancelEventChanges();
 });
 
 ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
@@ -229,7 +290,12 @@ ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
 
     let eventItem = document.createElement("label");
     eventItem.classList.add("io-EventLoader_Item");
-    eventItem.textContent = "Untitled Event";
+
+    let eventName = document.createElement("span");
+    eventName.classList.add("io-EventLoader_EventName");
+    eventName.textContent = "Untitled Event";
+    eventItem.appendChild(eventName);
+
     eventItem.setAttribute("contenteditable", "true");
     // eventItem.htmlFor = `event${idx}`;
     eventSlat.appendChild(eventItem);
@@ -271,15 +337,16 @@ io.addObserver({
     props: ["showingToolTray"],
     callback: function toggleTools() {
         if (io.showingToolTray === true) {
-            root.setAttribute("data-io-tools-exposed", "true");
-            createToolsClickMask();
-            let btnPosY = window.innerHeight - ioToolsBtn.getBoundingClientRect().top + 10;
-            let btnPosX = ioToolsBtn.getBoundingClientRect().right;
-            root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
-            root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
+            // root.setAttribute("data-io-tools-exposed", "true");
+            // createToolsClickMask();
+            // let btnPosY = window.innerHeight - ioToolsBtn.getBoundingClientRect().top + 10;
+            // let btnPosX = ioToolsBtn.getBoundingClientRect().right;
+            // root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
+            // root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
         } else {
             root.removeAttribute("data-io-tools-exposed");
-            removeToolsClickMask();
+            root.setAttribute("data-splitteam-showing", "false");
+            // removeToolsClickMask();
         }
     }
 });
@@ -291,9 +358,13 @@ function populateMenu() {
 
         let eventItem = document.createElement("label");
         eventItem.classList.add("io-EventLoader_Item");
-        eventItem.textContent = item.EventName;
         eventItem.htmlFor = `event${idx}`;
         eventSlat.appendChild(eventItem);
+
+        let eventName = document.createElement("span");
+        eventName.classList.add("io-EventLoader_EventName");
+        eventName.textContent = item.EventName;
+        eventItem.appendChild(eventName);
 
         let eventRadio = document.createElement("input");
         eventRadio.classList.add("io-EventLoader_Radio");
@@ -310,18 +381,17 @@ function populateMenu() {
 
         deleteBtn.addEventListener("click", function removeEVent(e) {
             this.parentElement.classList.add("io-EventLoader_DeleteSlat");
-            // console.log(idx);
             eventsToDelete.push(idx);
-            console.log(eventsToDelete);
         });
 
         if (item.Selected) {
             eventRadio.checked = true;
             ioEventSwitcherTitle.textContent = item.EventName;
-            ioEventSwitcherRosterCount.textContent = item.EventData.length;
+            // ioEventSwitcherRosterCount.textContent = item.EventData.length;
         }
 
         eventRadio.addEventListener("change", function(e) {
+            // debugger;
             if (editingEvents) {
                 return;
             }
@@ -333,10 +403,11 @@ function populateMenu() {
                     item.Selected = false;
                 }
             });
-            // let activeEventList = io.items.filter(item => item.Selected);
             root.setAttribute("data-loading-slats", "true");
             io.notify({ items: io.items });
-            closeEventSwitcherDrop();
+            // debugger;
+            stopEditingEvents();
+            // closeEventSwitcherDrop();
         });
         eventSlat.appendChild(eventRadio);
 
@@ -361,7 +432,7 @@ io.addObserver({
         storage.setItem("players", JSON.stringify(io.items));
 
         let currentDataSet = io.items.findIndex(item => item.Selected);
-        console.log(currentDataSet);
+        // console.log(currentDataSet);
         createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
@@ -439,37 +510,47 @@ ioSave.addEventListener("click", function(e) {
 });
 
 ioSplit2.addEventListener("click", function split2ways() {
-    let currentDataSet = io.items.findIndex(item => item.Selected);
+    let currentDataSet = getCurrentDataSet();
     splitTeams(2, currentDataSet);
-    io.notify({ showingToolTray: false });
+    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
+    removeStandardClickMask();
 });
 
 ioSplit3.addEventListener("click", function split3ways() {
-    let currentDataSet = io.items.findIndex(item => item.Selected);
+    let currentDataSet = getCurrentDataSet();
     splitTeams(3, currentDataSet);
-    io.notify({ showingToolTray: false });
+    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
+    removeStandardClickMask();
 });
 
 ioSplit4.addEventListener("click", function split4ways() {
-    let currentDataSet = io.items.findIndex(item => item.Selected);
+    let currentDataSet = getCurrentDataSet();
     splitTeams(4, currentDataSet);
-    io.notify({ showingToolTray: false });
+    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
+    removeStandardClickMask();
 });
 
+function removeStandardClickMask() {
+    let clickMaskPresent = document.querySelector(".io-ClickMask");
+    if (clickMaskPresent) {
+        clickMaskPresent.parentNode.removeChild(clickMaskPresent);
+    }
+}
+
 function itemAdd(itemString: string) {
-    let currentDataSet = io.items.findIndex(item => item.Selected);
+    let currentDataSet = getCurrentDataSet();
     var newPerson = new makePerson(itemString);
-    io.items[currentDataSet].EventData.push(newPerson);
+    io.items[currentDataSet].EventData.splice(0, 0, newPerson);
     io.notify({
         items: io.items
     });
 }
 
 function isNameValid(name: string) {
-    let currentDataSet = io.items.findIndex(item => item.Selected);
+    let currentDataSet = getCurrentDataSet();
     for (let item of io.items[currentDataSet].EventData) {
         if (item.name === name) {
             return false;
@@ -478,15 +559,12 @@ function isNameValid(name: string) {
     return true;
 }
 
-function addName() {
-    if (isNameValid(hdrInput.value) === false) {
+function addName(personName: string) {
+    if (isNameValid(personName) === false) {
         root.setAttribute("data-io-duplicate-name", "");
-        ioInputLabel.textContent = "Name already exists";
     } else {
         root.removeAttribute("data-io-duplicate-name");
-        ioInputLabel.textContent = "Add Name";
-        itemAdd(hdrInput.value);
-        hdrInput.value = "";
+        itemAdd(personName);
     }
 }
 
@@ -504,6 +582,23 @@ function setThisItem(slat: Object, currentDataSet) {
         }
         return participant;
     });
-    console.log(newItems);
+    // console.log(newItems);
     return newItems;
+}
+
+function getCurrentDataSet() {
+    return io.items.findIndex(item => item.Selected);
+}
+
+function randomName() {
+    let names = [
+        "Humpty Dumpty",
+        "Santa Claus",
+        "Homer Simpson",
+        "Floella Benjamin",
+        "Melvin Udall",
+        "Lieutenant Colonel Frank Slade"
+    ];
+    let choice = Math.floor(Math.random() * Math.floor(names.length));
+    return names[choice];
 }

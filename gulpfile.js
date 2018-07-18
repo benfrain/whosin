@@ -14,12 +14,16 @@ var sourcemaps = require("gulp-sourcemaps");
 
 gulp.task("css", function() {
     var processors = [
-        postcssimport({ glob: true }),
+        postcssimport({
+            glob: true
+        }),
         simplevars,
         nested,
-        assets({ relative: true }),
+        assets({
+            relative: true
+        }),
         postcssColorFunction(),
-        autoprefixer({ browsers: ["iOS >= 8", "android 4"] })
+        autoprefixer({ browsers: ["defaults"] })
     ];
 
     // Produce a file list off all needed css files and move them to /build

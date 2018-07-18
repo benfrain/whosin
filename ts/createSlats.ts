@@ -23,6 +23,8 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
     setTimeout(() => {
         root.removeAttribute("data-loading-slats");
     }, slats.length * 100);
+
+    root.setAttribute("data-roster-count", slats.length.toString());
     slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
@@ -94,7 +96,8 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
             "click",
             function(e) {
                 e.stopPropagation();
-                io.notify({ activeEvent: removeThisSlat(item) });
+                this.parentElement.classList.add("io-Slat_DeleteSlat");
+                playersToDelete.push(idx);
             },
             false
         );

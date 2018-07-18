@@ -30,9 +30,9 @@
                             <h2 id="ioEventSwitcherTitle" class="io-Header_EventBtnTitle"></h2>
                             <span class="io-Header_EventBtnRoster">
 
-                                <i id="ioCount" class="io-Header_EventBtnInCount"></i>
-                                /
-                                <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b>
+                                <!-- <i id="ioCount" class="io-Header_EventBtnInCount"></i> -->
+                                <!-- / -->
+                                <!-- <b id="ioEventSwitcherRosterCount" class="io-Header_EventBtnRosterCount"></b> -->
                             </span>
                             <svg class="io-Header_EventDownArrow" width="18" height="11" viewBox="0 0 18 11" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8.89 8.682L16.666.904l.707.707-7.778 7.778-.707.707L.404 1.611 1.11.904l7.778 7.778z" fill="#FFF" fill-rule="evenodd"
@@ -70,52 +70,60 @@
 
                     </div>
                     <button type="button" id="ioAddNameBtn" class="io-Header_AddNameBtn">
-                        <svg class="io-Header_AddSVG" width="19" height="19" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <svg class="io-Header_AddSVG" width="19" height="19" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10 9h9v1h-9v9H9v-9H0V9h9V0h1v9z" fill="#FFF" fill-rule="evenodd" />
-                        </svg>
+                        </svg> -->
+                        <i id="ioCount" class="io-Header_EventBtnInCount"></i>
                     </button>
                 </header>
             </div>
+            <nav class="io-EditBar">
+                <button type="button" id="ioEditBarPlayersBtn" class="io-EditBar_Btn io-EditBar_BtnEdit">
+                    Edit people
+                    <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512">
+                        <path d="M432 0c44.182 0 80 35.817 80 80 0 18.01-5.955 34.629-16 48l-32 32L352 48l32-32c13.371-10.045 29.989-16 48-16zM32 368L0 512l144-32 296-296L328 72 32 368zm325.789-186.211l-224 224-27.578-27.578 224-224 27.578 27.578z"
+                        />
+                    </svg>
+                </button>
+                <div class="io-EditBar_SplitContainer">
+                    <button type="button" id="ioEditBarSplitTeamsBtn" class="io-EditBar_Btn io-EditBar_BtnSplit">
+                        Split to teams
+                        <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 768 768">
+                            <path d="M319.5 127.5L246 201l169.5 169.5v270h-63v-243L201 246l-73.5 73.5v-192h192zm129 0h192v192L567 246l-93 93-45-45 93-93z"
+                            />
+                        </svg>
+
+                    </button>
+                    <div id="ioSplitter" class="io-EditBar_Splits">
+                        <button id="ioSplit2" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split2">Split to 2 Teams</button>
+                        <button id="ioSplit3" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split3">Split to 3 Teams</button>
+                        <button id="ioSplit4" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split4">Split to 4 Teams</button>
+                    </div>
+                </div>
+                <button type="button" id="ioEditBarAddBtn" class="io-EditBar_Btn io-EditBar_Add">Add Person
+                    <svg class="io-EditBar_AddSVG" width="12" height="12" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 8h8v3h-8v8H8v-8H0V8h8V0h3v8z" fill="#BBB" fill-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <button type="button" id="ioEditBarSaveBtn" class="io-EditBar_Btn io-EditBar_Save">Save
+                    <svg class="io-EditBar_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M.235 4.542l2.811 2.509L8.035.475" stroke-width=".68" fill="none" />
+                    </svg>
+                </button>
+                <button type="button" id="ioEditBarCancelBtn" class="io-EditBar_Btn io-EditBar_Cancel">Cancel
+                    <svg class="io-EditBar_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
+                            fill-rule="evenodd" />
+                    </svg>
+                </button>
+
+
+            </nav>
             <main id="itmContainer" class="io-Slats">
             </main>
         </section>
-        <nav class="io-EditBar">
-            <button type="button" id="ioEditBarPlayersBtn" class="io-EditBar_Btn io-EditBar_BtnEdit">
-                Edit players
-                <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512">
-                    <path d="M432 0c44.182 0 80 35.817 80 80 0 18.01-5.955 34.629-16 48l-32 32L352 48l32-32c13.371-10.045 29.989-16 48-16zM32 368L0 512l144-32 296-296L328 72 32 368zm325.789-186.211l-224 224-27.578-27.578 224-224 27.578 27.578z"
-                    />
-                </svg>
-            </button>
-            <div class="io-EditBar_SplitContainer">
-                <button type="button" id="ioEditBarSplitTeamsBtn" class="io-EditBar_Btn io-EditBar_BtnSplit">
-                    Split to teams
-                    <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 768 768">
-                        <path d="M319.5 127.5L246 201l169.5 169.5v270h-63v-243L201 246l-73.5 73.5v-192h192zm129 0h192v192L567 246l-93 93-45-45 93-93z"
-                        />
-                    </svg>
 
-                </button>
-                <div id="ioSplitter" class="io-EditBar_Splits">
-                    <button id="ioSplit2" type="button" class="io-Tools_MenuSlat">Split to 2 Teams</button>
-                    <button id="ioSplit3" type="button" class="io-Tools_MenuSlat">Split to 3 Teams</button>
-                    <button id="ioSplit4" type="button" class="io-Tools_MenuSlat">Split to 4 Teams</button>
-                </div>
-            </div>
-            <button type="button" id="ioEditBarSaveBtn" class="io-EditBar_Btn io-EditBar_Save">Save
-                <svg class="io-EditBar_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M.235 4.542l2.811 2.509L8.035.475" stroke-width=".68" fill="none" />
-                </svg>
-            </button>
-            <button type="button" id="ioEditBarCancelBtn" class="io-EditBar_Btn io-EditBar_Cancel">Cancel
-                <svg class="io-EditBar_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
-                        fill-rule="evenodd" />
-                </svg>
-            </button>
-
-
-        </nav>
 
         <div class="io-Tools">
             <button type="button" id="ioLoadSaveBtn" class="io-Tools_LoadSaveBtn">

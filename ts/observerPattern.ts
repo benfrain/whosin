@@ -26,7 +26,7 @@ function makePerson(name: string) {
     this.paid = false;
     this.marked = false;
     this.team = "";
-    this.in = false;
+    this.in = true;
 }
 
 InOut.prototype.addObserver = function(observer: Object) {

@@ -1,6 +1,11 @@
+.io-HeaderAndEventLoader {
+    position: sticky;
+    top: 0;
+    z-index: 110;
+}
+
 .io-Header {
     position: relative;
-
     display: flex;
     background: inline("img/HeaderBG.svg") 50% 50%,
         linear-gradient(225deg, #fbd249 0%, #f5a623 100%);
@@ -56,7 +61,7 @@
 
 .io-Header_EventBtnTitle {
     color: #fff;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .io-Header_EventBtnRoster {
@@ -84,7 +89,7 @@
     /* color: #222; */
     display: inline-flex;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     font-size: 20px;
     color: #fff;
     /*box-shadow: 3px 0 0 #333;*/
@@ -103,4 +108,9 @@
     100% {
         transform: none;
     }
+}
+
+.io-Header_EventBtnInText {
+    font-size: .8em;
+    margin-left: .5ch;
 }

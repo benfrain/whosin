@@ -1,45 +1,64 @@
 .io-EditBar {
     display: flex;
+    position: fixed;
+    top: 100px;
+    width: 100%;
+    z-index: 100;
     font-size: 0;
     align-items: center;
     flex: 0 0 auto;
-    margin-bottom: 100px;
     background-color: #efefef;
     border-bottom: 1px solid #e4e4e4;
-    transition: background-color .2s;
-    [data-editing-players="true"] & {
+    transition: background-color 0.2s;
+    box-shadow: #000 0 0px 24px -8px;
+    [data-editing-players="true"] &,
+    [data-adding-player="true"] & {
         background-color: #3a3a3a;
     }
 }
 
 .io-EditBar_SplitContainer {
-
     position: relative;
 }
 
 .io-EditBar_Btn {
     color: #888;
     font-size: 11px;
-    height: 35px;
+    height: 40px;
     display: inline-flex;
     /* min-width: 90px; */
     white-space: nowrap;
     justify-content: center;
     align-items: center;
     padding: 0 10px;
-    margin: 10px 0;
+    /* margin: 10px 0; */
     border-radius: 18px;
     /* background-color: #e4e4e4; */
-    transition: color .2s;
+    transition: color 0.2s;
     /* border: 1px solid #ddd; */
-    [data-editing-players="true"] & {
+    [data-editing-players="true"] &,
+    [data-adding-player="true"] & {
         color: #eeeeee;
     }
 }
 
 .io-EditBar_BtnSplit,
 .io-EditBar_BtnEdit {
-    [data-editing-players="true"] & {
+    [data-editing-players="true"] &,
+    [data-adding-player="true"] & {
+        display: none;
+    }
+}
+
+.io-EditBar_BtnEdit {
+    [data-roster-count="0"] & {
+        display: none;
+    }
+}
+
+.io-EditBar_BtnSplit {
+    [data-io-count="0"] &,
+    [data-io-count="1"] & {
         display: none;
     }
 }
@@ -51,14 +70,23 @@
 .io-EditBar_Cancel,
 .io-EditBar_Save {
     display: none;
-    [data-editing-players="true"] & {
+    [data-editing-players="true"] &,
+    [data-adding-player="true"] & {
         display: inline-flex;
     }
 }
 
+.io-EditBar_Save {
+    /* [data-io-duplicate-name] & {
+        opacity: 0;
+        pointer-events: none;
+    } */
+}
+
 .io-EditBar_Splits {
     position: absolute;
-    bottom: 100%;
+    z-index: 30;
+    top: 100%;
     left: 50%;
     margin-left: -100px;
     width: 200px;
@@ -69,23 +97,24 @@
     opacity: 0;
     transition: all 0.2s;
     pointer-events: none;
-    transform: translateY(10px);
+    transform: translateY(-10px);
     [data-splitteam-showing="true"] & {
         opacity: 1;
         pointer-events: auto;
         transform: none;
     }
-}
-
-.io-Tools_MenuSlat {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 16px;
-    color: #ddd;
-    height: 45px;
-    padding: 0 10px;
-    position: relative;
+    &:after {
+        content: "";
+        display: block;
+        left: calc(50% - 5px);
+        width: 0;
+        position: absolute;
+        bottom: 100%;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 5px 5px;
+        border-color: transparent transparent #222 transparent;
+    }
 }
 
 .io-ClickMask {
@@ -94,6 +123,7 @@
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 20;
 }
 
 .io-EditBar_SVG {
@@ -108,7 +138,30 @@
 
 .io-EditBar_CancelCross {
     margin-left: 5px;
-    
+
     fill: #efac27;
-    
+}
+
+.io-EditBar_Add {
+    margin-left: auto;
+    [data-editing-players="true"] &,
+    [data-adding-player="true"] & {
+        display: none;
+    }
+}
+
+.io-EditBar_AddSVG {
+    margin-left: 5px;
+    [data-roster-count="0"] & {
+        animation: ioPulse 0.5s alternate infinite linear;
+    }
+}
+
+@keyframes ioPulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.2);
+    }
 }

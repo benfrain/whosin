@@ -2,10 +2,8 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform 0.35s;
-    [data-io-tools-delete-mode="true"] & {
-        transform: translateX(44px);
-    }
+    top: 40px;
+    /* padding-bottom: 100px; */
 }
 
 .io-Slats_Wrapper {
@@ -18,15 +16,37 @@
     align-items: center;
     justify-content: space-between;
     color: #777;
-    min-height: 44px;
+    height: 45px;
+    overflow: hidden;
     padding: 0 10px;
     position: relative;
     width: 100%;
     transform: none;
-    transition: transform var(--duration);
+
+    transition: height 0.2s;
+    /* [data-editing-players="true"] & {
+    } */
     box-shadow: inset 0 -1px 0 0 #eee;
     &[data-io-slat-in="true"] {
         background-color: #fff;
+    }
+    &[data-io-slat-in="false"] {
+        padding-right: 75px;
+        &:before {
+            content: "out";
+            position: absolute;
+            font-size: 10px;
+            text-transform: uppercase;
+            right: 10px;
+        }
+    }
+    [data-editing-players="true"] & {
+        &:before {
+            display: none;
+        }
+        &:after {
+            display: none;
+        }
     }
     &:after {
         font-size: 12px;
@@ -42,6 +62,7 @@
     }
     /*Don't allow clicks on a slat to do anything if in the middle of a move*/
     [data-io-slat-moving="true"] & {
+        transition: transform var(--duration);
         pointer-events: none;
     }
     /* Don't want to see the team numbers when slats move */
@@ -62,6 +83,12 @@
     &:focus {
         outline: 0;
         caret-color: #f9ae27;
+    }
+    [data-io-slat-in="false"] & {
+        text-decoration: line-through;
+    }
+    [data-editing-players="true"] & {
+        text-decoration: none;
     }
 }
 
@@ -96,9 +123,16 @@
     }
 }
 
+.io-Slat_DeleteSlat {
+    transition: height 0.2s;
+    height: 0;
+    /* display: none !important; */
+}
+
 .io-Slat_Delete {
     position: absolute;
-    right: 100%;
+    left: 100%;
+    margin-left: -44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -107,11 +141,17 @@
     width: 44px;
     color: $color-white;
     /* background-color: $color-delete; */
-    background: inline("img/trash_bg.svg"), $color-delete;
+    background-image: inline("img/trash_bg.svg");
     background-size: 20px auto;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important;
+    /* box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important; */
+    opacity: 0;
+    transition: opacity 0.35s;
+    [data-editing-players="true"] & {
+        opacity: 1;
+        /* transform: translateX(-44px); */
+    }
 }
 
 .io-Slat_DeleteMask {
@@ -120,24 +160,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-}
-
-.io-Slat_Action {
-    position: absolute;
-    left: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 0;
-    height: 44px;
-    width: 100px;
-    border: 3px solid $color-paid;
-    background-color: transparent;
-    transition: transform 0.2s;
-    color: $color-white;
-    [data-io-tools-paid-mode="true"] & {
-        transform: translateX(-100px);
-    }
 }
 
 /*This creates a highlight colour for each team*/
@@ -162,5 +184,39 @@
 [data-io-slat-team="4"] {
     &:after {
         border: 2px solid color(#f90 a(0.5));
+    }
+}
+
+.io-Slat_Temp {
+    overflow: hidden;
+    animation: growSlat 0.2s forwards linear;
+}
+
+.io-Slat:not(.io-Slat_Temp) {
+    [data-adding-player="true"] & {
+        opacity: 0;
+        /* animation: flyOut 0.2s var(--delay) forwards linear; */
+        pointer-events: none;
+    }
+    [data-adding-player="false"] & {
+        /* animation: flyOut 0.2s var(--delay) reverse linear; */
+    }
+}
+
+@keyframes flyOut {
+    0% {
+        transform: none;
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes growSlat {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 45px;
     }
 }
