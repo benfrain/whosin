@@ -2,13 +2,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 40px;
-    /* padding-bottom: 100px; */
-}
-
-.io-Slats_Wrapper {
-    position: relative;
-    transition: transform var(--duration);
+    background-color: #fff;
 }
 
 .io-Slat {
@@ -22,28 +16,12 @@
     position: relative;
     width: 100%;
     transform: none;
-
     transition: height 0.2s;
-    /* [data-editing-players="true"] & {
-    } */
     box-shadow: inset 0 -1px 0 0 #eee;
     &[data-io-slat-in="true"] {
         background-color: #fff;
     }
-    &[data-io-slat-in="false"] {
-        padding-right: 75px;
-        &:before {
-            content: "out";
-            position: absolute;
-            font-size: 10px;
-            text-transform: uppercase;
-            right: 10px;
-        }
-    }
     [data-editing-players="true"] & {
-        &:before {
-            display: none;
-        }
         &:after {
             display: none;
         }
@@ -76,6 +54,11 @@
 }
 
 .io-Slat_Name {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 50px;
     border-bottom: 1px solid transparent;
     &[contenteditable="true"] {
         border-bottom: 1px dashed #f90;
@@ -83,12 +66,6 @@
     &:focus {
         outline: 0;
         caret-color: #f9ae27;
-    }
-    [data-io-slat-in="false"] & {
-        text-decoration: line-through;
-    }
-    [data-editing-players="true"] & {
-        text-decoration: none;
     }
 }
 
@@ -126,7 +103,6 @@
 .io-Slat_DeleteSlat {
     transition: height 0.2s;
     height: 0;
-    /* display: none !important; */
 }
 
 .io-Slat_Delete {
@@ -140,17 +116,16 @@
     height: 44px;
     width: 44px;
     color: $color-white;
-    /* background-color: $color-delete; */
-    background-image: inline("img/trash_bg.svg");
+    background-image: url("img/trash_bg.svg");
     background-size: 20px auto;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    /* box-shadow: inset 0 -1px 0 0 color($color-delete shade(10%)) !important; */
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.35s;
     [data-editing-players="true"] & {
         opacity: 1;
-        /* transform: translateX(-44px); */
+        pointer-events: auto;
     }
 }
 
@@ -188,18 +163,20 @@
 }
 
 .io-Slat_Temp {
-    overflow: hidden;
+    overflow: visible;
     animation: growSlat 0.2s forwards linear;
+    position: fixed;
+    top: 140px;
+    left: 0;
+    right: 0;
 }
 
 .io-Slat:not(.io-Slat_Temp) {
     [data-adding-player="true"] & {
         opacity: 0;
-        /* animation: flyOut 0.2s var(--delay) forwards linear; */
         pointer-events: none;
     }
     [data-adding-player="false"] & {
-        /* animation: flyOut 0.2s var(--delay) reverse linear; */
     }
 }
 
@@ -218,5 +195,85 @@
     }
     100% {
         height: 45px;
+    }
+}
+
+.io-Slat_AddWarning {
+    display: flex;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 0.7rem;
+    padding: 5px 20px;
+    color: #222;
+    border-radius: 2px;
+    border: 1px solid #efac27;
+    width: 90%;
+    margin: 20px auto;
+    max-width: 400px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    [data-io-duplicate-name] & {
+        opacity: 1;
+    }
+}
+
+.io-Slats_ConfirmedHeader {
+    display: flex;
+    align-items: flex-end;
+    border-bottom: 1px solid #2491e9;
+    z-index: 100;
+    position: sticky;
+    top: 100px;
+    background-color: #fff;
+    [data-adding-player="true"] & {
+        opacity: 0;
+        pointer-events: none;
+    }
+    [data-editing-players="true"] & {
+        position: static;
+        z-index: auto;
+    }
+}
+
+.io-Slats_UnConfirmedHeader {
+    transition: transform var(--duration);
+    position: relative;
+    border-bottom: 1px solid #9b9b9b;
+    [data-io-slat-moving="false"] & {
+        transition: none;
+    }
+    [data-adding-player="true"] & {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.io-Slats_Count {
+    margin-left: 1ch;
+    [data-io-count-update] & {
+        animation: ioCount 0.3s 1 ease-in-out;
+    }
+}
+
+.io-Slats_Header {
+    display: inline-flex;
+    margin: 15px auto 0 10px;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 12px;
+    color: #fff;
+    height: 30px;
+    padding: 0 10px;
+    .io-Slats_ConfirmedHeader & {
+        background-color: #2491e9;
+    }
+    .io-Slats_UnConfirmedHeader & {
+        background-color: #9b9b9b;
     }
 }

@@ -1,0 +1,26 @@
+{
+  "name": "In/Out",
+  "short_name": "I/O",
+  "lang": "en-US",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#ff9900",
+  "icons": [
+    {
+      "src": "homescreen_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "homescreen_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "homescreen.svg",
+      "type": "image/svg"
+    }
+  ],
+  "background_color": "#ffffff"
+}

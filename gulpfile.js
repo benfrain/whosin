@@ -1,6 +1,8 @@
 var gulp = require("gulp");
 var ts = require("gulp-typescript");
+var uglify = require("gulp-uglify");
 var postcss = require("gulp-postcss");
+var cssnano = require("cssnano");
 var simplevars = require("postcss-simple-vars")();
 var autoprefixer = require("autoprefixer");
 var browserSync = require("browser-sync");
@@ -11,6 +13,9 @@ var nested = require("postcss-nested");
 var tsProject = ts.createProject("tsconfig.json");
 var del = require("del");
 var sourcemaps = require("gulp-sourcemaps");
+var htmlmin = require("gulp-htmlmin");
+
+var compress = true;
 
 gulp.task("css", function() {
     var processors = [
@@ -23,7 +28,8 @@ gulp.task("css", function() {
             relative: true
         }),
         postcssColorFunction(),
-        autoprefixer({ browsers: ["defaults"] })
+        autoprefixer({ browsers: ["defaults"] }),
+        cssnano()
     ];
 
     // Produce a file list off all needed css files and move them to /build
@@ -56,8 +62,24 @@ gulp.task("default", ["clean:mobile"]);
 
 // HTML
 gulp.task("html", function() {
-    gulp.src("./libs/**/*").pipe(gulp.dest("./build/libs"));
-    return gulp.src("./index.html").pipe(gulp.dest("./build"));
+    // gulp.src("./libs/**/*").pipe(gulp.dest("./build/libs"));
+    // .pipe(htmlmin({collapseWhitespace: true}))
+    return gulp
+        .src("./index.html")
+        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(gulp.dest("./build"));
+});
+
+gulp.task("pwa", function() {
+    // gulp.src("./libs/**/*").pipe(gulp.dest("./build/libs"));
+    // .pipe(htmlmin({collapseWhitespace: true}))
+    return gulp.src("PWA/**/*").pipe(gulp.dest("./build"));
+});
+
+gulp.task("cssImg", function() {
+    // gulp.src("./libs/**/*").pipe(gulp.dest("./build/libs"));
+    // .pipe(htmlmin({collapseWhitespace: true}))
+    return gulp.src("preCSS/img/*").pipe(gulp.dest("./build/img"));
 });
 
 // Watch
@@ -76,9 +98,10 @@ gulp.task("ts", function() {
     tsProject
         .src()
         .pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
+        .pipe(tsProject())
         .js.pipe(sourcemaps.write())
+        .pipe(uglify())
         .pipe(gulp.dest("./build"));
 });
 
-gulp.task("default", ["clean", "html", "css", "browser-sync", "ts", "watch"]);
+gulp.task("default", ["clean", "html", "css", "browser-sync", "ts", "pwa", "cssImg", "watch"]);

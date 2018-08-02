@@ -1,7 +1,6 @@
 /// <reference path="defaultData.ts" />
 /// <reference path="splitTeams.ts" />
 /// <reference path="deleteOrPaidClickMask.ts" />
-/// <reference path="toolsClickMask.ts" />
 /// <reference path="repositionSlat.ts" />
 /// <reference path="createSlats.ts" />
 /// <reference path="utils.ts" />
@@ -9,14 +8,19 @@
 /// <reference path="loadFile.ts" />
 /// <reference path="saveText.ts" />
 /// <reference path="observerPattern.ts" />
+/// <reference path="onBoard.ts" />
 //// <reference path="eventSwitcher.ts" />
 
 const storage = window.localStorage;
 const itmContainer = document.getElementById("itmContainer");
-const hdrInputDoneBtn = <HTMLButtonElement>document.getElementById("hdrInputDoneBtn");
-const hdrInput = <HTMLInputElement>document.getElementById("hdrInput");
+const itmConfirmedContainer = document.getElementById("itmConfirmedContainer");
+const itmUnConfirmedContainer = document.getElementById("itmUnConfirmedContainer");
+const ioHeaderUnConfirmed = document.getElementById("ioHeaderUnConfirmed");
+
 const ioTools = <HTMLElement>document.getElementById("ioTools");
 // const ioSplitter = <HTMLElement>document.getElementById("ioSplitter");
+const ioSplitBar = <HTMLElement>document.getElementById("ioSplitBar");
+const ioSplit0 = <HTMLButtonElement>document.getElementById("ioSplit0");
 const ioSplit2 = <HTMLButtonElement>document.getElementById("ioSplit2");
 const ioSplit3 = <HTMLButtonElement>document.getElementById("ioSplit3");
 const ioSplit4 = <HTMLButtonElement>document.getElementById("ioSplit4");
@@ -25,6 +29,7 @@ const ioInputLabel = <HTMLLabelElement>document.getElementById("ioInputLabel");
 const ioLoad = <HTMLButtonElement>document.getElementById("ioLoad");
 const ioSave = <HTMLButtonElement>document.getElementById("ioSave");
 const ioCount = <HTMLElement>document.getElementById("ioCount");
+const ioUnconfirmedCount = <HTMLSpanElement>document.getElementById("ioUnconfirmedCount");
 const ioLoadSaveBtn = <HTMLButtonElement>document.getElementById("ioLoadSaveBtn");
 // const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
 // const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
@@ -43,6 +48,8 @@ const ioEditBarSplitTeamsBtn = document.getElementById("ioEditBarSplitTeamsBtn")
 const ioEditBarSaveBtn = document.getElementById("ioEditBarSaveBtn");
 const ioEditBarCancelBtn = document.getElementById("ioEditBarCancelBtn");
 const ioEditBarAddBtn = document.getElementById("ioEditBarAddBtn");
+const allInHeader = document.querySelector(".io-Slats_ConfirmedHeader");
+const allOutHeader = document.querySelector(".io-Slats_UnConfirmedHeader");
 
 const root = <HTMLHtmlElement>document.documentElement;
 const wrapper = <HTMLDivElement>document.querySelector(".io-InOut");
@@ -74,17 +81,30 @@ function addTempPlayer() {
     if (existingTemp) {
         return;
     }
-
     let firstExistingSlat = document.querySelector(`.io-Slat:first-child`);
+
     let tempPlayer = document.createElement("div");
     tempPlayer.classList.add("io-Slat", "io-Slat_Temp");
     tempPlayer.setAttribute("data-io-slat-in", "true");
+    tempPlayer.addEventListener("click", function(e) {
+        if (e.target.classList.contains("io-Slat_Name")) {
+            return;
+        } else {
+            setEndOfContenteditable(e.target.querySelector(".io-Slat_Name"));
+        }
+    });
 
     let tempPlayerName = document.createElement("p");
     tempPlayerName.classList.add("io-Slat_Name");
-    tempPlayerName.textContent = randomName();
+    let tempName = randomName();
+    tempPlayerName.textContent = tempName;
     tempPlayerName.setAttribute("contenteditable", "true");
     tempPlayer.appendChild(tempPlayerName);
+
+    let warning = document.createElement("div");
+    warning.classList.add("io-Slat_AddWarning");
+    warning.textContent = `Name already exists. Please choose a unique name.`;
+    tempPlayer.appendChild(warning);
 
     itmContainer.insertBefore(tempPlayer, firstExistingSlat);
     root.setAttribute("data-adding-player", "true");
@@ -114,20 +134,13 @@ function createClickMask(triggerElement, dataAttrb: string) {
     });
 }
 
-// ioAddNameBtn.addEventListener("click", function(e) {
-//     root.setAttribute(
-//         "data-addform-exposed",
-//         root.getAttribute("data-addform-exposed") === "true" ? "false" : "true"
-//     );
-//     closeEventSwitcherDrop();
-// });
-
 ioEventLoaderEditBtn.addEventListener("click", function(e) {
     root.setAttribute("data-editing-events", "true");
-    let eventLabels = document.querySelectorAll(".io-EventLoader_Item");
-    eventLabels.forEach(label => {
-        label.setAttribute("contenteditable", "true");
-        label.htmlFor = "";
+    let eventName = document.querySelectorAll(".io-EventLoader_EventName");
+    eventName.forEach(name => {
+        name.setAttribute("contenteditable", "true");
+        name.parentElement.htmlFor = "";
+        // Let a tap in the middle of the name select accordingly, else select the end of the string
     });
     editingEvents = !editingEvents;
 });
@@ -181,12 +194,20 @@ function removeDeletedEvents() {
     var newEvents = io.items.reduce(function(acc: Array<Object>, item: Object, idx: Number) {
         if (!eventsToDelete.includes(idx)) {
             acc.push(item);
-        } else {
-            io.items[0].Selected = true;
         }
         return acc;
     }, []);
-    io.items = newEvents;
+    // If there are no events left, empty everything and set a new untitled event
+    if (newEvents.length === 0) {
+        io.items.length = 0;
+        io.items[0] = {
+            EventName: "Untitled Event",
+            Selected: true,
+            EventData: []
+        };
+    } else {
+        io.items = newEvents;
+    }
     io.notify({ items: io.items });
     // Now we have remove the events, empty the array
     eventsToDelete.length = 0;
@@ -219,11 +240,28 @@ ioEditBarSaveBtn.addEventListener("click", function(e) {
     updateEventPlayers();
 });
 
+var duplicateCheck;
 function updateEventPlayers() {
     let addedPlayer = document.querySelector(".io-Slat_Temp p");
     if (addedPlayer) {
-        addName(addedPlayer.textContent);
-        root.setAttribute("data-adding-player", "false");
+        let newName = addedPlayer.textContent;
+        isNameValid(newName);
+        if (duplicateCheck === true) {
+            return;
+        }
+        if (isNameValid(newName) === false) {
+            root.setAttribute("data-io-duplicate-name", "true");
+            duplicateCheck = true;
+            setTimeout(e => {
+                root.removeAttribute("data-io-duplicate-name");
+                duplicateCheck = false;
+            }, 3000);
+            return;
+        } else {
+            root.removeAttribute("data-io-duplicate-name");
+            itemAdd(newName);
+            root.setAttribute("data-adding-player", "false");
+        }
     }
     let eventPlayers = document.querySelectorAll(".io-Slat_Name");
     let currentDataSet = getCurrentDataSet();
@@ -247,6 +285,7 @@ function updateEventPlayers() {
 
     io.notify({ items: io.items });
     stopEditingPlayers();
+    removeSplits();
     // Now we have removed the players, empty the Array
     playersToDelete.length = 0;
 }
@@ -275,6 +314,7 @@ function cancelEventChanges() {
     let eventItems = document.querySelectorAll(".io-EventLoader_EventName");
     eventItems.forEach((item, idx) => {
         item.textContent = io.items[idx].EventName;
+        item.setAttribute("contenteditable", "false");
     });
 }
 
@@ -290,22 +330,25 @@ ioEventLoaderAddEventBtn.addEventListener("click", function(e) {
 
     let eventItem = document.createElement("label");
     eventItem.classList.add("io-EventLoader_Item");
-
+    eventItem.addEventListener("click", function(evt) {
+        if (evt.target.classList.contains("io-EventLoader_EventName")) {
+            return;
+        } else {
+            setEndOfContenteditable(evt.target.querySelector(".io-EventLoader_EventName"));
+        }
+    });
     let eventName = document.createElement("span");
     eventName.classList.add("io-EventLoader_EventName");
     eventName.textContent = "Untitled Event";
+    eventName.setAttribute("contenteditable", "true");
     eventItem.appendChild(eventName);
 
-    eventItem.setAttribute("contenteditable", "true");
-    // eventItem.htmlFor = `event${idx}`;
     eventSlat.appendChild(eventItem);
 
     let eventRadio = document.createElement("input");
     eventRadio.classList.add("io-EventLoader_Radio");
     eventRadio.type = "radio";
-    // eventRadio.id = `event${idx}`;
     eventRadio.name = "eventOption";
-    // eventRadio.value = idx.toString();
     eventSlat.appendChild(eventRadio);
     ioEventSwitcher.appendChild(eventSlat);
 });
@@ -337,16 +380,9 @@ io.addObserver({
     props: ["showingToolTray"],
     callback: function toggleTools() {
         if (io.showingToolTray === true) {
-            // root.setAttribute("data-io-tools-exposed", "true");
-            // createToolsClickMask();
-            // let btnPosY = window.innerHeight - ioToolsBtn.getBoundingClientRect().top + 10;
-            // let btnPosX = ioToolsBtn.getBoundingClientRect().right;
-            // root.style.setProperty("--toolsX", `${btnPosX.toString()}px`);
-            // root.style.setProperty("--toolsY", `${btnPosY.toString()}px`);
         } else {
             root.removeAttribute("data-io-tools-exposed");
             root.setAttribute("data-splitteam-showing", "false");
-            // removeToolsClickMask();
         }
     }
 });
@@ -365,6 +401,14 @@ function populateMenu() {
         eventName.classList.add("io-EventLoader_EventName");
         eventName.textContent = item.EventName;
         eventItem.appendChild(eventName);
+
+        eventItem.addEventListener("click", function(e) {
+            if (e.target.classList.contains("io-EventLoader_EventName")) {
+                return;
+            } else {
+                setEndOfContenteditable(e.target.querySelector(".io-EventLoader_EventName"));
+            }
+        });
 
         let eventRadio = document.createElement("input");
         eventRadio.classList.add("io-EventLoader_Radio");
@@ -387,11 +431,9 @@ function populateMenu() {
         if (item.Selected) {
             eventRadio.checked = true;
             ioEventSwitcherTitle.textContent = item.EventName;
-            // ioEventSwitcherRosterCount.textContent = item.EventData.length;
         }
 
-        eventRadio.addEventListener("change", function(e) {
-            // debugger;
+        eventRadio.addEventListener("click", function(e) {
             if (editingEvents) {
                 return;
             }
@@ -405,16 +447,14 @@ function populateMenu() {
             });
             root.setAttribute("data-loading-slats", "true");
             io.notify({ items: io.items });
-            // debugger;
             stopEditingEvents();
-            // closeEventSwitcherDrop();
+            closeEventSwitcherDrop();
+            removeStandardClickMask();
         });
         eventSlat.appendChild(eventRadio);
 
         ioEventSwitcher.appendChild(eventSlat);
     });
-    // looks at the data and creates a link for each event, appending it to the menu
-    // adds a data attribute or similar to create a unique reference
 }
 
 // This function renders the list of items in total each time
@@ -424,15 +464,17 @@ io.addObserver({
         ioEventSwitcher.innerHTML = "";
         populateMenu();
         // console.table(io.items);
-
-        // clear the container
-        itmContainer.innerHTML = "";
+        let allSlats = document.querySelectorAll(".io-Slat");
+        allSlats.forEach(slat => {
+            itmContainer.removeChild(slat);
+        });
+        ioSplitBar.style = "";
+        ioHeaderUnConfirmed.style = "";
 
         // Set the storage
         storage.setItem("players", JSON.stringify(io.items));
 
         let currentDataSet = io.items.findIndex(item => item.Selected);
-        // console.log(currentDataSet);
         createSlats(io.items[currentDataSet].EventData, currentDataSet);
         if (io.count !== countIn(io.items)) {
             root.setAttribute("data-io-count-update", "");
@@ -444,9 +486,12 @@ io.addObserver({
         }
         io.count = countIn(io.items[currentDataSet].EventData);
 
-        // Communicate to DO M the count number
+        // Communicate to DOM the count number
         root.setAttribute("data-io-count", io.count.toString());
         ioCount.textContent = io.count.toString();
+        ioUnconfirmedCount.textContent = (
+            io.items[currentDataSet].EventData.length - io.count
+        ).toString();
     }
 });
 
@@ -454,28 +499,7 @@ if (storage.getItem("players")) {
     io.notify({
         items: makeArrayOfStorageItems(JSON.parse(storage.getItem("players")))
     });
-} else {
-    io.notify({
-        items: defaultDataV2
-    });
 }
-// If we have storage of the players, and the array isn't empty then we create an array of them and notify the instance
-
-ioAddForm.addEventListener(
-    "submit",
-    function(e) {
-        // stop the page refreshing by default
-        e.preventDefault();
-        // If nothing has been entered in the text box
-        if (hdrInput.value === "") {
-            console.warn("nothing entered");
-            return;
-        }
-        // Otherwise, add the name
-        addName();
-    },
-    false
-);
 
 ioLoadSaveBtn.addEventListener("click", function(e) {
     if (root.getAttribute("data-toolsmenu-showing") === "false") {
@@ -495,18 +519,25 @@ ioSave.addEventListener("click", function(e) {
     saveText(JSON.stringify(io.items), "inout.json");
 });
 
-// We need a listener for input so we can determine if he input is filled or not
-hdrInput.addEventListener(
-    "input",
-    function(e) {
-        e.target.setAttribute("data-io-input", this.value.length > 0 ? "filled" : "empty");
-    },
-    false
-);
-
 ioSave.addEventListener("click", function(e) {
     io.notify({ deleteMode: false, paidMode: false });
     saveText(JSON.stringify(io.items), "inout.json");
+});
+
+function removeSplits() {
+    let currentDataSet = getCurrentDataSet();
+    io.items[currentDataSet].EventData.forEach((player: object, idx: number) => {
+        player.team = "";
+        let playerInDom = document.querySelector(`.io-Slat[data-idx="${idx}"]`);
+        playerInDom.removeAttribute("data-io-slat-team");
+    });
+    io.notify({ items: io.items });
+}
+
+ioSplit0.addEventListener("click", function split2ways() {
+    removeSplits();
+    root.setAttribute("data-splitteam-showing", "false");
+    removeStandardClickMask();
 });
 
 ioSplit2.addEventListener("click", function split2ways() {
@@ -559,15 +590,6 @@ function isNameValid(name: string) {
     return true;
 }
 
-function addName(personName: string) {
-    if (isNameValid(personName) === false) {
-        root.setAttribute("data-io-duplicate-name", "");
-    } else {
-        root.removeAttribute("data-io-duplicate-name");
-        itemAdd(personName);
-    }
-}
-
 // We remove any team affiliation here
 function removeTeams(currentDataSet) {
     io.items[currentDataSet].EventData.forEach(participant => {
@@ -601,4 +623,22 @@ function randomName() {
     ];
     let choice = Math.floor(Math.random() * Math.floor(names.length));
     return names[choice];
+}
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("/sw.js").then(
+            function(registration) {
+                // Registration was successful
+                console.log(
+                    "ServiceWorker registration successful with scope: ",
+                    registration.scope
+                );
+            },
+            function(err) {
+                // registration failed :(
+                console.log("ServiceWorker registration failed: ", err);
+            }
+        );
+    });
 }

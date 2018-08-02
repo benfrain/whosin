@@ -7,21 +7,9 @@
 .io-Header {
     position: relative;
     display: flex;
-    background: inline("img/HeaderBG.svg") 50% 50%,
-        linear-gradient(225deg, #fbd249 0%, #f5a623 100%);
+    background: url("img/HeaderBG.svg") 50% 50%, linear-gradient(225deg, #fbd249 0%, #f5a623 100%);
     height: 100px;
     align-items: center;
-}
-
-.io-Header_AddNameBtn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: color(#de8e0e a(0.4));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 10px 0 auto;
 }
 
 .io-Header_Left {
@@ -44,16 +32,12 @@
     [data-evswitcher-showing="true"] & {
         border-radius: 2px;
     }
-    [data-addform-exposed="true"] & {
-        opacity: 0;
-        pointer-events: none;
-    }
 }
 
 .io-Header_EventDownArrow {
     position: absolute;
     right: 10px;
-    transition: transform .2s;
+    transition: transform 0.2s;
     [data-evswitcher-showing="true"] & {
         transform: rotate(180deg);
     }
@@ -62,43 +46,6 @@
 .io-Header_EventBtnTitle {
     color: #fff;
     font-size: 16px;
-}
-
-.io-Header_EventBtnRoster {
-    display: inline-flex;
-    align-items: baseline;
-    font-size: 14px;
-    color: color(#fff a(0.7));
-}
-
-
-
-.io-Header_EventBtnRosterCount {
-    color: color(#fff a(0.7));
-}
-
-.io-Header_AddSVG {
-    position: relative;
-    transition: transform 0.2s;
-    [data-addform-exposed="true"] & {
-        transform: rotate(45deg);
-    }
-}
-
-.io-Header_EventBtnInCount {
-    /* color: #222; */
-    display: inline-flex;
-    justify-content: center;
-    align-items: baseline;
-    font-size: 20px;
-    color: #fff;
-    /*box-shadow: 3px 0 0 #333;*/
-    [data-io-count-update] & {
-        animation: ioCount .3s 1 ease-in-out;
-    }
-    &:empty {
-        opacity: 0;
-    }
 }
 
 @keyframes ioCount {
@@ -111,6 +58,6 @@
 }
 
 .io-Header_EventBtnInText {
-    font-size: .8em;
-    margin-left: .5ch;
+    font-size: 0.8em;
+    margin-left: 0.5ch;
 }

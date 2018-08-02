@@ -17,7 +17,6 @@
         pointer-events: auto;
         transform: none;
     }
-
 }
 
 .io-EventLoader_Slats {
@@ -33,9 +32,11 @@
     height: 45px;
     padding: 0 10px;
     position: relative;
-    /* max-height: 45px; */
-    transition: height .2s;
+    transition: height 0.2s;
     overflow: hidden;
+    & + & {
+        border-top: 1px solid #111;
+    }
 }
 
 .io-EventLoader_Item {
@@ -45,17 +46,17 @@
     align-items: center;
     font-size: 16px;
     color: #ddd;
-    &:focus {
-        outline: 0;
-        caret-color: #f9ae27;
-    }
 }
 
 .io-EventLoader_EventName {
     transition: border 0.1s;
     border-bottom: 1px dashed transparent;
-    [contenteditable="true"] & {
+    &[contenteditable="true"] {
         border-bottom: 1px dashed #f9ae27;
+    }
+    &:focus {
+        outline: 0;
+        caret-color: #f9ae27;
     }
 }
 
@@ -141,7 +142,7 @@
     background-size: 20px auto;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-image: inline("img/trash-white.svg");
+    background-image: url("img/trash-white.svg");
     transition: opacity 0.2s;
     [data-editing-events="true"] & {
         opacity: 1;
@@ -150,13 +151,12 @@
 }
 
 .io-EventLoader_DeleteSlat {
-    transition: height .2s;
+    transition: height 0.2s;
     height: 0;
-    /* display: none; */
 }
 
 .io-EventLoader_TempSlat {
-    animation: ioAddEventSlat .2s forwards linear; 
+    animation: ioAddEventSlat 0.2s forwards linear;
 }
 
 @keyframes ioAddEventSlat {

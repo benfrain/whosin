@@ -151,18 +151,25 @@ Items can now be removed – see the `removeDeletedEvents()` but need someway t
 - Need a click mask on the event switcher [x]
 - If editing players, clicking the switch event control should turn off editing players [x]
 - slat names and event names in the event menu need a span around them so that they can sit in the middle but have the underline  [x]
-- maybe radio buttons and 'no splits' for the Split to teams menu?? [v2!]
+- maybe radio buttons and 'no splits' for the Split to teams menu?? [x]
 - Make the load/save button (maybe the cloud or other icon with the text??) [x]
 - The Event switcher needs full height buttons. Maybe need to tweak the HTML here? [x]
-- 25 char limit on event names and player names (regex??) []
-- adding event [x] and player [] should animate in, not snap []
-- remove main player name input box and associated CSS []
-- maybe add small logo top left []
+- 25 char limit on event names and player names (regex??) [truncate instead]
+- adding event [x] and player [x] should animate in, not snap [x]
+- remove main player name input box and associated CSS [x]
+- maybe add small logo top left [added bottom centre]
 - change count to '6 confirmed' [x]
-- adding player in bottom bar and functionality []
 - add a count of actual players (not confirmed) to root. Less than 2 hide the 'split to teams' and if there are none, hide 'edit players' [x]
 - style 'io-EditBar_AddSVG' so if roster count is zero it pulses larger to prompt someone to add a name [x]
 
 Bug:
 
 When you have added an event, but then choose something else from the menu, it should choose that event, and remove the temp added event.Currently on 355 of io.ts [x]
+
+
+WHen adding name, if duplicate name, add a little box below telling them it is duplicate. Perhaps add MutationObserver to the io-Slat_Temp and run the validation on a new mutation. A change fades out the error and re-checks. 'Save' should fade out and be inoperable while there is a duplicate name [x]
+
+Add person should also switch off teams [x]
+
+
+Need to transform the edit bar and the Unconfirmed sections too [x]

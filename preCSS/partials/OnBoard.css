@@ -1,0 +1,78 @@
+.io-OnBoard {
+    position: fixed;
+    transform: translate(-50%, calc(-50% - 20px));
+    z-index: 110;
+    opacity: 0;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    background-color: #2d2d2d;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 90vw;
+    max-width: 450px;
+    height: auto;
+    transition: all 0.35s;
+    [data-io-onboard="true"] & {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.io-OnBoard_Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: #222;
+}
+
+.io-OnBoard_Title {
+    font-size: 16px;
+    color: #fff;
+}
+
+.io-OnBoard_Dismiss {
+    display: flex;
+    min-height: 40px;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px;
+    color: #f5a623;
+}
+
+.io-OnBoard_Body {
+    padding: 0 30px;
+}
+
+.io-OnBoard_Text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ccc;
+    margin-top: 15px;
+}
+
+.io-OnBoard_OK {
+    border: 1px solid #f5a623;
+    border-radius: 50%;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    margin: 20px auto;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.io-OnBoard_Dummy {
+    font-size: 12px;
+    color: #ddd;
+    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    margin: 0 auto 15px;
+}

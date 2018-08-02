@@ -1,48 +1,50 @@
 .io-EditBar {
     display: flex;
-    position: fixed;
-    top: 100px;
     width: 100%;
-    z-index: 100;
     font-size: 0;
     align-items: center;
     flex: 0 0 auto;
     background-color: #efefef;
     border-bottom: 1px solid #e4e4e4;
-    transition: background-color 0.2s;
-    box-shadow: #000 0 0px 24px -8px;
+    transition: background-color 0.2s, transform var(--duration);
     [data-editing-players="true"] &,
     [data-adding-player="true"] & {
         background-color: #3a3a3a;
+        position: sticky;
+        z-index: 101;
+        top: 100px;
     }
 }
 
 .io-EditBar_SplitContainer {
+    margin: 5px 0 0 auto;
     position: relative;
+    transition: transform var(--duration);
+    [data-io-slat-moving="false"] & {
+        transition: none;
+    }
+    [data-editing-players="true"] & {
+        display: none;
+    }
 }
 
 .io-EditBar_Btn {
     color: #888;
     font-size: 11px;
-    height: 40px;
+    height: 35px;
     display: inline-flex;
-    /* min-width: 90px; */
     white-space: nowrap;
     justify-content: center;
     align-items: center;
     padding: 0 10px;
-    /* margin: 10px 0; */
     border-radius: 18px;
-    /* background-color: #e4e4e4; */
     transition: color 0.2s;
-    /* border: 1px solid #ddd; */
     [data-editing-players="true"] &,
     [data-adding-player="true"] & {
         color: #eeeeee;
     }
 }
 
-.io-EditBar_BtnSplit,
 .io-EditBar_BtnEdit {
     [data-editing-players="true"] &,
     [data-adding-player="true"] & {
@@ -57,9 +59,33 @@
 }
 
 .io-EditBar_BtnSplit {
+    align-items: baseline;
+    position: relative;
+    transition: opacity var(--duration);
+    &:after {
+        content: "";
+        display: block;
+        left: calc(50% - 5px);
+        width: 0;
+        position: absolute;
+        margin-top: -4px;
+        top: 100%;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 5px 5px;
+        border-color: transparent transparent #222 transparent;
+        opacity: 0;
+        transition: all 0.2s;
+        transform: translateY(-10px);
+    }
+    [data-splitteam-showing="true"] &:after {
+        opacity: 1;
+        transform: none;
+    }
     [data-io-count="0"] &,
     [data-io-count="1"] & {
-        display: none;
+        opacity: 0.3;
+        pointer-events: none;
     }
 }
 
@@ -76,19 +102,11 @@
     }
 }
 
-.io-EditBar_Save {
-    /* [data-io-duplicate-name] & {
-        opacity: 0;
-        pointer-events: none;
-    } */
-}
-
 .io-EditBar_Splits {
     position: absolute;
     z-index: 30;
     top: 100%;
-    left: 50%;
-    margin-left: -100px;
+    right: 10px;
     width: 200px;
     display: flex;
     background-color: #222;
@@ -103,31 +121,17 @@
         pointer-events: auto;
         transform: none;
     }
-    &:after {
-        content: "";
-        display: block;
-        left: calc(50% - 5px);
-        width: 0;
-        position: absolute;
-        bottom: 100%;
-        height: 0;
-        border-style: solid;
-        border-width: 0 5px 5px 5px;
-        border-color: transparent transparent #222 transparent;
-    }
-}
-
-.io-ClickMask {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
 }
 
 .io-EditBar_SVG {
     margin-left: 5px;
+    fill: #bbb;
+}
+
+.io-EditBar_SplitSVG {
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
     fill: #bbb;
 }
 
@@ -143,7 +147,6 @@
 }
 
 .io-EditBar_Add {
-    margin-left: auto;
     [data-editing-players="true"] &,
     [data-adding-player="true"] & {
         display: none;

@@ -23,8 +23,10 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
     setTimeout(() => {
         root.removeAttribute("data-loading-slats");
     }, slats.length * 100);
-
+    let allIn = document.createDocumentFragment();
+    let allOut = document.createDocumentFragment();
     root.setAttribute("data-roster-count", slats.length.toString());
+
     slats.forEach(function(item, idx) {
         // The container
         let slat = document.createElement("div");
@@ -51,7 +53,10 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
                     e.stopPropagation();
                     // Fork here depending upon whether item is in or out
                     root.setAttribute("data-io-slat-moving", "true");
-                    if (e.target.getAttribute("data-io-slat-in") === "false") {
+                    if (
+                        e.target.getAttribute("data-io-slat-in") === "false" ||
+                        e.target.parentElement.getAttribute("data-io-slat-in") === "false"
+                    ) {
                         console.log("up");
                         rePositionSlat(this, "up");
                         this.addEventListener("transitionend", function setItems() {
@@ -108,6 +113,14 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
         textNode.textContent = item.name;
         slat.appendChild(textNode);
 
-        itmContainer.appendChild(slat);
+        if (item.in) {
+            allIn.appendChild(slat);
+            console.log(allIn);
+            // itmConfirmedContainer.appendChild(slat);
+        } else {
+            allOut.appendChild(slat);
+        }
     });
+    itmContainer.insertBefore(allIn, allInHeader.nextElementSibling);
+    itmContainer.insertBefore(allOut, allOutHeader.nextElementSibling);
 }

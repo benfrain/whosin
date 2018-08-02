@@ -11,27 +11,30 @@ $color-orange: #f90;
 
 html {
     height: 100%;
+    width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    &[data-adding-player="true"] {
+        position: fixed;
+        overflow: hidden;
+        -webkit-overflow-scrolling: auto;
+    }
 }
 
 body {
+    font-family: "Exo 2", system-ui, apple-system, "Helvetica Neue", "Roboto", "Ubuntu", sans-serif;
     display: flex;
     height: 100%;
+    width: 100%;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background-color: #f4f4f4;
-    /* [data-io-tools-exposed="true"] & {
-        filter: blur(3px);
-    } */
-}
-
-.io-InOut_Group {
-    transition: filter .2s;
-    [data-io-tools-exposed="true"] & {
-        filter: blur(3px);
+    [data-adding-player="true"] & {
+        position: fixed;
+        overflow: hidden;
+        -webkit-overflow-scrolling: auto;
     }
 }
 
@@ -39,9 +42,22 @@ body {
     box-sizing: border-box !important;
     display: flex;
     flex-direction: column;
-    font-family: 'Exo 2', sans-serif;
     width: 100%;
     position: relative;
+}
+
+.io-InOut_Credits {
+    font-size: 0.6rem;
+    color: #777;
+    line-height: 1.5;
+    padding: 0 10vw;
+    text-align: center;
+    margin: 15px 0 65px;
+}
+
+.io-InOut_CreditsLink {
+    color: #f90;
+    text-decoration: underline;
 }
 
 input[type="file" i] {
@@ -54,7 +70,15 @@ input[type="file" i] {
     text-align: right !important;
 }
 
-.io-Slats_Wrapper {
-    position: relative;
-    transition: transform .4s;
+.io-ClickMask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    [data-io-onboard="true"] & {
+        background-color: color(#fff a(0.5));
+        z-index: 110;
+    }
 }

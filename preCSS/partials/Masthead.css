@@ -1,44 +1,6 @@
-.io-Masthead {
-  position: relative;
-  padding: 10px 20px;
-  display: inline-flex;
-  flex: 0 1 auto;
-}
-
-.io-Masthead_ToolsBtn {
-  z-index: 100;
-  display: block;
-  height: 40px;
-  width: 40px;
-  position: fixed;
-  top: 65vh;
-  right: 20px;
-  border-radius: 50%;
-  background-color: #f9ae27;
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    border-radius: 50%;
-    border: 1px solid #f9ae27;
-    height: 44px;
-    width: 44px;
-    background-color: transparent;
-  }
-  transition: transform 0.1s;
-  &[aria-selected="true"] {
-    transform: scale(0.8);
-  }
-}
-
-.io-Masthead_Logo {
-  display: flex;
-  flex: 1 0 auto;
-  align-items: center;
-}
-
 .io-Masthead_LogoSvg {
   height: 55px;
+  flex: 0 0 auto;
+  margin: 80px 0 10px;
+  align-self: center;
 }

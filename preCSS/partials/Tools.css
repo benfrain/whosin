@@ -3,13 +3,8 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 50px;
-    margin-top: 100px;
     z-index: 10;
     position: relative;
-    transition: opacity 0.2s;
-    [data-io-slat-moving="true"] & {
-        opacity: 0;
-    }
 }
 
 .io-Tools_Menu {
@@ -43,8 +38,9 @@
     height: 45px;
     padding: 0 10px;
     position: relative;
+    & + &,
     .io-Tools_LoadInput + & {
-        border-top: 1px solid #333;
+        border-top: 1px solid #111;
     }
 }
 
@@ -54,25 +50,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    /* background-color: color(#111 a(.1)); */
-    /* filter: blur(3px); */
-}
-
-.io-Tools_Header {
-    color: #ccc;
-    justify-content: center;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    height: 30px;
-    background-color: #252525;
-}
-
-.io-Tools_Admin {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
 }
 
 .io-Tools_BtnAbout {
@@ -84,100 +61,8 @@
     color: #888;
 }
 
-.io-Tools_IconSplit {
-    fill: #ddd;
-}
-
-.io-Tools_IconAdmin {
-    fill: #ddd;
-}
-
-.io-Tools_LoadBtn {
-    all: unset;
-    display: flex;
-    align-items: center;
-}
-
-.io-Tools_StorageText {
-    /* Needed for iOS */
-    align-self: center;
-    margin-left: 5px;
-    font-size: 0.75rem;
-}
-
 .io-Tools_LoadInput {
     display: none !important;
-}
-
-.io-Tools_Split {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 0 20px;
-}
-
-.io-Tools_SplitBtn {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    color: #ccc;
-    position: relative;
-    /*border-radius: 2px;*/
-    font-size: 0.65rem;
-
-    /*padding: 0 11px;*/
-    &:before {
-        content: attr(data-io-divisor);
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-        font-size: 10px;
-        color: #222;
-        border-radius: 50%;
-        background-color: $color-orange;
-        justify-content: center;
-        height: 14px;
-        width: 14px;
-    }
-    & + & {
-        margin-left: 20px;
-    }
-}
-
-.io-Tools_LoadSave {
-    display: flex;
-    height: 44px;
-    margin-top: 20px;
-    border-top: 1px solid #252525;
-}
-
-.io-Tools_Load {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    align-self: stretch;
-    font-size: 1rem;
-    color: #ccc;
-}
-
-.io-Tools_Save {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    align-self: stretch;
-    font-size: 1rem;
-    color: #ccc;
-    border-left: 1px solid #252525;
-}
-
-.io-Tools_Delete {
-    &:before {
-        /* background-image: inline("../img/trash.svg"); */
-    }
 }
 
 .io-Tools_LoadSaveBtn {

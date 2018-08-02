@@ -1,12 +1,9 @@
-@import url("https://fonts.googleapis.com/css?family=Exo+2");
 @import "partials/app-reset.css";
 @import "partials/InOut.css";
 @import "partials/Header.css";
-@import "partials/AddForm.css";
 @import "partials/Slat.css";
 @import "partials/Tools.css";
-@import "partials/Split.css";
 @import "partials/Masthead.css";
-@import "partials/Count.css";
 @import "partials/EventLoader.css";
 @import "partials/EditBar.css";
+@import "partials/OnBoard.css";
