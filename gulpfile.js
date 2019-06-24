@@ -54,11 +54,11 @@ gulp.task("browser-sync", function() {
 });
 
 // Delete
+var del = require("del");
+
 gulp.task("clean", function() {
     return del(["build/**/*"]);
 });
-
-gulp.task("default", ["clean:mobile"]);
 
 // HTML
 gulp.task("html", function() {

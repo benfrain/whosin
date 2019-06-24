@@ -1,4 +1,4 @@
-var CACHE_NAME = "io-v2";
+var CACHE_NAME = "io-v3a";
 var urlsToCache = ["/", "/styles.css", "/inout.js", "/index.html"];
 
 self.addEventListener("install", function(event) {

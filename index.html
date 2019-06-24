@@ -1,166 +1,401 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js" data-io-slat-moving="false" data-evswitcher-showing="false" data-splitteam-showing="false"
-data-addform-exposed="false" data-toolsmenu-showing="false">
+<html
+    lang="en-US"
+    class="no-js"
+    data-io-slat-moving="false"
+    data-evswitcher-showing="false"
+    data-splitteam-showing="false"
+    data-addform-exposed="false"
+    data-toolsmenu-showing="false"
+>
+    <head>
+        <title>IN/OUT</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="styles.css?=0.16" />
+        <link rel="manifest" href="manifest.json" />
 
-<head>
-    <title>IN/OUT</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css?=0.16">
-    <link rel="manifest" href="manifest.json">
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="I/O" />
+        <meta name="apple-mobile-web-app-title" content="I/O" />
+        <meta name="theme-color" content="#ff9900" />
+        <meta name="msapplication-navbutton-color" content="#ff9900" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="msapplication-starturl" content="/index.html" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="I/O">
-    <meta name="apple-mobile-web-app-title" content="I/O">
-    <meta name="theme-color" content="#ff9900">
-    <meta name="msapplication-navbutton-color" content="#ff9900">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="msapplication-starturl" content="/index.html">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" type="image/png" sizes="192x192" href="homescreen_192.png" />
+        <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="homescreen_192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="homescreen_512.png" />
+        <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="homescreen_512.png" />
+        <link rel="icon" type="image/svg" href="homescreen.svg" />
+        <link rel="apple-touch-icon" type="image/svg" href="homescreen.svg" />
+        <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet" defer />
+    </head>
 
-    <link rel="icon" type="image/png" sizes="192x192" href="homescreen_192.png">
-    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="homescreen_192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="homescreen_512.png">
-    <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="homescreen_512.png">
-    <link rel="icon" type="image/svg" href="homescreen.svg">
-    <link rel="apple-touch-icon" type="image/svg" href="homescreen.svg">
-    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet" defer>
-</head>
+    <body>
+        <div class="io-InOut">
+            <div class="io-InOut_Group">
+                <div class="io-HeaderAndEventLoader">
+                    <header class="io-Header">
+                        <div class="io-Header_Left">
+                            <button
+                                type="button"
+                                id="ioEventSwitcherBtn"
+                                class="io-Header_EventBtn"
+                            >
+                                <span
+                                    id="ioEventSwitcherTitle"
+                                    class="io-Header_EventBtnTitle"
+                                ></span>
+                                <svg
+                                    class="io-Header_EventDownArrow"
+                                    width="18"
+                                    height="11"
+                                    viewBox="0 0 18 11"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M8.89 8.682L16.666.904l.707.707-7.778 7.778-.707.707L.404 1.611 1.11.904l7.778 7.778z"
+                                        fill="#FFF"
+                                        fill-rule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                            <nav class="io-EventLoader">
+                                <div id="ioEventSwitcher" class="io-EventLoader_Slats"></div>
+                                <div class="io-EventLoader_EditGroup">
+                                    <button
+                                        type="button"
+                                        id="ioEventLoaderAddEventBtn"
+                                        class="io-EventLoader_EditBtn"
+                                    >
+                                        Add event
+                                    </button>
+                                    <button
+                                        type="button"
+                                        id="ioEventLoaderEditBtn"
+                                        class="io-EventLoader_EditBtn"
+                                    >
+                                        Edit events
+                                    </button>
 
-<body>
-    <div class="io-InOut">
-        <div class="io-InOut_Group">
-            <div class="io-HeaderAndEventLoader">
-                <header class="io-Header">
-                    <div class="io-Header_Left">
-                        <button type="button" id="ioEventSwitcherBtn" class="io-Header_EventBtn">
-                            <span id="ioEventSwitcherTitle" class="io-Header_EventBtnTitle"></span>
-                            <svg class="io-Header_EventDownArrow" width="18" height="11" viewBox="0 0 18 11" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.89 8.682L16.666.904l.707.707-7.778 7.778-.707.707L.404 1.611 1.11.904l7.778 7.778z" fill="#FFF" fill-rule="evenodd"
-                                />
-                            </svg>
-                        </button>
-                        <nav class="io-EventLoader">
-                            <div id="ioEventSwitcher" class="io-EventLoader_Slats">
-                            </div>
-                            <div class="io-EventLoader_EditGroup">
-                                <button type="button" id="ioEventLoaderAddEventBtn" class="io-EventLoader_EditBtn">Add event</button>
-                                <button type="button" id="ioEventLoaderEditBtn" class="io-EventLoader_EditBtn">Edit events</button>
-
-                                <button type="button" id="ioEventLoaderSaveBtn" class="io-EventLoader_SaveBtn">Save
-                                    <svg class="io-EventLoader_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M.235 4.542l2.811 2.509L8.035.475" stroke="#FFF" stroke-width=".68" fill="none" />
-                                    </svg>
-                                </button>
-                                <button type="button" id="ioEventLoaderCancelBtn" class="io-EventLoader_CancelBtn">Cancel
-                                    <svg class="io-EventLoader_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
-                                        fill="#FFF" fill-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
-                    </div>                  
-                </header>
-            </div>
-            <nav class="io-EditBar">
-                <button type="button" id="ioEditBarAddBtn" class="io-EditBar_Btn io-EditBar_Add">Add Person
-                    <svg class="io-EditBar_AddSVG" width="12" height="12" viewBox="0 0 19 19" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11 8h8v3h-8v8H8v-8H0V8h8V0h3v8z" fill="#BBB" fill-rule="evenodd" />
-                    </svg>
-                </button>
-                <button type="button" id="ioEditBarPlayersBtn" class="io-EditBar_Btn io-EditBar_BtnEdit">
-                    Edit names
-                    <svg class="io-EditBar_SVG" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512">
-                        <path d="M432 0c44.182 0 80 35.817 80 80 0 18.01-5.955 34.629-16 48l-32 32L352 48l32-32c13.371-10.045 29.989-16 48-16zM32 368L0 512l144-32 296-296L328 72 32 368zm325.789-186.211l-224 224-27.578-27.578 224-224 27.578 27.578z"
-                        />
-                    </svg>
-                </button>
-                <button type="button" id="ioEditBarSaveBtn" class="io-EditBar_Btn io-EditBar_Save">Save
-                    <svg class="io-EditBar_SaveTick" width="9" height="8" viewBox="0 0 9 8" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M.235 4.542l2.811 2.509L8.035.475" stroke-width=".68" fill="none" />
-                    </svg>
-                </button>
-                <button type="button" id="ioEditBarCancelBtn" class="io-EditBar_Btn io-EditBar_Cancel">Cancel
-                    <svg class="io-EditBar_CancelCross" width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
-                        fill-rule="evenodd" />
-                    </svg>
-                </button>
-            </nav>
-            <main id="itmContainer" class="io-Slats">
-                <h3 class="io-Slats_ConfirmedHeader">
-                 <span class="io-Slats_Header">In<span class="io-Slats_Count" id="ioCount"></span></span>
-                 <span id="ioSplitBar" class="io-EditBar_SplitContainer">
-                    <button type="button" id="ioEditBarSplitTeamsBtn" class="io-EditBar_Btn io-EditBar_BtnSplit">
-                        Split to teams
-                        <svg class="io-EditBar_SplitSVG" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 768 768">
-                            <path d="M319.5 127.5L246 201l169.5 169.5v270h-63v-243L201 246l-73.5 73.5v-192h192zm129 0h192v192L567 246l-93 93-45-45 93-93z"
+                                    <button
+                                        type="button"
+                                        id="ioEventLoaderSaveBtn"
+                                        class="io-EventLoader_SaveBtn"
+                                    >
+                                        Save
+                                        <svg
+                                            class="io-EventLoader_SaveTick"
+                                            width="9"
+                                            height="8"
+                                            viewBox="0 0 9 8"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M.235 4.542l2.811 2.509L8.035.475"
+                                                stroke="#FFF"
+                                                stroke-width=".68"
+                                                fill="none"
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        id="ioEventLoaderCancelBtn"
+                                        class="io-EventLoader_CancelBtn"
+                                    >
+                                        Cancel
+                                        <svg
+                                            class="io-EventLoader_CancelCross"
+                                            width="8"
+                                            height="8"
+                                            viewBox="0 0 8 8"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
+                                                fill="#FFF"
+                                                fill-rule="evenodd"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+                </div>
+                <nav class="io-EditBar">
+                    <button
+                        type="button"
+                        id="ioEditBarAddBtn"
+                        class="io-EditBar_Btn io-EditBar_Add"
+                    >
+                        Add Person
+                        <svg
+                            class="io-EditBar_AddSVG"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 19 19"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M11 8h8v3h-8v8H8v-8H0V8h8V0h3v8z"
+                                fill="#BBB"
+                                fill-rule="evenodd"
                             />
                         </svg>
                     </button>
-                    <span id="ioSplitter" class="io-EditBar_Splits">
-                        <button id="ioSplit2" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split2">Split to 2 Teams</button>
-                        <button id="ioSplit3" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split3">Split to 3 Teams</button>
-                        <button id="ioSplit4" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split4">Split to 4 Teams</button>
-                        <button id="ioSplit0" type="button" class="io-Tools_MenuSlat io-Tools_MenuSlat-split0">Remove Splits</button>
-                    </span>
-                </span>    
-            </h3>         
-            <div id="ioHeaderUnConfirmed" class="io-Slats_UnConfirmedHeader">
-                <span class="io-Slats_Header">Out <span class="io-Slats_Count" id="ioUnconfirmedCount"></span></span>
+                    <button
+                        type="button"
+                        id="ioEditBarPlayersBtn"
+                        class="io-EditBar_Btn io-EditBar_BtnEdit"
+                    >
+                        Edit names
+                        <svg
+                            class="io-EditBar_SVG"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 512 512"
+                        >
+                            <path
+                                d="M432 0c44.182 0 80 35.817 80 80 0 18.01-5.955 34.629-16 48l-32 32L352 48l32-32c13.371-10.045 29.989-16 48-16zM32 368L0 512l144-32 296-296L328 72 32 368zm325.789-186.211l-224 224-27.578-27.578 224-224 27.578 27.578z"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        id="ioEditBarSaveBtn"
+                        class="io-EditBar_Btn io-EditBar_Save"
+                    >
+                        Save
+                        <svg
+                            class="io-EditBar_SaveTick"
+                            width="9"
+                            height="8"
+                            viewBox="0 0 9 8"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M.235 4.542l2.811 2.509L8.035.475"
+                                stroke-width=".68"
+                                fill="none"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        id="ioEditBarCancelBtn"
+                        class="io-EditBar_Btn io-EditBar_Cancel"
+                    >
+                        Cancel
+                        <svg
+                            class="io-EditBar_CancelCross"
+                            width="8"
+                            height="8"
+                            viewBox="0 0 8 8"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M4.372 4l3.35 3.35-.373.372L4 4.372.65 7.722l-.372-.373L3.628 4 .278.65.651.279 4 3.628 7.35.278l.372.373L4.372 4z"
+                                fill-rule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                </nav>
+                <main id="itmContainer" class="io-Slats">
+                    <h3 class="io-Slats_ConfirmedHeader">
+                        <span class="io-Slats_Header"
+                            >In<span class="io-Slats_Count" id="ioCount"></span
+                        ></span>
+                        <span id="ioSplitBar" class="io-EditBar_SplitContainer">
+                            <button
+                                type="button"
+                                id="ioEditBarSplitTeamsBtn"
+                                class="io-EditBar_Btn io-EditBar_BtnSplit"
+                            >
+                                Split to teams
+                                <svg
+                                    class="io-EditBar_SplitSVG"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 768 768"
+                                >
+                                    <path
+                                        d="M319.5 127.5L246 201l169.5 169.5v270h-63v-243L201 246l-73.5 73.5v-192h192zm129 0h192v192L567 246l-93 93-45-45 93-93z"
+                                    />
+                                </svg>
+                            </button>
+                            <span id="ioSplitter" class="io-EditBar_Splits">
+                                <button
+                                    id="ioSplit2"
+                                    type="button"
+                                    class="io-Tools_MenuSlat io-Tools_MenuSlat-split2"
+                                >
+                                    Split to 2 Teams
+                                </button>
+                                <button
+                                    id="ioSplit3"
+                                    type="button"
+                                    class="io-Tools_MenuSlat io-Tools_MenuSlat-split3"
+                                >
+                                    Split to 3 Teams
+                                </button>
+                                <button
+                                    id="ioSplit4"
+                                    type="button"
+                                    class="io-Tools_MenuSlat io-Tools_MenuSlat-split4"
+                                >
+                                    Split to 4 Teams
+                                </button>
+                                <button
+                                    id="ioSplit0"
+                                    type="button"
+                                    class="io-Tools_MenuSlat io-Tools_MenuSlat-split0"
+                                >
+                                    Remove Splits
+                                </button>
+                            </span>
+                        </span>
+                    </h3>
+                    <div id="ioHeaderUnConfirmed" class="io-Slats_UnConfirmedHeader">
+                        <span class="io-Slats_Header"
+                            >Out <span class="io-Slats_Count" id="ioUnconfirmedCount"></span
+                        ></span>
+                    </div>
+                </main>
             </div>
-        </main>
-    </div>
-    <div class="io-Tools">
-        <button type="button" id="ioLoadSaveBtn" class="io-Tools_LoadSaveBtn">
-            Load/Save
-            <svg class="io-Tools_IconStorage" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 1024 1024">
-                <path d="M480 512L376 616l-24-24 144-144 144 144-24 24-104-104v352h-32V512zm-32 160H224.09C153.534 672 96 614.692 96 544c0-60.652 42.388-111.624 99.232-124.73C193.11 407.835 192 396.047 192 384c0-106.04 85.96-192 192-192 83.694 0 154.88 53.55 181.166 128.257C589.946 300.09 621.56 288 656 288c75.467 0 137.375 58.053 143.502 131.938C854.864 434.018 896 484.224 896 544c0 70.55-57.348 128-128.09 128H544v32h224.018C856.374 704 928 632.186 928 544c0-67.085-41.175-124.528-99.748-148.304C811.522 315.912 740.757 256 656 256c-27.613 0-53.74 6.36-76.998 17.692C540.518 205.806 467.608 160 384 160c-123.712 0-224 100.288-224 224 0 4.42.128 8.812.38 13.17C103.67 421.81 64 478.37 64 544c0 88.366 71.44 160 159.982 160H448v-32z"
-                />
+            <div class="io-Tools">
+                <button type="button" id="ioLoadSaveBtn" class="io-Tools_LoadSaveBtn">
+                    Load/Save
+                    <svg
+                        class="io-Tools_IconStorage"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        viewBox="0 0 1024 1024"
+                    >
+                        <path
+                            d="M480 512L376 616l-24-24 144-144 144 144-24 24-104-104v352h-32V512zm-32 160H224.09C153.534 672 96 614.692 96 544c0-60.652 42.388-111.624 99.232-124.73C193.11 407.835 192 396.047 192 384c0-106.04 85.96-192 192-192 83.694 0 154.88 53.55 181.166 128.257C589.946 300.09 621.56 288 656 288c75.467 0 137.375 58.053 143.502 131.938C854.864 434.018 896 484.224 896 544c0 70.55-57.348 128-128.09 128H544v32h224.018C856.374 704 928 632.186 928 544c0-67.085-41.175-124.528-99.748-148.304C811.522 315.912 740.757 256 656 256c-27.613 0-53.74 6.36-76.998 17.692C540.518 205.806 467.608 160 384 160c-123.712 0-224 100.288-224 224 0 4.42.128 8.812.38 13.17C103.67 421.81 64 478.37 64 544c0 88.366 71.44 160 159.982 160H448v-32z"
+                        />
+                    </svg>
+                </button>
+                <div class="io-Tools_Menu">
+                    <label for="ioLoad" class="io-Tools_MenuSlat">Load File</label>
+                    <input class="io-Tools_LoadInput" type="file" id="ioLoad" />
+                    <button id="ioSave" type="button" class="io-Tools_MenuSlat">Save File</button>
+                </div>
+                <button type="button" id="ioAbout" class="io-Tools_BtnAbout">
+                    About
+                    <svg
+                        id="icon-information"
+                        class="io-Tools_IconAbout"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="21"
+                        height="21"
+                        viewBox="0 0 32 32"
+                    >
+                        <path
+                            d="M17 22v-7h-3v1h2v6h-2v1h5v-1h-2zM16.5 29v0 0c-6.904 0-12.5-5.596-12.5-12.5s5.596-12.5 12.5-12.5c6.904 0 12.5 5.596 12.5 12.5s-5.596 12.5-12.5 12.5zM16.5 28c6.351 0 11.5-5.149 11.5-11.5s-5.149-11.5-11.5-11.5c-6.351 0-11.5 5.149-11.5 11.5s5.149 11.5 11.5 11.5v0 0zM16.5 13c0.828 0 1.5-0.672 1.5-1.5s-0.672-1.5-1.5-1.5c-0.828 0-1.5 0.672-1.5 1.5s0.672 1.5 1.5 1.5v0 0z"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+
+            <svg
+                class="io-Masthead_LogoSvg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="47"
+                height="42"
+                viewBox="0 0 47 42"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+                <defs>
+                    <path
+                        id="a"
+                        d="M0 0h47v17.9a2 2 0 0 1-1.806 1.99L23.499 22 1.806 19.89A2 2 0 0 1 0 17.9V0z"
+                    />
+                </defs>
+                <g fill="none" fill-rule="evenodd">
+                    <path
+                        fill="#545454"
+                        d="M0 22h47v16.092a2 2 0 0 1-1.824 1.992L23.5 42 1.824 40.084A2 2 0 0 1 0 38.092V22z"
+                    />
+                    <path
+                        fill="#FFF"
+                        d="M13.344 25.252c1.621 0 2.752.419 3.392 1.256.64.837.96 2.328.96 4.472 0 2.144-.32 3.635-.96 4.472-.64.837-1.77 1.256-3.392 1.256-1.621 0-2.755-.419-3.4-1.256s-.968-2.328-.968-4.472c0-2.144.323-3.635.968-4.472.645-.837 1.779-1.256 3.4-1.256zm0 1.264c-1.088 0-1.84.323-2.256.968-.416.645-.624 1.81-.624 3.496 0 1.685.208 2.85.624 3.496.416.645 1.168.968 2.256.968 1.088 0 1.84-.323 2.256-.968.416-.645.624-1.81.624-3.496 0-1.685-.208-2.85-.624-3.496-.416-.645-1.168-.968-2.256-.968zm14.688-1.056v6.816c0 1.61-.299 2.752-.896 3.424-.597.672-1.616 1.008-3.056 1.008-1.493 0-2.547-.336-3.16-1.008-.613-.672-.92-1.813-.92-3.424V25.46h1.408v6.816c0 1.184.192 2.008.576 2.472.384.464 1.061.696 2.032.696.96 0 1.635-.232 2.024-.696.39-.464.584-1.288.584-2.472V25.46h1.408zm10.224 1.248h-3.568V36.5H33.28v-9.792h-3.552V25.46h8.528v1.248z"
+                    />
+                    <g transform="matrix(1 0 0 -1 0 22)">
+                        <use fill="#F8F8F8" xlink:href="#a" />
+                        <path
+                            stroke="#545454"
+                            d="M.5.5v17.4a1.5 1.5 0 0 0 1.355 1.493l21.596 2.11 21.694-2.11A1.5 1.5 0 0 0 46.5 17.9V.5H.5z"
+                        />
+                    </g>
+                    <path
+                        fill="#585858"
+                        d="M18.8 17h-1.408V5.96H18.8V17zM30.08 5.96v10.48c0 .373-.181.56-.544.56H28.16c-.288 0-.496-.15-.624-.448l-3.728-7.824c-.363-.79-.57-1.275-.624-1.456h-.256c.043.427.064.912.064 1.456V17h-1.408V6.52c0-.373.187-.56.56-.56h1.328c.288 0 .496.15.624.448l3.616 7.632a27.5 27.5 0 0 1 .752 1.6h.272a30.3 30.3 0 0 1-.048-1.68v-8h1.392z"
+                    />
+                </g>
             </svg>
-        </button>
-        <div class="io-Tools_Menu">
-            <label for="ioLoad" class="io-Tools_MenuSlat">Load File</label>
-            <input class="io-Tools_LoadInput" type="file" id="ioLoad">
-            <button id="ioSave" type="button" class="io-Tools_MenuSlat">Save File</button>
+            <small class="io-InOut_Credits"
+                ><a class="io-InOut_CreditsLink" href="https://benfrain.com">Ben Frain</a>, Summer
+                2018.</small
+            >
         </div>
-        <button type="button" id="ioAbout" class="io-Tools_BtnAbout">About
-            <svg id="icon-information" class="io-Tools_IconAbout" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 32 32">
-                <path d="M17 22v-7h-3v1h2v6h-2v1h5v-1h-2zM16.5 29v0 0c-6.904 0-12.5-5.596-12.5-12.5s5.596-12.5 12.5-12.5c6.904 0 12.5 5.596 12.5 12.5s-5.596 12.5-12.5 12.5zM16.5 28c6.351 0 11.5-5.149 11.5-11.5s-5.149-11.5-11.5-11.5c-6.351 0-11.5 5.149-11.5 11.5s5.149 11.5 11.5 11.5v0 0zM16.5 13c0.828 0 1.5-0.672 1.5-1.5s-0.672-1.5-1.5-1.5c-0.828 0-1.5 0.672-1.5 1.5s0.672 1.5 1.5 1.5v0 0z"></path>
-            </svg>
-        </button>
-    </div>
 
-    <svg class="io-Masthead_LogoSvg" xmlns="http://www.w3.org/2000/svg" width="47" height="42" viewBox="0 0 47 42" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h47v17.9a2 2 0 0 1-1.806 1.99L23.499 22 1.806 19.89A2 2 0 0 1 0 17.9V0z"/></defs><g fill="none" fill-rule="evenodd"><path fill="#545454" d="M0 22h47v16.092a2 2 0 0 1-1.824 1.992L23.5 42 1.824 40.084A2 2 0 0 1 0 38.092V22z"/><path fill="#FFF" d="M13.344 25.252c1.621 0 2.752.419 3.392 1.256.64.837.96 2.328.96 4.472 0 2.144-.32 3.635-.96 4.472-.64.837-1.77 1.256-3.392 1.256-1.621 0-2.755-.419-3.4-1.256s-.968-2.328-.968-4.472c0-2.144.323-3.635.968-4.472.645-.837 1.779-1.256 3.4-1.256zm0 1.264c-1.088 0-1.84.323-2.256.968-.416.645-.624 1.81-.624 3.496 0 1.685.208 2.85.624 3.496.416.645 1.168.968 2.256.968 1.088 0 1.84-.323 2.256-.968.416-.645.624-1.81.624-3.496 0-1.685-.208-2.85-.624-3.496-.416-.645-1.168-.968-2.256-.968zm14.688-1.056v6.816c0 1.61-.299 2.752-.896 3.424-.597.672-1.616 1.008-3.056 1.008-1.493 0-2.547-.336-3.16-1.008-.613-.672-.92-1.813-.92-3.424V25.46h1.408v6.816c0 1.184.192 2.008.576 2.472.384.464 1.061.696 2.032.696.96 0 1.635-.232 2.024-.696.39-.464.584-1.288.584-2.472V25.46h1.408zm10.224 1.248h-3.568V36.5H33.28v-9.792h-3.552V25.46h8.528v1.248z"/><g transform="matrix(1 0 0 -1 0 22)"><use fill="#F8F8F8" xlink:href="#a"/><path stroke="#545454" d="M.5.5v17.4a1.5 1.5 0 0 0 1.355 1.493l21.596 2.11 21.694-2.11A1.5 1.5 0 0 0 46.5 17.9V.5H.5z"/></g><path fill="#585858" d="M18.8 17h-1.408V5.96H18.8V17zM30.08 5.96v10.48c0 .373-.181.56-.544.56H28.16c-.288 0-.496-.15-.624-.448l-3.728-7.824c-.363-.79-.57-1.275-.624-1.456h-.256c.043.427.064.912.064 1.456V17h-1.408V6.52c0-.373.187-.56.56-.56h1.328c.288 0 .496.15.624.448l3.616 7.632a27.5 27.5 0 0 1 .752 1.6h.272a30.3 30.3 0 0 1-.048-1.68v-8h1.392z"/></g></svg>
-    <small class="io-InOut_Credits"><a class="io-InOut_CreditsLink" href="https://benfrain.com">Ben Frain</a>, Summer 2018.</small>
+        <section id="ioOnBoard" class="io-OnBoard">
+            <header class="io-OnBoard_Header">
+                <h2 class="io-OnBoard_Title">About In/Out</h2>
+                <button id="ioOnBoardDismiss" class="io-OnBoard_Dismiss">Dismiss</button>
+            </header>
+            <div class="io-OnBoard_Body">
+                <p class="io-OnBoard_Text">
+                    Use In/Out to organise who’s “In” and who’s “Out” of your regular team-based
+                    sports or activities.
+                </p>
+                <p class="io-OnBoard_Text">
+                    Edit, add or choose event names from the header.
+                </p>
+                <p class="io-OnBoard_Text">
+                    Add, edit and move people ‘In’ and ‘Out’ using the name slats.
+                </p>
+                <p class="io-OnBoard_Text">
+                    All data is stored in your browser. To back-up or restore your data, click the
+                    Load/Save icon in the footer.
+                </p>
+            </div>
+            <button id="ioOnBoardOK" class="io-OnBoard_OK">OK</button>
+            <button id="ioOnBoardDummy" class="io-OnBoard_Dummy">Or start with dummy data</button>
+        </section>
+        <script src="inout.js?=0.16"></script>
+        <!-- Start Open Web Analytics Tracker -->
+        <script type="text/javascript">
+            //<![CDATA[
+            var owa_baseUrl = "http://benfrain.com/owa/";
+            var owa_cmds = owa_cmds || [];
+            owa_cmds.push(["setSiteId", "c390268a968e24e2ef2553ea443377c4"]);
+            owa_cmds.push(["trackPageView"]);
+            owa_cmds.push(["trackClicks"]);
 
-</div>
-
-<section id="ioOnBoard" class="io-OnBoard">
-    <header class="io-OnBoard_Header">
-        <h2 class="io-OnBoard_Title">About In/Out</h2>
-        <button id="ioOnBoardDismiss" class="io-OnBoard_Dismiss">Dismiss</button>
-    </header>
-    <div class="io-OnBoard_Body">
-        <p class="io-OnBoard_Text">
-            Use In/Out to organise who’s “In” and who’s “Out” of your regular team-based sports or activities.
-        </p>
-        <p class="io-OnBoard_Text">
-            Edit, add or choose event names from the header.</p>
-        <p class="io-OnBoard_Text">
-              Add, edit and move people ‘In’ and ‘Out’ using the name slats.
-        </p>
-        <p class="io-OnBoard_Text">
-            All data is stored in your browser. To back-up or restore your data, click the Load/Save icon in the footer.
-        </p>
-    </div>
-    <button id="ioOnBoardOK" class="io-OnBoard_OK">OK</button>
-    <button id="ioOnBoardDummy" class="io-OnBoard_Dummy">Or start with dummy data</button>
-</section>
-<script src="inout.js?=0.16"></script>
-
-</body>
-
+            (function() {
+                var _owa = document.createElement("script");
+                _owa.type = "text/javascript";
+                _owa.async = true;
+                owa_baseUrl =
+                    "https:" == document.location.protocol
+                        ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, "https:")
+                        : owa_baseUrl;
+                _owa.src = owa_baseUrl + "modules/base/js/owa.tracker-combined-min.js";
+                var _owa_s = document.getElementsByTagName("script")[0];
+                _owa_s.parentNode.insertBefore(_owa, _owa_s);
+            })();
+            //]]>
+        </script>
+        <!-- End Open Web Analytics Code -->
+    </body>
 </html>

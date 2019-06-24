@@ -173,3 +173,10 @@ Add person should also switch off teams [x]
 
 
 Need to transform the edit bar and the Unconfirmed sections too [x]
+
+## 27.7.18
+Main functionality as bug free as it ever has been!
+Going to make the intro now.
+
+if no localStorage items found check if a localStorage for 'ioWatchedIntro'. If not, show intro.
+Need to do an initial check to see if a value in the Part of the main io needs to know whether the intro has been watched.

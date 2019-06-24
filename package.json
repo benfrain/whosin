@@ -1,30 +1,30 @@
 {
-  "dependencies": {
-    "gulp": "^3.9.1",
-    "postcss": "^6.0.22",
-    "postcss-assets": "^5.0.0"
-  },
-  "name": "In Out",
-  "version": "1.0.0",
-  "description": "simple utility to see who's in and who's out",
-  "main": "index.js",
-  "author": "Ben Frain",
-  "license": "MIT",
-  "devDependencies": {
-    "autoprefixer": "^8.5.1",
-    "browser-sync": "^2.24.6",
-    "cssnano": "^4.0.4",
-    "del": "^3.0.0",
-    "gulp-htmlmin": "^4.0.0",
-    "gulp-postcss": "^7.0.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-typescript": "^4.0.2",
-    "gulp-uglify": "^3.0.1",
-    "postcss-color-function": "^4.0.1",
-    "postcss-import": "^11.1.0",
-    "postcss-mixins": "^6.2.0",
-    "postcss-nested": "^3.0.0",
-    "postcss-simple-vars": "^4.1.0",
-    "typescript": "^2.8.3"
-  }
+    "dependencies": {
+        "gulp": "^3.9.1",
+        "postcss": "^6.0.22",
+        "postcss-assets": "^5.0.0"
+    },
+    "name": "inout",
+    "version": "1.0.0",
+    "description": "simple utility to see who's in and who's out",
+    "main": "index.js",
+    "author": "Ben Frain",
+    "license": "MIT",
+    "devDependencies": {
+        "autoprefixer": "^8.5.1",
+        "browser-sync": "^2.24.6",
+        "cssnano": "^4.0.4",
+        "del": "^3.0.0",
+        "gulp-htmlmin": "^4.0.0",
+        "gulp-postcss": "^7.0.1",
+        "gulp-sourcemaps": "^2.6.4",
+        "gulp-typescript": "^4.0.2",
+        "gulp-uglify": "^3.0.1",
+        "postcss-color-function": "^4.0.1",
+        "postcss-import": "^11.1.0",
+        "postcss-mixins": "^6.2.0",
+        "postcss-nested": "^3.0.0",
+        "postcss-simple-vars": "^4.1.0",
+        "typescript": "^2.8.3"
+    }
 }

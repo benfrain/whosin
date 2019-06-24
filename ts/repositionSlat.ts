@@ -5,9 +5,7 @@ function rePositionSlat(slat: HTMLDivElement, direction: string) {
     let nextItem = slat.nextElementSibling || null;
     let duration = 0.5;
     let allItemsInContainer = Array.from(itmContainer.children);
-    let indexOfClickedSlat = allItemsInContainer.findIndex((item, idx) => {
-        return item === slat;
-    });
+    let indexOfClickedSlat = allItemsInContainer.findIndex(item => item === slat);
     let positionOfClickedSlat = slatGeometry.top + window.scrollY;
     let positionOfFirstSlat;
     if (io.count === 0) {
@@ -19,9 +17,6 @@ function rePositionSlat(slat: HTMLDivElement, direction: string) {
     }
     let positionOfLastSlat =
         itmContainer.getBoundingClientRect().bottom + window.scrollY - heightOfClickedItem;
-
-    // Wrap everything up above the clicked item
-    let items = document.querySelectorAll(".io-Slat");
 
     // Set the clicked slat to be position fixed;
     slat.style.zIndex = "99";
@@ -36,7 +31,6 @@ function rePositionSlat(slat: HTMLDivElement, direction: string) {
     let allItemsInContainerAboveClicked = allItemsInContainer.filter(
         (item, idx) => idx < indexOfClickedSlat && idx > 0
     );
-    // debugger;
     if (nextItem) {
         nextItem.style.marginTop = `${heightOfClickedItem}px`;
     } else {
@@ -49,7 +43,6 @@ function rePositionSlat(slat: HTMLDivElement, direction: string) {
     }
 
     root.style.setProperty("--duration", `${duration.toFixed(2)}s`);
-    // We use a ternary operator to use one string or another based upon whether we are moving the slat up or down
     function anim() {
         window.requestAnimationFrame(function(timeStamp) {
             if (direction === "up") {

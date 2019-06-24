@@ -19,7 +19,6 @@ function setEndOfContenteditable(contentEditableElement) {
 }
 
 function createSlats(slats: Array<Object>, currentDataSet: number) {
-    // console.log(slats);
     setTimeout(() => {
         root.removeAttribute("data-loading-slats");
     }, slats.length * 100);
@@ -57,7 +56,6 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
                         e.target.getAttribute("data-io-slat-in") === "false" ||
                         e.target.parentElement.getAttribute("data-io-slat-in") === "false"
                     ) {
-                        console.log("up");
                         rePositionSlat(this, "up");
                         this.addEventListener("transitionend", function setItems() {
                             moveEntryInArray(
@@ -72,8 +70,6 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
                             root.setAttribute("data-io-slat-moving", "false");
                         });
                     } else {
-                        console.log("down");
-
                         rePositionSlat(this, "down");
                         this.addEventListener("transitionend", function returnItems() {
                             moveEntryInArray(
@@ -115,8 +111,6 @@ function createSlats(slats: Array<Object>, currentDataSet: number) {
 
         if (item.in) {
             allIn.appendChild(slat);
-            console.log(allIn);
-            // itmConfirmedContainer.appendChild(slat);
         } else {
             allOut.appendChild(slat);
         }

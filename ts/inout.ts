@@ -9,7 +9,6 @@
 /// <reference path="saveText.ts" />
 /// <reference path="observerPattern.ts" />
 /// <reference path="onBoard.ts" />
-//// <reference path="eventSwitcher.ts" />
 
 const storage = window.localStorage;
 const itmContainer = document.getElementById("itmContainer");
@@ -18,7 +17,6 @@ const itmUnConfirmedContainer = document.getElementById("itmUnConfirmedContainer
 const ioHeaderUnConfirmed = document.getElementById("ioHeaderUnConfirmed");
 
 const ioTools = <HTMLElement>document.getElementById("ioTools");
-// const ioSplitter = <HTMLElement>document.getElementById("ioSplitter");
 const ioSplitBar = <HTMLElement>document.getElementById("ioSplitBar");
 const ioSplit0 = <HTMLButtonElement>document.getElementById("ioSplit0");
 const ioSplit2 = <HTMLButtonElement>document.getElementById("ioSplit2");
@@ -31,8 +29,6 @@ const ioSave = <HTMLButtonElement>document.getElementById("ioSave");
 const ioCount = <HTMLElement>document.getElementById("ioCount");
 const ioUnconfirmedCount = <HTMLSpanElement>document.getElementById("ioUnconfirmedCount");
 const ioLoadSaveBtn = <HTMLButtonElement>document.getElementById("ioLoadSaveBtn");
-// const ioToolsBtn = <HTMLButtonElement>document.getElementById("ioToolsBtn");
-// const ioToolsClose = <HTMLButtonElement>document.getElementById("ioToolsClose");
 const ioEventSwitcherTitle = <HTMLHeadingElement>document.getElementById("ioEventSwitcherTitle");
 const ioEventSwitcherBtn = document.getElementById("ioEventSwitcherBtn");
 const ioAddNameBtn = document.getElementById("ioAddNameBtn");
@@ -240,7 +236,7 @@ ioEditBarSaveBtn.addEventListener("click", function(e) {
     updateEventPlayers();
 });
 
-var duplicateCheck;
+var duplicateCheck: boolean;
 function updateEventPlayers() {
     let addedPlayer = document.querySelector(".io-Slat_Temp p");
     if (addedPlayer) {
@@ -463,7 +459,6 @@ io.addObserver({
     callback: function renderItems() {
         ioEventSwitcher.innerHTML = "";
         populateMenu();
-        // console.table(io.items);
         let allSlats = document.querySelectorAll(".io-Slat");
         allSlats.forEach(slat => {
             itmContainer.removeChild(slat);
@@ -543,7 +538,6 @@ ioSplit0.addEventListener("click", function split2ways() {
 ioSplit2.addEventListener("click", function split2ways() {
     let currentDataSet = getCurrentDataSet();
     splitTeams(2, currentDataSet);
-    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
     removeStandardClickMask();
 });
@@ -551,7 +545,6 @@ ioSplit2.addEventListener("click", function split2ways() {
 ioSplit3.addEventListener("click", function split3ways() {
     let currentDataSet = getCurrentDataSet();
     splitTeams(3, currentDataSet);
-    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
     removeStandardClickMask();
 });
@@ -559,7 +552,6 @@ ioSplit3.addEventListener("click", function split3ways() {
 ioSplit4.addEventListener("click", function split4ways() {
     let currentDataSet = getCurrentDataSet();
     splitTeams(4, currentDataSet);
-    // io.notify({ showingToolTray: false });
     root.setAttribute("data-splitteam-showing", "false");
     removeStandardClickMask();
 });
@@ -604,7 +596,6 @@ function setThisItem(slat: Object, currentDataSet) {
         }
         return participant;
     });
-    // console.log(newItems);
     return newItems;
 }
 
